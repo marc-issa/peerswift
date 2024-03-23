@@ -49,9 +49,9 @@ module.exports = {
 	},
 
 	signup: (req, res) => {
-		const { phone_number, full_name, mid_name, dob } = req.body;
-		const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, nationality, kyc_status, pin, registration_date, last_login_date) VALUES ($1, $2, $3, $4, 'LBN', false, 0,NOW(), NOW()) RETURNING *`;
-		const values = [phone_number, full_name, mid_name, dob];
+		const { phone_number, full_name, mid_name, dob, pin } = req.body;
+		const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, nationality, kyc_status, pin, registration_date, last_login_date) VALUES ($1, $2, $3, $4, 'LBN', false, $5, NOW(), NOW()) RETURNING *`;
+		const values = [phone_number, full_name, mid_name, dob, pin];
 
 		pool.query(queryText, values, (error, results) => {
 			if (error) {
@@ -71,16 +71,33 @@ module.exports = {
 			}
 		});
 	},
-	logout: (req, res) => {
-		res.send("Auth Controller");
-	},
-	forgotPassword: (req, res) => {
-		res.send("Auth Controller");
-	},
-	resetPassword: (req, res) => {
-		res.send("Auth Controller");
-	},
-	changePhone: (req, res) => {
-		res.send("Auth Controller");
+
+	pinAccees: (req, res) => {
+		const { pin } = req.body;
+		const user = jwt.decode(req.headers.authorization.split(" ")[1]);
+		const queryText = `SELECT * FROM users WHERE pin = $1 AND user_id = $2`;
+
+		const values = [pin, user.user_id];
+
+		pool.query(queryText, values, (error, results) => {
+			if (error) {
+				res.status(400).json({
+					status: "error",
+					message: error.message || "Pin not verified",
+				});
+			} else {
+				if (results.rows.length > 0) {
+					res.status(200).json({
+						status: "success",
+						message: "Pin verified successfully",
+					});
+				} else {
+					res.status(400).json({
+						status: "error",
+						message: "Pin not verified",
+					});
+				}
+			}
+		});
 	},
 };
