@@ -73,11 +73,10 @@ module.exports = {
 	},
 
 	pinAccees: (req, res) => {
-		const { pin } = req.body;
-		const user = jwt.decode(req.headers.authorization.split(" ")[1]);
-		const queryText = `SELECT * FROM users WHERE pin = $1 AND user_id = $2`;
+		const { pin, phone_number } = req.body;
+		const queryText = `SELECT * FROM users WHERE pin = $1 AND phone_number = $2`;
 
-		const values = [pin, user.user_id];
+		const values = [pin, phone_number];
 
 		pool.query(queryText, values, (error, results) => {
 			if (error) {
@@ -90,6 +89,10 @@ module.exports = {
 					res.status(200).json({
 						status: "success",
 						message: "Pin verified successfully",
+						user: results.rows[0],
+						jwt: jwt.sign(results.rows[0], process.env.JWT_SECRET, {
+							expiresIn: "30d",
+						}),
 					});
 				} else {
 					res.status(400).json({
