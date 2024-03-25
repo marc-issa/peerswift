@@ -46,4 +46,20 @@ module.exports = {
 			});
 		}
 	},
+	getCountries: async (req, res) => {
+		const queryText = `SELECT * FROM countries`;
+		try {
+			const response = await pool.query(queryText);
+			const countries = response.rows;
+			res.status(200).json({
+				status: "success",
+				data: countries,
+			});
+		} catch (error) {
+			res.status(400).json({
+				status: "error",
+				message: error.message || "Countries not found",
+			});
+		}
+	},
 };

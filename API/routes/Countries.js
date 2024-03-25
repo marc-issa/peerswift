@@ -4,5 +4,6 @@ const router = express();
 const CountriesController = require("../controllers/CountriesController");
 
 router.get("/insert", CountriesController.insertCountries);
+router.get("/", CountriesController.getCountries);
 
 module.exports = router;
