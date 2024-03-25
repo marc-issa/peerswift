@@ -49,9 +49,10 @@ module.exports = {
 	},
 
 	signup: (req, res) => {
-		const { phone_number, full_name, mid_name, dob, pin } = req.body;
-		const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, nationality, kyc_status, pin, registration_date, last_login_date) VALUES ($1, $2, $3, $4, 'LBN', false, $5, NOW(), NOW()) RETURNING *`;
-		const values = [phone_number, full_name, mid_name, dob, pin];
+		const { phone_number, full_name, mid_name, dob, country_id, pin } =
+			req.body;
+		const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, country_id, kyc_status, pin, registration_date, last_login_date) VALUES ($1, $2, $3, $4, $5, false, $6, NOW(), NOW()) RETURNING *`;
+		const values = [phone_number, full_name, mid_name, dob, country_id, pin];
 
 		pool.query(queryText, values, (error, results) => {
 			if (error) {
