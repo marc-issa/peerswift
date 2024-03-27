@@ -54,6 +54,8 @@ module.exports = {
 		const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, country_id, kyc_status, pin, registration_date, last_login_date) VALUES ($1, $2, $3, $4, $5, false, $6, NOW(), NOW()) RETURNING *`;
 		const values = [phone_number, full_name, mid_name, dob, country_id, pin];
 
+		const walletQuery = `INSERT INTO wallets (user_id, balance, currency) VALUES ($1, 0, 'USD') RETURNING *`;
+
 		pool.query(queryText, values, (error, results) => {
 			if (error) {
 				res.status(400).json({
@@ -61,14 +63,25 @@ module.exports = {
 					message: error.message || "User not created",
 				});
 			} else {
-				res.status(201).json({
-					status: "success",
-					message: "User created successfully",
-					user: results.rows[0],
-					jwt: jwt.sign(results.rows[0], process.env.JWT_SECRET, {
-						expiresIn: "30d",
-					}),
-				});
+				pool.query(
+					walletQuery,
+					[results.rows[0].user_id],
+					(error, walletRes) => {
+						if (error) {
+							res.status(400).json({
+								status: "error",
+								message: error.message || "Wallet not created",
+							});
+						} else {
+							results.rows[0].wallet = walletRes.rows[0];
+							res.status(200).json({
+								status: "success",
+								message: "User created successfully",
+								user: results.rows[0],
+							});
+						}
+					},
+				);
 			}
 		});
 	},
