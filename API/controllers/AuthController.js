@@ -27,8 +27,7 @@ module.exports = {
 			const dbRes = await pool.query(queryText, values);
 
 			if (dbRes.rows.length > 0) {
-				const verification = { status: "success" };
-
+				const verification = await otpVerf.verifyOTP(phone_number, otp_code);
 				res.status(200).json({
 					status: verification.status,
 					message: "Phone number verified successfully",

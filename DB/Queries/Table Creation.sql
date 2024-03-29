@@ -16,7 +16,7 @@ CREATE TABLE countries (
   country_abreviation varchar(255),
   currency_name varchar(255),
   currency_code varchar(255),
-  country_flag varchar(255)
+  country_flag varchar(865)
 );
 
 

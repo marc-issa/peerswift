@@ -12,7 +12,7 @@ class OTP {
 
 		return client.verify.v2
 			.services(verifySid)
-			.verifications.create({ to: phone_number, channel: "whatsapp" });
+			.verifications.create({ to: phone_number, channel: "sms" });
 	}
 
 	verifyOTP(phone_number, otp_code) {
