@@ -27,8 +27,7 @@ module.exports = {
 			const dbRes = await pool.query(queryText, values);
 
 			if (dbRes.rows.length > 0) {
-				const verification = { status: "success" };
-
+				const verification = await otpVerf.verifyOTP(phone_number, otp_code);
 				res.status(200).json({
 					status: verification.status,
 					message: "Phone number verified successfully",
@@ -48,28 +47,58 @@ module.exports = {
 		}
 	},
 
-	signup: (req, res) => {
-		const { phone_number, full_name, mid_name, dob, pin } = req.body;
-		const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, nationality, kyc_status, pin, registration_date, last_login_date) VALUES ($1, $2, $3, $4, 'LBN', false, $5, NOW(), NOW()) RETURNING *`;
-		const values = [phone_number, full_name, mid_name, dob, pin];
+	signup: async (req, res) => {
+		const { phone_number, full_name, mid_name, dob, country_id, pin } =
+			req.body;
 
-		pool.query(queryText, values, (error, results) => {
-			if (error) {
-				res.status(400).json({
-					status: "error",
-					message: error.message || "User not created",
-				});
-			} else {
-				res.status(201).json({
-					status: "success",
-					message: "User created successfully",
-					user: results.rows[0],
-					jwt: jwt.sign(results.rows[0], process.env.JWT_SECRET, {
-						expiresIn: "30d",
-					}),
-				});
-			}
-		});
+		try {
+			// Start a transaction
+			await pool.query("BEGIN");
+
+			// Get group_id
+			const groupsQuery = `SELECT group_id FROM groups WHERE country_id = $1`;
+			const groupValues = [country_id];
+			const groupResult = await pool.query(groupsQuery, groupValues);
+			const group_id = groupResult.rows[0].group_id;
+
+			// Insert user
+			const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, country_id, kyc_status, pin, registration_date, last_login_date) VALUES ($1, $2, $3, $4, $5, false, $6, NOW(), NOW()) RETURNING *`;
+			const userValues = [
+				phone_number,
+				full_name,
+				mid_name,
+				dob,
+				country_id,
+				pin,
+			];
+			const userResult = await pool.query(queryText, userValues);
+			const user_id = userResult.rows[0].user_id;
+
+			// Insert wallet
+			const walletQuery = `INSERT INTO wallets (user_id, balance, currency) VALUES ($1, 0, 'USD') RETURNING *`;
+			await pool.query(walletQuery, [user_id]);
+
+			// Insert user_group_membership
+			const userGroupQuery = `INSERT INTO user_group_memberships (user_id, group_id, join_date) VALUES ($1, $2, NOW()) RETURNING *`;
+			await pool.query(userGroupQuery, [user_id, group_id]);
+
+			// Commit transaction
+			await pool.query("COMMIT");
+
+			res.status(200).json({
+				status: "success",
+				message: "User created successfully",
+				user: userResult.rows[0],
+			});
+		} catch (error) {
+			// Rollback transaction on error
+			await pool.query("ROLLBACK");
+			console.error("Error in signup:", error.stack);
+			res.status(500).json({
+				status: "error",
+				message: error.message || "An error occurred during signup",
+			});
+		}
 	},
 
 	pinAccees: (req, res) => {
