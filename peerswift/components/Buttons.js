@@ -3,7 +3,7 @@ import { useTheme } from "@react-navigation/native";
 
 import { TouchableOpacity, Text } from "react-native";
 
-const Buttons = ({ navigation, type, screen, disabled }) => {
+const Buttons = ({ navigation, type, screen, disabled, title }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
@@ -13,7 +13,7 @@ const Buttons = ({ navigation, type, screen, disabled }) => {
 				style={[style.primaryButton, disabled && style.disabledButton]}
 				disabled={disabled}
 				onPress={() => navigation.replace(screen)}>
-				<Text style={style.primaryButtonTxt}>Continue</Text>
+				<Text style={style.primaryButtonTxt}>{title}</Text>
 			</TouchableOpacity>
 		);
 	}

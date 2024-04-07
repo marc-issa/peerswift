@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 
-// API imports
-import { useQuery } from "@tanstack/react-query";
-import getCountries from "../api client/getCountries";
-
 // Style imports
 import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
 
+// API imports
+import { useQuery } from "@tanstack/react-query";
+import getCountries from "../api client/getCountries";
+
 import { View, Image, Text } from "react-native";
 
 // Component imports
-import PhoneInput from "../components/PhoneInput";
+import PhoneInput from "../components/Inputs/PhoneInput";
 import Buttons from "../components/Buttons";
 import DialPad from "../components/DialPad";
 
@@ -82,6 +82,7 @@ const Login = ({ navigation }) => {
 				screen={"OTPVerf"}
 				navigation={navigation}
 				disabled={disabled}
+				title={"Continue"}
 			/>
 			<DialPad onChange={handlePhoneInput} />
 		</View>

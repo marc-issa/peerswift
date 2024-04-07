@@ -7,7 +7,7 @@ import {
 	ActivityIndicator,
 } from "react-native";
 import { useTheme } from "@react-navigation/native";
-import { styles } from "../styles";
+import { styles } from "../../styles";
 
 const PhoneInput = ({ value, onChange, flag }) => {
 	const theme = useTheme();
@@ -24,6 +24,12 @@ const PhoneInput = ({ value, onChange, flag }) => {
 	}, [flag]);
 
 	useEffect(() => {
+		if (value) {
+			setIsFocused(true);
+		}
+	}, [value]);
+
+	useEffect(() => {
 		Animated.timing(anim, {
 			toValue: value ? 1 : 0,
 			duration: 200,
@@ -37,7 +43,7 @@ const PhoneInput = ({ value, onChange, flag }) => {
 		backgroundColor: theme.colors.background,
 		top: anim.interpolate({
 			inputRange: [0, 1],
-			outputRange: [12, -8],
+			outputRange: [15, -8],
 		}),
 		fontSize: anim.interpolate({
 			inputRange: [0, 1],
@@ -51,7 +57,6 @@ const PhoneInput = ({ value, onChange, flag }) => {
 
 	const handleChange = (value) => {
 		onChange(value);
-		setIsFocused(true);
 	};
 
 	return (
@@ -60,7 +65,7 @@ const PhoneInput = ({ value, onChange, flag }) => {
 				style.phoneInput,
 				{
 					borderColor: isFocused ? theme.colors.primary : theme.colors.accent,
-					borderWidth: isFocused ? 2 : 1,
+					borderWidth: isFocused ? 1.5 : 1,
 				},
 			]}>
 			<View
@@ -68,7 +73,7 @@ const PhoneInput = ({ value, onChange, flag }) => {
 					style.flagBox,
 					{
 						borderColor: isFocused ? theme.colors.primary : theme.colors.accent,
-						borderRightWidth: isFocused ? 2 : 1,
+						borderRightWidth: isFocused ? 1.5 : 1,
 					},
 				]}>
 				{flagUrl ? (

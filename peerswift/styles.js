@@ -23,6 +23,7 @@ export const styles = (theme) =>
 			borderWidth: 1,
 			borderColor: theme.colors.accent,
 			width: theme.dimensions.width * 0.85,
+			height: theme.dimensions.height * 0.06,
 			marginTop: theme.dimensions.height * 0.035,
 			borderRadius: 5,
 		},
@@ -38,6 +39,24 @@ export const styles = (theme) =>
 		phoneFlag: {
 			width: theme.dimensions.width * 0.1,
 			height: theme.dimensions.height * 0.03,
+		},
+		// OTP input
+		otpContainer: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			marginTop: theme.dimensions.height * 0.035,
+			width: theme.dimensions.width * 0.9,
+		},
+		otpBox: {
+			width: 50,
+			height: 50,
+			borderWidth: 1,
+			borderColor: theme.colors.border,
+			textAlign: "center",
+			margin: 5,
+			borderRadius: 10,
+			fontSize: 20,
+			color: theme.colors.accent,
 		},
 		// ********** Buttons **********
 		// Global
@@ -67,6 +86,7 @@ export const styles = (theme) =>
 			width: theme.dimensions.width * 0.95,
 			marginTop: theme.dimensions.height * 0.02,
 			paddingHorizontal: theme.dimensions.width * 0.05,
+			marginTop: theme.dimensions.height * 0.035,
 		},
 		dialButton: {
 			width: theme.dimensions.width * 0.25,
@@ -79,5 +99,22 @@ export const styles = (theme) =>
 		dialText: {
 			color: theme.colors.accent,
 			fontSize: 40,
+		},
+		// ********** OTP Verf **********
+		resendOTPContainer: {
+			flexDirection: "row",
+			justifyContent: "flex-end",
+			alignItems: "flex-end",
+			width: theme.dimensions.width * 0.9,
+		},
+		resendOTP: {
+			color: theme.colors.accent,
+			fontSize: 15,
+			marginTop: theme.dimensions.height * 0.02,
+		},
+		resendButtonText: {
+			color: theme.colors.primary,
+			fontSize: 15,
+			fontWeight: "bold",
 		},
 	});
