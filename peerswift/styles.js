@@ -56,4 +56,24 @@ export const styles = (theme) =>
 			fontSize: 16,
 			fontWeight: "bold",
 		},
+		// ********** DialPad **********
+		buttonGrid: {
+			flexDirection: "row",
+			flexWrap: "wrap",
+			width: theme.dimensions.width * 0.95,
+			marginTop: theme.dimensions.height * 0.02,
+			paddingHorizontal: theme.dimensions.width * 0.05,
+		},
+		dialButton: {
+			width: theme.dimensions.width * 0.25,
+			height: theme.dimensions.height * 0.11,
+			margin: theme.dimensions.width * 0.01,
+			borderRadius: 100,
+			alignItems: "center",
+			justifyContent: "center",
+		},
+		dialText: {
+			color: theme.colors.accent,
+			fontSize: 40,
+		},
 	});
