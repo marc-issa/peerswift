@@ -37,9 +37,13 @@ export const styles = (theme) =>
 		},
 		phoneFlag: {
 			width: theme.dimensions.width * 0.1,
-			height: theme.dimensions.height * 0.04,
+			height: theme.dimensions.height * 0.03,
 		},
 		// ********** Buttons **********
+		// Global
+		disabledButton: {
+			opacity: 0.5,
+		},
 		// Primary button
 		primaryButton: {
 			backgroundColor: theme.colors.primary,

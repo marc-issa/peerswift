@@ -48,6 +48,10 @@ export default function App() {
 		Poppins: require("./assets/Poppins/Poppins-Regular.ttf"),
 	});
 
+	if (fontError) {
+		console.log(fontError);
+	}
+
 	// Use lightTheme as the themeColor
 	const themeColor = lightTheme;
 

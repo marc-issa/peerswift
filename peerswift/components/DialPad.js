@@ -10,6 +10,9 @@ const DialPad = ({ onChange }) => {
 
 	// Function to handle press events
 	const handlePress = (button) => {
+		if (button === " ") {
+			return;
+		}
 		onChange(button);
 	};
 

@@ -1,13 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
-import { TextInput, Text, View, Animated, Image } from "react-native";
+import {
+	TextInput,
+	View,
+	Animated,
+	Image,
+	ActivityIndicator,
+} from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { styles } from "../styles";
 
-const PhoneInput = ({ value, onChange, inputType }) => {
+const PhoneInput = ({ value, onChange, flag }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 	const anim = useRef(new Animated.Value(value ? 1 : 0)).current;
 	const [isFocused, setIsFocused] = useState(false);
+
+	const [flagUrl, setFlagUrl] = useState("");
+
+	useEffect(() => {
+		if (flag) {
+			setFlagUrl(flag);
+		}
+	}, [flag]);
 
 	useEffect(() => {
 		Animated.timing(anim, {
@@ -37,6 +51,7 @@ const PhoneInput = ({ value, onChange, inputType }) => {
 
 	const handleChange = (value) => {
 		onChange(value);
+		setIsFocused(true);
 	};
 
 	return (
@@ -56,14 +71,15 @@ const PhoneInput = ({ value, onChange, inputType }) => {
 						borderRightWidth: isFocused ? 2 : 1,
 					},
 				]}>
-				<Image
-					source={{ uri: "https://flagcdn.com/w320/cy.png" }}
-					style={style.phoneFlag}
-				/>
+				{flagUrl ? (
+					<Image source={{ uri: flagUrl }} style={style.phoneFlag} />
+				) : (
+					<ActivityIndicator size='small' />
+				)}
 			</View>
 			<Animated.Text style={labelStyle}>Phone Number</Animated.Text>
 			<TextInput
-				keyboardType={inputType}
+				keyboardType={"phone-pad"}
 				value={value}
 				onChangeText={handleChange}
 				placeholder={value ? "" : ""}
