@@ -75,6 +75,41 @@ export const styles = (theme) =>
 			color: theme.colors.accent,
 			fontSize: 16,
 		},
+		// Pin Input
+		pinInpContainer: {
+			flexDirection: "row",
+			justifyContent: "center",
+			alignItems: "center",
+			width: theme.dimensions.width * 0.8,
+
+			marginTop: theme.dimensions.height * 0.01,
+			marginBottom: theme.dimensions.height * 0.035,
+		},
+		pinInpBox: {
+			width: theme.dimensions.width * 0.07,
+			height: theme.dimensions.width * 0.07,
+			borderWidth: 1,
+			borderColor: theme.colors.primary,
+			borderWidth: 1.5,
+			textAlign: "center",
+			margin: 5,
+			borderRadius: 100,
+			fontSize: 20,
+			color: theme.colors.accent,
+		},
+		pinInpBoxFill: {
+			width: theme.dimensions.width * 0.07,
+			height: theme.dimensions.width * 0.07,
+			borderWidth: 1,
+			borderColor: theme.colors.primary,
+			borderWidth: 2,
+			textAlign: "center",
+			margin: 5,
+			borderRadius: 100,
+			fontSize: 20,
+			color: theme.colors.accent,
+			backgroundColor: theme.colors.primary,
+		},
 		// ********** Buttons **********
 		// Global
 		disabledButton: {
@@ -135,6 +170,23 @@ export const styles = (theme) =>
 			fontWeight: "bold",
 		},
 
+		// ********** Pin Verf **********
+		forgotPassContainer: {
+			width: theme.dimensions.width * 0.9,
+			marginTop: theme.dimensions.height * 0.02,
+		},
+		forgotPass: {
+			color: theme.colors.accent,
+			fontSize: 16,
+			textAlign: "center",
+		},
+		forgotPassText: {
+			color: theme.colors.primary,
+			fontSize: 16,
+			fontWeight: "bold",
+		},
+		forgotPassButton: {},
+
 		// ********** Calendar Modal **********
 		datePickerModal: {
 			position: "absolute",
@@ -148,5 +200,10 @@ export const styles = (theme) =>
 			padding: 20,
 			borderTopLeftRadius: 20,
 			borderTopRightRadius: 20,
+		},
+		// ********** Errors **********
+		errorTxt: {
+			color: "#D05353",
+			fontSize: 16,
 		},
 	});

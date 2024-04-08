@@ -51,8 +51,6 @@ const Signup = ({ navigation }) => {
 	};
 
 	useEffect(() => {
-		console.log(date, new Date());
-		console.log(firstName, middleName, lastName, isSameDay(date, new Date()));
 		if (firstName && lastName && middleName && !isSameDay(date, new Date())) {
 			setDisabled(false);
 		} else {
@@ -99,7 +97,8 @@ const Signup = ({ navigation }) => {
 						/>
 						<Buttons
 							type={"primary"}
-							screen={"OTPVerf"}
+							screen={"PinVerf"}
+							navData={"new"}
 							navigation={navigation}
 							disabled={disabled}
 							title={"Continue"}

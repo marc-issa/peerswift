@@ -7,6 +7,7 @@ import {
 import Login from "../screens/Login";
 import OTPVerf from "../screens/OTPVerf";
 import Signup from "../screens/Signup";
+import PinVerf from "../screens/PinVerf";
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='Signup'
 				component={Signup}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='PinVerf'
+				component={PinVerf}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,
