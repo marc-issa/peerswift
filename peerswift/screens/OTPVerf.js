@@ -52,7 +52,7 @@ const OTPVerf = ({ navigation }) => {
 
 			<Buttons
 				type={"primary"}
-				screen={"OTPVerf"}
+				screen={"Signup"}
 				navigation={navigation}
 				disabled={disabled}
 				title={"Verify"}

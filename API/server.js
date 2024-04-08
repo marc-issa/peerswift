@@ -1,4 +1,23 @@
 require("dotenv").config();
+
+var os = require("os");
+
+var networkInterfaces = os.networkInterfaces();
+
+function logIPv4Addresses() {
+	Object.keys(networkInterfaces).forEach((interfaceName) => {
+		networkInterfaces[interfaceName].forEach((interface) => {
+			if (
+				"IPv4" === interface.family &&
+				!interface.internal &&
+				interfaceName === "Wi-Fi"
+			) {
+				console.log(`Server running on: http://${interface.address}:${port}`);
+			}
+		});
+	});
+}
+
 const logs = require("./middlewares/Logs");
 
 const express = require("express");
@@ -21,5 +40,5 @@ app.use("/countries", countriesRouter);
 app.use("/groups", groupsRouter);
 
 app.listen(port, () => {
-	console.log(`Server is running on port ${port}`);
+	logIPv4Addresses();
 });

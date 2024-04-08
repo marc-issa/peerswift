@@ -62,7 +62,7 @@ const PhoneInput = ({ value, onChange, flag }) => {
 	return (
 		<View
 			style={[
-				style.phoneInput,
+				style.input,
 				{
 					borderColor: isFocused ? theme.colors.primary : theme.colors.accent,
 					borderWidth: isFocused ? 1.5 : 1,
@@ -89,11 +89,13 @@ const PhoneInput = ({ value, onChange, flag }) => {
 				onChangeText={handleChange}
 				placeholder={value ? "" : ""}
 				showSoftInputOnFocus={false}
+				editable={false}
 				style={{
-					height: theme.dimensions.height * 0.05,
+					height: theme.dimensions.height * 0.055,
 					color: theme.colors.text,
 					flex: 3,
 					paddingLeft: theme.dimensions.width * 0.04,
+					fontSize: 16,
 				}}
 				onFocus={() => {
 					if (!value) {

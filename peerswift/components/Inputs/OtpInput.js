@@ -38,6 +38,7 @@ const OtpInput = ({ otpCode, onChange }) => {
 							borderWidth: 1.5,
 						},
 					]}
+					editable={false}
 					maxLength={1}
 					keyboardType='number-pad'
 					onChangeText={handleChange}

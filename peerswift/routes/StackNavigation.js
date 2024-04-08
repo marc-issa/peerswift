@@ -6,6 +6,7 @@ import {
 // Screens
 import Login from "../screens/Login";
 import OTPVerf from "../screens/OTPVerf";
+import Signup from "../screens/Signup";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='OTPVerf'
 				component={OTPVerf}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='Signup'
+				component={Signup}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,

@@ -28,7 +28,7 @@ module.exports = {
 						country.name.common,
 						currency.name,
 						currencyCode,
-						country.flags.svg,
+						country.flags.png,
 						country.cca3,
 					];
 					await pool.query(queryText, values);
