@@ -381,6 +381,45 @@ export const styles = (theme) =>
 			fontSize: 16,
 			fontWeight: "bold",
 		},
+		cardActLong: {
+			width: theme.dimensions.width * 0.9,
+			borderRadius: 10,
+			backgroundColor: "#F6F6F6",
+			flexDirection: "row",
+			justifyContent: "space-between",
+			marginVertical: 10,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+		},
+		cardCurerncyLong: {
+			fontSize: 18,
+			color: theme.colors.accent,
+			fontWeight: "bold",
+			marginRight: 5,
+		},
+		cardAmountLong: {
+			fontSize: 19,
+			color: theme.colors.accent,
+			fontWeight: "bold",
+		},
+		cardActFlagLong: {
+			width: theme.dimensions.width * 0.075,
+			height: theme.dimensions.width * 0.075,
+			marginRight: 5,
+			borderRadius: 100,
+		},
+		cardFooterLong: {
+			width: theme.dimensions.width * 0.3,
+			borderBottomRightRadius: 10,
+			borderTopLeftRadius: 10,
+			paddingHorizontal: 5,
+			paddingVertical: 5,
+			alignItems: "flex-end",
+		},
 		// ********** Calendar Modal **********
 		datePickerModal: {
 			position: "absolute",
@@ -402,6 +441,7 @@ export const styles = (theme) =>
 			justifyContent: "space-between",
 			alignItems: "center",
 			marginTop: theme.dimensions.height * 0.02,
+			paddingBottom: 10,
 		},
 		filterBox: {
 			flexDirection: "row",
@@ -425,6 +465,14 @@ export const styles = (theme) =>
 			color: theme.colors.primary,
 			fontSize: 16,
 			fontWeight: "bold",
+		},
+		listContainer: {
+			width: theme.dimensions.width,
+			marginTop: theme.dimensions.height * 0.02,
+			paddingVertical: 10,
+			flexDirection: "column",
+			justifyContent: "flex-start",
+			alignItems: "center",
 		},
 		// ********** Errors **********
 		errorTxt: {

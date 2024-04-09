@@ -1,9 +1,12 @@
 // Import necessary dependencies from React and React Native
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useTheme } from "@react-navigation/native";
 // Import PanGestureHandler from react-native-gesture-handler for detecting swipe gestures
 import { PanGestureHandler } from "react-native-gesture-handler";
+
+// Import component
+import ActCardLong from "../components/ActCardLong";
 
 // Import your styles
 import { styles } from "../styles";
@@ -19,12 +22,17 @@ const Activity = ({ navigation, route }) => {
 	};
 
 	const onSwipe = (event) => {
-		const { velocityX } = event.nativeEvent;
-		// Change filter based on the direction of the swipe
-		if (velocityX > 0) {
-			handleChangeFilter("requests");
-		} else if (velocityX < 0) {
-			handleChangeFilter("transactions");
+		if (event.nativeEvent.x < 110 && event.nativeEvent.x > 0) {
+			// If the swipe left is greater than 100 units, navigate back
+			navigation.goBack();
+		} else {
+			const { velocityX } = event.nativeEvent;
+			// Change filter based on the direction of the swipe
+			if (velocityX > 0) {
+				handleChangeFilter("requests");
+			} else if (velocityX < 0) {
+				handleChangeFilter("transactions");
+			}
 		}
 	};
 
@@ -305,6 +313,18 @@ const Activity = ({ navigation, route }) => {
 						</TouchableOpacity>
 					</View>
 				</View>
+				<ScrollView>
+					<View style={style.listContainer}>
+						{filter === "requests" &&
+							requestsDummy.map((request) => (
+								<ActCardLong key={request.history_id} data={request} />
+							))}
+						{filter === "transactions" &&
+							transactionsDummy.map((transaction) => (
+								<ActCardLong key={transaction.history_id} data={transaction} />
+							))}
+					</View>
+				</ScrollView>
 			</View>
 		</PanGestureHandler>
 	);
