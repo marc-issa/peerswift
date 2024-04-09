@@ -16,6 +16,21 @@ export const styles = (theme) =>
 			marginTop: theme.dimensions.height * 0.02,
 			width: theme.dimensions.width * 0.8,
 		},
+		header: {
+			color: theme.colors.accent,
+			marginTop: theme.dimensions.height * 0.02,
+			width: theme.dimensions.width * 0.9,
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+		},
+		headerTitle: {
+			fontSize: 24,
+			color: theme.colors.accent,
+			fontWeight: "bold",
+			textAlign: "center",
+			flex: 10,
+		},
 		// ********** Inputs **********
 		// Global
 		input: {
@@ -131,6 +146,7 @@ export const styles = (theme) =>
 				height: 2,
 			},
 			shadowOpacity: 0.25,
+			elevation: 3,
 		},
 		primaryButtonTxt: {
 			color: theme.colors.background,
@@ -248,6 +264,7 @@ export const styles = (theme) =>
 				height: 2,
 			},
 			shadowOpacity: 0.25,
+			elevation: 3,
 		},
 		statsTxtS: {
 			color: theme.colors.background,
@@ -275,6 +292,7 @@ export const styles = (theme) =>
 				height: 2,
 			},
 			shadowOpacity: 0.25,
+			elevation: 3,
 		},
 		navBox: {
 			width: theme.dimensions.width * 0.17,
@@ -314,6 +332,7 @@ export const styles = (theme) =>
 				height: 2,
 			},
 			shadowOpacity: 0.25,
+			elevation: 3,
 		},
 		cardHeader: {
 			flexDirection: "row",
@@ -366,6 +385,46 @@ export const styles = (theme) =>
 			fontSize: 16,
 			fontWeight: "bold",
 		},
+		cardActLong: {
+			width: theme.dimensions.width * 0.9,
+			borderRadius: 10,
+			backgroundColor: "#F6F6F6",
+			flexDirection: "row",
+			justifyContent: "space-between",
+			marginVertical: 10,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
+		},
+		cardCurerncyLong: {
+			fontSize: 18,
+			color: theme.colors.accent,
+			fontWeight: "bold",
+			marginRight: 5,
+		},
+		cardAmountLong: {
+			fontSize: 19,
+			color: theme.colors.accent,
+			fontWeight: "bold",
+		},
+		cardActFlagLong: {
+			width: theme.dimensions.width * 0.075,
+			height: theme.dimensions.width * 0.075,
+			marginRight: 5,
+			borderRadius: 100,
+		},
+		cardFooterLong: {
+			width: theme.dimensions.width * 0.3,
+			borderBottomRightRadius: 10,
+			borderTopLeftRadius: 10,
+			paddingHorizontal: 5,
+			paddingVertical: 5,
+			alignItems: "flex-end",
+		},
 		// ********** Calendar Modal **********
 		datePickerModal: {
 			position: "absolute",
@@ -380,6 +439,47 @@ export const styles = (theme) =>
 			borderTopLeftRadius: 20,
 			borderTopRightRadius: 20,
 		},
+		// ********** Activities Filter **********
+		filterDesign: {
+			width: theme.dimensions.width * 0.9,
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			marginTop: theme.dimensions.height * 0.02,
+			paddingBottom: 10,
+		},
+		filterBox: {
+			flexDirection: "row",
+			justifyContent: "center",
+			alignItems: "center",
+			backgroundColor: "#F6F6F6",
+			borderRadius: 100,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
+		},
+		filterIndvBox: {
+			paddingHorizontal: 15,
+			paddingVertical: 10,
+			borderRadius: 100,
+		},
+		filterTxt: {
+			color: theme.colors.primary,
+			fontSize: 16,
+			fontWeight: "bold",
+		},
+		listContainer: {
+			width: theme.dimensions.width,
+			marginTop: theme.dimensions.height * 0.02,
+			paddingVertical: 10,
+			flexDirection: "column",
+			justifyContent: "flex-start",
+			alignItems: "center",
+		},
 		// ********** Errors **********
 		errorTxt: {
 			color: "#D05353",
@@ -389,5 +489,9 @@ export const styles = (theme) =>
 		icon: {
 			width: 36,
 			height: 36,
+		},
+		backButton: {
+			width: 40,
+			height: 40,
 		},
 	});
