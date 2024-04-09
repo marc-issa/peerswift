@@ -16,6 +16,21 @@ export const styles = (theme) =>
 			marginTop: theme.dimensions.height * 0.02,
 			width: theme.dimensions.width * 0.8,
 		},
+		header: {
+			color: theme.colors.accent,
+			marginTop: theme.dimensions.height * 0.02,
+			width: theme.dimensions.width * 0.9,
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+		},
+		headerTitle: {
+			fontSize: 24,
+			color: theme.colors.accent,
+			fontWeight: "bold",
+			textAlign: "center",
+			flex: 10,
+		},
 		// ********** Inputs **********
 		// Global
 		input: {
@@ -380,6 +395,37 @@ export const styles = (theme) =>
 			borderTopLeftRadius: 20,
 			borderTopRightRadius: 20,
 		},
+		// ********** Activities Filter **********
+		filterDesign: {
+			width: theme.dimensions.width * 0.9,
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			marginTop: theme.dimensions.height * 0.02,
+		},
+		filterBox: {
+			flexDirection: "row",
+			justifyContent: "center",
+			alignItems: "center",
+			backgroundColor: "#F6F6F6",
+			borderRadius: 100,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+		},
+		filterIndvBox: {
+			paddingHorizontal: 15,
+			paddingVertical: 10,
+			borderRadius: 100,
+		},
+		filterTxt: {
+			color: theme.colors.primary,
+			fontSize: 16,
+			fontWeight: "bold",
+		},
 		// ********** Errors **********
 		errorTxt: {
 			color: "#D05353",
@@ -389,5 +435,9 @@ export const styles = (theme) =>
 		icon: {
 			width: 36,
 			height: 36,
+		},
+		backButton: {
+			width: 40,
+			height: 40,
 		},
 	});

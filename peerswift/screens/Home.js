@@ -6,7 +6,7 @@ import { useTheme } from "@react-navigation/native";
 // Components import
 import ActivitiesCard from "../components/activitiesCard";
 
-const Home = () => {
+const Home = ({ navigation }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
@@ -121,7 +121,7 @@ const Home = () => {
 	return (
 		<ScrollView>
 			<View style={style.container}>
-				<View style={style.homeHeader}>
+				<View style={style.header}>
 					<TouchableOpacity>
 						<Image
 							source={require("../assets/Icons/menu.png")}
@@ -185,7 +185,11 @@ const Home = () => {
 							</View>
 							<Text style={style.navTxt}>top-up</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={style.navButton}>
+						<TouchableOpacity
+							style={style.navButton}
+							onPress={() =>
+								navigation.navigate("Activity", { filter: "requests" })
+							}>
 							<View style={style.navBox}>
 								<Image
 									source={require("../assets/Icons/transaction.png")}
@@ -208,7 +212,10 @@ const Home = () => {
 				<View style={style.recentContainer}>
 					<View style={style.recentHeader}>
 						<Text style={style.homeTxt}>Recent requests</Text>
-						<TouchableOpacity>
+						<TouchableOpacity
+							onPress={() =>
+								navigation.navigate("Activity", { filter: "requests" })
+							}>
 							<Text style={style.linkTxt}>view all</Text>
 						</TouchableOpacity>
 					</View>
@@ -225,7 +232,10 @@ const Home = () => {
 				<View style={style.recentContainer}>
 					<View style={style.recentHeader}>
 						<Text style={style.homeTxt}>Recent transactions</Text>
-						<TouchableOpacity>
+						<TouchableOpacity
+							onPress={() =>
+								navigation.navigate("Activity", { filter: "transactions" })
+							}>
 							<Text style={style.linkTxt}>view all</Text>
 						</TouchableOpacity>
 					</View>
