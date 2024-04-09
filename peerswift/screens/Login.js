@@ -27,6 +27,7 @@ const Login = ({ navigation }) => {
 	const [disabled, setDisabled] = useState(true);
 
 	const [countries, setCountries] = useState([]);
+	const [countryCode, setCountryCode] = useState([]);
 	const [flag, setFlag] = useState("");
 
 	// API Calls
@@ -50,6 +51,7 @@ const Login = ({ navigation }) => {
 			const country = searchCountry(countries, "Lebanon");
 			if (country) {
 				setFlag(country.country_flag);
+				setCountryCode(country.country_code);
 			}
 		}
 	}, [countries]);
@@ -80,6 +82,7 @@ const Login = ({ navigation }) => {
 			<Buttons
 				type={"primary"}
 				screen={"OTPVerf"}
+				navData={{ phoneNumber: countryCode + phoneNumber }}
 				navigation={navigation}
 				disabled={disabled}
 				title={"Continue"}

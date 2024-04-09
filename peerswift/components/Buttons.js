@@ -8,7 +8,7 @@ const Buttons = ({ navigation, type, screen, disabled, title, navData }) => {
 	const style = styles(theme);
 
 	const primaryRedirect = () => {
-		navigation.replace([screen, { navData }]);
+		navigation.replace(screen, navData);
 	};
 
 	if (type === "primary") {

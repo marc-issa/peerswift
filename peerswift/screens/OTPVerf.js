@@ -11,13 +11,15 @@ import OtpInput from "../components/Inputs/OtpInput";
 import Buttons from "../components/Buttons";
 import DialPad from "../components/DialPad";
 
-const OTPVerf = ({ navigation }) => {
+const OTPVerf = ({ navigation, route }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
 	const [otp, setOtp] = useState([]);
 
 	const [disabled, setDisabled] = useState(true);
+
+	const [phoneNumber, setPhoneNumber] = useState(route.params.phoneNumber);
 
 	const handleOtpInput = (value) => {
 		if (value === "<") {
@@ -26,6 +28,10 @@ const OTPVerf = ({ navigation }) => {
 		if (otp.length < 6) {
 			return setOtp([...otp, value]);
 		}
+	};
+
+	const handleResendOTP = () => {
+		console.log("Resend OTP");
 	};
 
 	useEffect(() => {
@@ -39,13 +45,13 @@ const OTPVerf = ({ navigation }) => {
 		<View style={style.container}>
 			<Image source={require("../assets/Logo/Logo - small.png")} />
 			<Text style={style.description}>
-				An OTP (One-Time Password) has been sent to +961 11-111-111 mobile
-				number. Please enter the 6-digit code below to verify your account.
+				An OTP (One-Time Password) has been sent to {phoneNumber} mobile number.
+				Please enter the 6-digit code below to verify your account.
 			</Text>
 			<OtpInput otpCode={otp} onChange={handleOtpInput} />
 			<View style={style.resendOTPContainer}>
 				<Text style={style.resendOTP}>Didn't receive the OTP?</Text>
-				<TouchableOpacity>
+				<TouchableOpacity onPress={handleResendOTP}>
 					<Text style={style.resendButtonText}> Resend OTP</Text>
 				</TouchableOpacity>
 			</View>

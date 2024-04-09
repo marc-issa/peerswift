@@ -187,6 +187,101 @@ export const styles = (theme) =>
 		},
 		forgotPassButton: {},
 
+		// ********** Home **********
+		homeHeader: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			width: theme.dimensions.width * 0.9,
+			marginTop: theme.dimensions.height * 0.02,
+		},
+		BalanceDisp: {
+			width: theme.dimensions.width * 0.9,
+			marginTop: theme.dimensions.height * 0.02,
+		},
+		homeTxt: {
+			color: theme.colors.accent,
+			fontSize: 16,
+		},
+		balanceTxt: {
+			color: theme.colors.primary,
+			fontSize: 38,
+			fontWeight: "bold",
+			marginTop: theme.dimensions.height * 0.01,
+		},
+		homeFunc: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			width: theme.dimensions.width * 0.9,
+			paddingVertical: theme.dimensions.height * 0.02,
+		},
+		stats: {
+			flex: 1,
+			flexDirection: "column",
+			justifyContent: "flex-start",
+			alignItems: "center",
+			height: theme.dimensions.height * 0.21,
+		},
+		statsBox: {
+			width: "100%",
+			height: theme.dimensions.height * 0.08,
+			borderRadius: 10,
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "center",
+			marginTop: 5,
+		},
+		statsTxtS: {
+			color: theme.colors.background,
+			fontSize: 16,
+		},
+		statsTxtL: {
+			color: theme.colors.background,
+			fontSize: 28,
+			fontWeight: "bold",
+		},
+		navs: {
+			flex: 1.8,
+			flexDirection: "row",
+			justifyContent: "flex-start",
+			alignItems: "center",
+			flexWrap: "wrap",
+			height: theme.dimensions.height * 0.21,
+		},
+		navButton: {
+			alignItems: "center",
+			marginLeft: 8,
+		},
+		navBox: {
+			width: theme.dimensions.width * 0.17,
+			height: theme.dimensions.width * 0.17,
+			borderRadius: 10,
+			marginVertical: 5,
+			backgroundColor: theme.colors.primary,
+			justifyContent: "center",
+			alignItems: "center",
+		},
+		navIcon: {
+			width: theme.dimensions.width * 0.1,
+			height: theme.dimensions.width * 0.09,
+		},
+		recentContainer: {
+			width: theme.dimensions.width * 0.9,
+			marginTop: theme.dimensions.height * 0.02,
+		},
+		// ********** Activities Card **********
+		cardAct: {
+			width: theme.dimensions.width * 0.6,
+			height: theme.dimensions.width * 0.6,
+			borderRadius: 10,
+			backgroundColor: theme.colors.primary,
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			paddingHorizontal: 10,
+			marginTop: 10,
+		},
 		// ********** Calendar Modal **********
 		datePickerModal: {
 			position: "absolute",
@@ -205,5 +300,10 @@ export const styles = (theme) =>
 		errorTxt: {
 			color: "#D05353",
 			fontSize: 16,
+		},
+		// ********** Icons **********
+		icon: {
+			width: 36,
+			height: 36,
 		},
 	});

@@ -25,7 +25,7 @@ const PinVerf = ({ navigation }) => {
 
 	useEffect(() => {
 		if (pin.length === 6) {
-			console.log("redirecting to home");
+			navigation.replace("Home");
 		}
 	}, [pin]);
 
@@ -34,7 +34,7 @@ const PinVerf = ({ navigation }) => {
 			<Image source={require("../assets/Logo/Logo - small.png")} />
 
 			<Text style={style.description}>
-				Please enter your 4-digit PIN to access your account.
+				Please enter your 6-digit PIN to access your account.
 			</Text>
 			<Text
 				style={[
