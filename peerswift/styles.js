@@ -125,6 +125,12 @@ export const styles = (theme) =>
 			paddingVertical: 15,
 			alignItems: "center",
 			justifyContent: "center",
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
 		},
 		primaryButtonTxt: {
 			color: theme.colors.background,
@@ -203,6 +209,11 @@ export const styles = (theme) =>
 			color: theme.colors.accent,
 			fontSize: 16,
 		},
+		linkTxt: {
+			color: theme.colors.primary,
+			fontSize: 16,
+			textDecorationLine: "underline",
+		},
 		balanceTxt: {
 			color: theme.colors.primary,
 			fontSize: 38,
@@ -231,6 +242,12 @@ export const styles = (theme) =>
 			justifyContent: "center",
 			alignItems: "center",
 			marginTop: 5,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
 		},
 		statsTxtS: {
 			color: theme.colors.background,
@@ -252,6 +269,12 @@ export const styles = (theme) =>
 		navButton: {
 			alignItems: "center",
 			marginLeft: 8,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
 		},
 		navBox: {
 			width: theme.dimensions.width * 0.17,
@@ -270,17 +293,78 @@ export const styles = (theme) =>
 			width: theme.dimensions.width * 0.9,
 			marginTop: theme.dimensions.height * 0.02,
 		},
+		recentHeader: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+		},
 		// ********** Activities Card **********
 		cardAct: {
-			width: theme.dimensions.width * 0.6,
-			height: theme.dimensions.width * 0.6,
+			width: theme.dimensions.width * 0.55,
+			height: theme.dimensions.width * 0.4,
+			marginRight: 10,
 			borderRadius: 10,
-			backgroundColor: theme.colors.primary,
+			backgroundColor: "#F6F6F6",
+			flexDirection: "column",
+			justifyContent: "space-between",
+			marginTop: 5,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+		},
+		cardHeader: {
 			flexDirection: "row",
 			justifyContent: "space-between",
 			alignItems: "center",
 			paddingHorizontal: 10,
-			marginTop: 10,
+			paddingVertical: 10,
+		},
+		cardActFlag: {
+			width: theme.dimensions.width * 0.1,
+			height: theme.dimensions.width * 0.1,
+			marginRight: 5,
+			borderRadius: 100,
+		},
+		cardActTitle: {
+			color: theme.colors.accent,
+			fontSize: 16,
+		},
+		cardActRating: {
+			color: theme.colors.accent,
+			fontSize: 16,
+		},
+		cardMid: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			paddingHorizontal: 10,
+			marginBottom: 20,
+		},
+		cardCurrency: {
+			color: theme.colors.accent,
+			fontSize: 25,
+			fontWeight: "bold",
+			marginRight: 5,
+		},
+		cardAmount: {
+			color: theme.colors.accent,
+			fontSize: 28,
+			fontWeight: "bold",
+		},
+		cardFooter: {
+			borderBottomLeftRadius: 10,
+			borderBottomRightRadius: 10,
+			paddingHorizontal: 5,
+			paddingVertical: 5,
+			alignItems: "flex-end",
+		},
+		cardAction: {
+			color: theme.colors.background,
+			fontSize: 16,
+			fontWeight: "bold",
 		},
 		// ********** Calendar Modal **********
 		datePickerModal: {
