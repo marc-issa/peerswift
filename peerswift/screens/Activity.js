@@ -21,21 +21,6 @@ const Activity = ({ navigation, route }) => {
 		setFilter(newFilter);
 	};
 
-	const onSwipe = (event) => {
-		if (event.nativeEvent.x < 110 && event.nativeEvent.x > 0) {
-			// If the swipe left is greater than 100 units, navigate back
-			navigation.goBack();
-		} else {
-			const { velocityX } = event.nativeEvent;
-			// Change filter based on the direction of the swipe
-			if (velocityX > 0) {
-				handleChangeFilter("requests");
-			} else if (velocityX < 0) {
-				handleChangeFilter("transactions");
-			}
-		}
-	};
-
 	const requestsDummy = [
 		{
 			history_id: 1,
@@ -252,81 +237,77 @@ const Activity = ({ navigation, route }) => {
 	];
 
 	return (
-		<PanGestureHandler onEnded={onSwipe}>
-			<View style={style.container}>
-				<View style={style.header}>
-					<TouchableOpacity onPress={() => navigation.goBack()}>
-						<Image
-							source={require("../assets/Icons/back.png")}
-							style={style.backButton}
-						/>
-					</TouchableOpacity>
-					<Text style={style.headerTitle}>Activity</Text>
-					<View style={{ flex: 1 }}></View>
-				</View>
+		<View style={style.container}>
+			<View style={style.header}>
+				<TouchableOpacity onPress={() => navigation.goBack()}>
+					<Image
+						source={require("../assets/Icons/back.png")}
+						style={style.backButton}
+					/>
+				</TouchableOpacity>
+				<Text style={style.headerTitle}>Activity</Text>
+				<View style={{ flex: 1 }}></View>
+			</View>
 
-				<View style={style.filterDesign}>
-					<View style={style.filterBox}>
-						<TouchableOpacity
-							onPress={() => handleChangeFilter("requests")}
+			<View style={style.filterDesign}>
+				<View style={style.filterBox}>
+					<TouchableOpacity
+						onPress={() => handleChangeFilter("requests")}
+						style={[
+							style.filterIndvBox,
+							{
+								backgroundColor:
+									filter === "requests" ? theme.colors.primary : "#F6F6F6",
+							},
+						]}>
+						<Text
 							style={[
-								style.filterIndvBox,
+								style.filterTxt,
 								{
-									backgroundColor:
-										filter === "requests" ? theme.colors.primary : "#F6F6F6",
+									color:
+										filter !== "requests" ? theme.colors.primary : "#F6F6F6",
 								},
 							]}>
-							<Text
-								style={[
-									style.filterTxt,
-									{
-										color:
-											filter !== "requests" ? theme.colors.primary : "#F6F6F6",
-									},
-								]}>
-								Requests
-							</Text>
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={() => handleChangeFilter("transactions")}
+							Requests
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => handleChangeFilter("transactions")}
+						style={[
+							style.filterIndvBox,
+							{
+								backgroundColor:
+									filter === "transactions" ? theme.colors.primary : "#F6F6F6",
+							},
+						]}>
+						<Text
 							style={[
-								style.filterIndvBox,
+								style.filterTxt,
 								{
-									backgroundColor:
-										filter === "transactions"
+									color:
+										filter !== "transactions"
 											? theme.colors.primary
 											: "#F6F6F6",
 								},
 							]}>
-							<Text
-								style={[
-									style.filterTxt,
-									{
-										color:
-											filter !== "transactions"
-												? theme.colors.primary
-												: "#F6F6F6",
-									},
-								]}>
-								Transactions
-							</Text>
-						</TouchableOpacity>
-					</View>
+							Transactions
+						</Text>
+					</TouchableOpacity>
 				</View>
-				<ScrollView>
-					<View style={style.listContainer}>
-						{filter === "requests" &&
-							requestsDummy.map((request) => (
-								<ActCardLong key={request.history_id} data={request} />
-							))}
-						{filter === "transactions" &&
-							transactionsDummy.map((transaction) => (
-								<ActCardLong key={transaction.history_id} data={transaction} />
-							))}
-					</View>
-				</ScrollView>
 			</View>
-		</PanGestureHandler>
+			<ScrollView>
+				<View style={style.listContainer}>
+					{filter === "requests" &&
+						requestsDummy.map((request) => (
+							<ActCardLong key={request.history_id} data={request} />
+						))}
+					{filter === "transactions" &&
+						transactionsDummy.map((transaction) => (
+							<ActCardLong key={transaction.history_id} data={transaction} />
+						))}
+				</View>
+			</ScrollView>
+		</View>
 	);
 };
 

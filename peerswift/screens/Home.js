@@ -150,7 +150,7 @@ const Home = ({ navigation }) => {
 								style.statsBox,
 								{
 									backgroundColor: "#D05353",
-									marginTop: theme.dimensions.height * 0.026,
+									marginTop: theme.dimensions.height * 0.033,
 								},
 							]}>
 							<Text style={style.statsTxtS}>activity</Text>

@@ -146,6 +146,7 @@ export const styles = (theme) =>
 				height: 2,
 			},
 			shadowOpacity: 0.25,
+			elevation: 3,
 		},
 		primaryButtonTxt: {
 			color: theme.colors.background,
@@ -263,6 +264,7 @@ export const styles = (theme) =>
 				height: 2,
 			},
 			shadowOpacity: 0.25,
+			elevation: 3,
 		},
 		statsTxtS: {
 			color: theme.colors.background,
@@ -290,6 +292,7 @@ export const styles = (theme) =>
 				height: 2,
 			},
 			shadowOpacity: 0.25,
+			elevation: 3,
 		},
 		navBox: {
 			width: theme.dimensions.width * 0.17,
@@ -329,6 +332,7 @@ export const styles = (theme) =>
 				height: 2,
 			},
 			shadowOpacity: 0.25,
+			elevation: 3,
 		},
 		cardHeader: {
 			flexDirection: "row",
@@ -394,6 +398,7 @@ export const styles = (theme) =>
 				height: 2,
 			},
 			shadowOpacity: 0.25,
+			elevation: 3,
 		},
 		cardCurerncyLong: {
 			fontSize: 18,
@@ -455,6 +460,7 @@ export const styles = (theme) =>
 				height: 2,
 			},
 			shadowOpacity: 0.25,
+			elevation: 3,
 		},
 		filterIndvBox: {
 			paddingHorizontal: 15,
