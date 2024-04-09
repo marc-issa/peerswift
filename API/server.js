@@ -10,7 +10,7 @@ function logIPv4Addresses() {
 			if (
 				"IPv4" === interface.family &&
 				!interface.internal &&
-				interfaceName === "Wi-Fi"
+				(interfaceName === "Wi-Fi" || interfaceName === "Ethernet")
 			) {
 				console.log(`Server running on: http://${interface.address}:${port}`);
 			}
