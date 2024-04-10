@@ -10,6 +10,7 @@ import Signup from "../screens/Signup";
 import PinVerf from "../screens/PinVerf";
 import Home from "../screens/Home";
 import Activity from "../screens/Activity";
+import Groups from "../screens/Groups";
 
 const Stack = createStackNavigator();
 
@@ -59,6 +60,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='Activity'
 				component={Activity}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='Groups'
+				component={Groups}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,

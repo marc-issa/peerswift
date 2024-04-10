@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useTheme } from "@react-navigation/native";
-// Import PanGestureHandler from react-native-gesture-handler for detecting swipe gestures
-import { PanGestureHandler } from "react-native-gesture-handler";
 
 // Import component
 import ActCardLong from "../components/ActCardLong";

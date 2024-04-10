@@ -480,6 +480,57 @@ export const styles = (theme) =>
 			justifyContent: "flex-start",
 			alignItems: "center",
 		},
+		// ********** Groups **********
+		groupList: {
+			width: theme.dimensions.width,
+			marginTop: theme.dimensions.height * 0.02,
+			flexDirection: "column",
+			justifyContent: "flex-start",
+			alignItems: "center",
+		},
+		groupBox: {
+			width: theme.dimensions.width,
+			borderRadius: 10,
+			backgroundColor: theme.colors.background,
+			flexDirection: "row",
+			justifyContent: "flex-start",
+			marginTop: 5,
+			borderBottomWidth: 1,
+			borderColor: theme.colors.accent,
+			paddingVertical: 10,
+		},
+		groupIcon: {
+			width: theme.dimensions.width * 0.2,
+			height: theme.dimensions.width * 0.2,
+			borderRadius: 100,
+		},
+		groupInfoBox: {
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "flex-start",
+			marginLeft: 10,
+			width: theme.dimensions.width * 0.6,
+		},
+		groupName: {
+			color: theme.colors.accent,
+			fontSize: 20,
+			fontWeight: "bold",
+			marginBottom: 5,
+		},
+		groupLastMessage: {
+			color: theme.colors.accent,
+			fontSize: 14,
+		},
+		groupTimeBox: {
+			flexDirection: "column",
+			justifyContent: "flex-end",
+			alignItems: "flex-end",
+			padding: 5,
+		},
+		lastMessageTime: {
+			color: theme.colors.accent,
+			fontSize: 14,
+		},
 		// ********** Errors **********
 		errorTxt: {
 			color: "#D05353",
