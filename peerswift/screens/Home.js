@@ -198,7 +198,9 @@ const Home = ({ navigation }) => {
 							</View>
 							<Text style={style.navTxt}>activity</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={style.navButton}>
+						<TouchableOpacity
+							style={style.navButton}
+							onPress={() => navigation.navigate("Groups")}>
 							<View style={style.navBox}>
 								<Image
 									source={require("../assets/Icons/groups.png")}
