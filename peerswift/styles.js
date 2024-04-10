@@ -531,6 +531,102 @@ export const styles = (theme) =>
 			color: theme.colors.accent,
 			fontSize: 14,
 		},
+		// ********** GroupChat **********
+		chatHeaderBG: {
+			width: theme.dimensions.width,
+			paddingHorizontal: theme.dimensions.width * 0.05,
+			borderBottomWidth: 1,
+			borderBottomColors: theme.colors.accent,
+			paddingBottom: 10,
+		},
+		groupChatHeader: {
+			flex: 8,
+			paddingLeft: 20,
+			flexDirection: "row",
+			justifyContent: "flex-start",
+			alignItems: "center",
+		},
+		groupChatIcon: {
+			width: theme.dimensions.width * 0.1,
+			height: theme.dimensions.width * 0.1,
+			borderRadius: 100,
+		},
+		groupChatName: {
+			color: theme.colors.accent,
+			fontSize: 20,
+			fontWeight: "bold",
+			marginLeft: 10,
+		},
+		messagesContainer: {
+			flex: 1,
+			width: theme.dimensions.width,
+			marginTop: 10,
+		},
+		// Send Input
+		inputArea: {
+			flexDirection: "row",
+			padding: 10,
+			alignItems: "center",
+			backgroundColor: "#F6F6F6",
+			borderRadius: 100,
+			width: theme.dimensions.width * 0.95,
+			marginBottom: 20,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
+		},
+		messageInput: {
+			flex: 1,
+			padding: 10,
+			borderRadius: 20,
+			backgroundColor: theme.colors.inputBackground, // Replace with your theme's input background color
+			color: theme.colors.text, // Replace with your theme's text color
+		},
+		sendButton: {
+			marginLeft: 10,
+		},
+		sendIcon: {
+			width: 30,
+			height: 30,
+			resizeMode: "contain",
+		},
+		// Messages
+		messageRow: {
+			flexDirection: "row",
+			alignItems: "flex-end",
+		},
+		sentMessageRow: {
+			flexDirection: "row-reverse",
+			alignSelf: "flex-end",
+		},
+		messageBubble: {
+			padding: 10,
+			borderRadius: 10,
+			marginVertical: 5,
+			marginHorizontal: 10,
+			maxWidth: theme.dimensions.width * 0.6,
+			alignSelf: "flex-start",
+		},
+		receivedMessage: {
+			backgroundColor: "#f6f6f6",
+		},
+		sentMessage: {
+			backgroundColor: theme.colors.primary,
+		},
+		messageText: {
+			color: "black",
+		},
+		messageTime: {
+			color: "grey",
+			fontSize: 10,
+			marginTop: 4,
+			alignSelf: "flex-end",
+		},
+
 		// ********** Errors **********
 		errorTxt: {
 			color: "#D05353",

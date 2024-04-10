@@ -7,6 +7,17 @@ import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 // Functions import
 import formatMessage from "../functions/formatMessage";
 
+const groupsDummy = [
+	{
+		group_id: 1,
+		group_name: "Cyprus",
+		group_icon: "https://flagcdn.com/w320/cy.png",
+		last_message:
+			"Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam qui architecto, fugit ipsum maiores nostrum nihil accusantium suscipit optio inventore vero cupiditate doloremque earum labore numquam ex asperiores veritatis ad.",
+		last_message_time: "8:45 AM",
+	},
+];
+
 const Groups = ({ navigation }) => {
 	const theme = useTheme();
 	const style = styles(theme);
@@ -21,10 +32,13 @@ const Groups = ({ navigation }) => {
 				</TouchableOpacity>
 				<Text style={style.headerTitle}>Groups</Text>
 				<TouchableOpacity
-					onPress={() => console.log("Navigating to country select")}>
+					onPress={() => console.log("Redirecting to countries")}>
 					<Image
-						soruce={require("../assets/Icons/add.png")}
-						style={style.backButton}
+						source={require("../assets/Icons/add.png")}
+						style={{
+							width: theme.dimensions.width * 0.075,
+							height: theme.dimensions.width * 0.075,
+						}}
 					/>
 				</TouchableOpacity>
 			</View>
@@ -34,7 +48,8 @@ const Groups = ({ navigation }) => {
 						style={[
 							style.groupBox,
 							{ borderTopWidth: 1, borderTopColor: theme.colors.accent },
-						]}>
+						]}
+						onPress={() => navigation.navigate("GroupChat")}>
 						<Image
 							source={{ uri: "https://flagcdn.com/w320/cy.png" }}
 							style={style.groupIcon}
