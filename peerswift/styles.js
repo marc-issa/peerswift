@@ -620,13 +620,58 @@ export const styles = (theme) =>
 		messageText: {
 			color: "black",
 		},
+		sentMessageTxt: {
+			color: theme.colors.background,
+		},
 		messageTime: {
 			color: "grey",
 			fontSize: 10,
 			marginTop: 4,
 			alignSelf: "flex-end",
 		},
-
+		// ********** Profile **********
+		profileHeader: {
+			flex: 4,
+			paddingLeft: 20,
+			flexDirection: "row",
+			justifyContent: "center",
+			alignItems: "center",
+		},
+		profileName: {
+			color: theme.colors.accent,
+			fontSize: 25,
+			fontWeight: "bold",
+			marginLeft: 10,
+		},
+		profileSection: {
+			color: theme.colors.accent,
+			fontSize: 16,
+			fontWeight: "bold",
+			alignSelf: "flex-start",
+		},
+		profileItem: {
+			flexDirection: "row",
+			alignItems: "center",
+			marginTop: 20,
+			backgroundColor: "#F6F6F6",
+			padding: 10,
+			borderRadius: 10,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
+		},
+		profileItemIcon: {
+			marginRight: 10,
+		},
+		profileItemText: {
+			color: theme.colors.accent,
+			fontSize: 16,
+			fontWeight: "bold",
+		},
 		// ********** Errors **********
 		errorTxt: {
 			color: "#D05353",

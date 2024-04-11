@@ -24,7 +24,10 @@ const Message = ({ text, time, incoming }) => {
 					style.messageBubble,
 					incoming ? style.receivedMessage : style.sentMessage,
 				]}>
-				<Text style={style.messageText}>{text}</Text>
+				<Text
+					style={[style.messageText, !incoming ? style.sentMessageTxt : ""]}>
+					{text}
+				</Text>
 				<Text style={style.messageTime}>{time}</Text>
 			</View>
 		</View>
