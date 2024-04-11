@@ -13,6 +13,7 @@ import Activity from "../screens/Activity";
 import Groups from "../screens/Groups";
 import GroupChat from "../screens/GroupChat";
 import Profile from "../screens/Profile";
+import Countries from "../screens/Countries";
 
 const Stack = createStackNavigator();
 
@@ -86,6 +87,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='Profile'
 				component={Profile}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='Countries'
+				component={Countries}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,

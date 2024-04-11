@@ -672,6 +672,33 @@ export const styles = (theme) =>
 			fontSize: 16,
 			fontWeight: "bold",
 		},
+		// ********** Countries **********
+		countriesList: {
+			width: theme.dimensions.width,
+			flexDirection: "column",
+			justifyContent: "flex-start",
+			alignItems: "center",
+			marginTop: 20,
+		},
+		countryBox: {
+			flexDirection: "row",
+			justifyContent: "flex-start",
+			alignItems: "center",
+			borderBottomColor: theme.colors.accent,
+			borderTopColor: theme.colors.accent,
+			borderBottomWidth: 1,
+			padding: 10,
+			width: theme.dimensions.width,
+		},
+		countryFlag: {
+			width: theme.dimensions.width * 0.1,
+			height: theme.dimensions.width * 0.1,
+			marginRight: 10,
+		},
+		countryName: {
+			color: theme.colors.accent,
+			fontSize: 16,
+		},
 		// ********** Errors **********
 		errorTxt: {
 			color: "#D05353",

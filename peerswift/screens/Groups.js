@@ -31,8 +31,7 @@ const Groups = ({ navigation }) => {
 					/>
 				</TouchableOpacity>
 				<Text style={style.headerTitle}>Groups</Text>
-				<TouchableOpacity
-					onPress={() => console.log("Redirecting to countries")}>
+				<TouchableOpacity onPress={() => navigation.navigate("Countries")}>
 					<Image
 						source={require("../assets/Icons/add.png")}
 						style={{
