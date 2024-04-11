@@ -122,7 +122,7 @@ const Home = ({ navigation }) => {
 		<ScrollView>
 			<View style={style.container}>
 				<View style={style.header}>
-					<TouchableOpacity>
+					<TouchableOpacity onPress={() => navigation.navigate("Profile")}>
 						<Image
 							source={require("../assets/Icons/menu.png")}
 							style={style.icon}
