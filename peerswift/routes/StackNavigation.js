@@ -15,6 +15,7 @@ import GroupChat from "../screens/GroupChat";
 import Profile from "../screens/Profile";
 import Countries from "../screens/Countries";
 import Notifications from "../screens/Notifications";
+import EditProfile from "../screens/EditProfile";
 
 const Stack = createStackNavigator();
 
@@ -104,6 +105,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='Notifications'
 				component={Notifications}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='EditProfile'
+				component={EditProfile}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,

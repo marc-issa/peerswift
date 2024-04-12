@@ -25,7 +25,7 @@ const Profile = ({ navigation }) => {
 					style.profileItem,
 					{ marginTop: iconName === "logout" ? 40 : 20 },
 				]}
-				onPress={() => console.log(redirect)}>
+				onPress={() => navigation.navigate(redirect)}>
 				<Image source={icon} style={style.profileItemIcon} />
 				<Text style={style.profileItemText}>{title}</Text>
 			</TouchableOpacity>
