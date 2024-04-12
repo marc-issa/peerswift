@@ -128,7 +128,8 @@ const Home = ({ navigation }) => {
 							style={style.icon}
 						/>
 					</TouchableOpacity>
-					<TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => navigation.navigate("Notifications")}>
 						<Image
 							source={require("../assets/Icons/notifications.png")}
 							style={style.icon}

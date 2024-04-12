@@ -699,6 +699,21 @@ export const styles = (theme) =>
 			color: theme.colors.accent,
 			fontSize: 16,
 		},
+		// ********** Notifications **********
+		notifBox: {
+			width: theme.dimensions.width * 0.9,
+			padding: 10,
+			backgroundColor: "#F6F6F6",
+			borderRadius: 10,
+			marginTop: 10,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
+		},
 		// ********** Errors **********
 		errorTxt: {
 			color: "#D05353",

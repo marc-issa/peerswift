@@ -14,6 +14,7 @@ import Groups from "../screens/Groups";
 import GroupChat from "../screens/GroupChat";
 import Profile from "../screens/Profile";
 import Countries from "../screens/Countries";
+import Notifications from "../screens/Notifications";
 
 const Stack = createStackNavigator();
 
@@ -95,6 +96,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='Countries'
 				component={Countries}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='Notifications'
+				component={Notifications}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,
