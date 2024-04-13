@@ -561,6 +561,8 @@ export const styles = (theme) =>
 			flex: 1,
 			width: theme.dimensions.width,
 			marginTop: 10,
+			flexDirection: "column-reverse",
+			paddingBottom: 10,
 		},
 		// Send Input
 		inputArea: {
