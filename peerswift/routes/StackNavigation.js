@@ -17,6 +17,9 @@ import Countries from "../screens/Countries";
 import Notifications from "../screens/Notifications";
 import EditProfile from "../screens/EditProfile";
 
+// Actions
+import SendMoney from "../screens/SendMoney";
+
 const Stack = createStackNavigator();
 
 const StackNavigation = ({ navigation }) => {
@@ -113,6 +116,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='EditProfile'
 				component={EditProfile}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='SendMoney'
+				component={SendMoney}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,

@@ -716,6 +716,78 @@ export const styles = (theme) =>
 			shadowOpacity: 0.25,
 			elevation: 3,
 		},
+		// ********** Actions **********
+		actionSection: {
+			width: theme.dimensions.width * 0.9,
+			marginTop: theme.dimensions.height * 0.02,
+			flexDirection: "column",
+			justifyContent: "flex-start",
+			alignItems: "center",
+		},
+		actionSectionHeader: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			width: theme.dimensions.width * 0.9,
+		},
+		actionSectionTitle: {
+			color: theme.colors.accent,
+			fontSize: 16,
+		},
+		actionSectionbutton: {
+			color: theme.colors.background,
+			backgroundColor: theme.colors.primary,
+			paddingHorizontal: 10,
+			paddingVertical: 5,
+			borderRadius: 100,
+			fontSize: 16,
+			fontWeight: "bold",
+		},
+		// ********** Account **********
+		accountBox: {
+			width: theme.dimensions.width * 0.75,
+			height: theme.dimensions.width * 0.25,
+			backgroundColor: "#F6F6F6",
+			flexDirection: "row",
+			justifyContent: "flex-start",
+			alignItems: "center",
+			marginRight: 10,
+			borderRadius: 10,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
+			padding: 10,
+		},
+		accountTitle: {
+			flex: 1,
+			color: theme.colors.accent,
+			fontSize: 24,
+			fontWeight: "bold",
+			textAlign: "center",
+		},
+		accountInfo: {
+			flex: 1,
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "center",
+		},
+		accountInfoTitle: {
+			color: theme.colors.accent,
+			fontSize: 16,
+		},
+		accountBalance: {
+			color: theme.colors.accent,
+			fontSize: 20,
+			fontWeight: "bold",
+		},
+		accountNumber: {
+			color: theme.colors.accent,
+			fontSize: 14,
+		},
 		// ********** Errors **********
 		errorTxt: {
 			color: "#D05353",

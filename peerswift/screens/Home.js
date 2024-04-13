@@ -159,7 +159,9 @@ const Home = ({ navigation }) => {
 						</View>
 					</View>
 					<View style={style.navs}>
-						<TouchableOpacity style={style.navButton}>
+						<TouchableOpacity
+							style={style.navButton}
+							onPress={() => navigation.navigate("SendMoney")}>
 							<View style={style.navBox}>
 								<Image
 									source={require("../assets/Icons/send_money.png")}
