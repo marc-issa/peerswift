@@ -16,6 +16,7 @@ import Profile from "../screens/Profile";
 import Countries from "../screens/Countries";
 import Notifications from "../screens/Notifications";
 import EditProfile from "../screens/EditProfile";
+import RequestTransfer from "../screens/RequestTransfer";
 
 // Actions
 import SendMoney from "../screens/SendMoney";
@@ -124,6 +125,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='SendMoney'
 				component={SendMoney}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='RequestTransfer'
+				component={RequestTransfer}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,
