@@ -1,12 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-	View,
-	Text,
-	Image,
-	TouchableOpacity,
-	ScrollView,
-	Touchable,
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 // Import your styles
 import { styles } from "../styles";
@@ -29,15 +22,14 @@ const Account = ({ account, value, onChange }) => {
 			<TouchableOpacity
 				style={[
 					style.accountBox,
-					{ borderWidth: account.account_id === value ? 2 : 0 },
+					{ borderWidth: account.account_id === value ? 3 : 0 },
 				]}
 				onPress={() => handleAccountClick(account.account_id)}>
 				<Text style={style.accountTitle}>{account.account_name}</Text>
 				<View style={style.accountInfo}>
 					<Text style={style.accountInfoTitle}>Total Balance</Text>
 					<Text style={style.accountBalance}>
-						{account.currency}
-						{account.account_balance}.00
+						{account.currency} {account.account_balance}.00
 					</Text>
 				</View>
 			</TouchableOpacity>
@@ -47,7 +39,7 @@ const Account = ({ account, value, onChange }) => {
 			<TouchableOpacity
 				style={[
 					style.accountBox,
-					{ borderWidth: account.account_id === value ? 2 : 0 },
+					{ borderWidth: account.account_id === value ? 3 : 0 },
 				]}
 				onPress={() => handleAccountClick(account.account_id)}>
 				<Text style={style.accountTitle}>{account.account_name}</Text>

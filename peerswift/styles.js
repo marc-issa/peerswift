@@ -223,11 +223,11 @@ export const styles = (theme) =>
 		},
 		homeTxt: {
 			color: theme.colors.accent,
-			fontSize: 16,
+			fontSize: 18,
 		},
 		linkTxt: {
 			color: theme.colors.primary,
-			fontSize: 16,
+			fontSize: 18,
 			textDecorationLine: "underline",
 		},
 		balanceTxt: {
@@ -738,11 +738,20 @@ export const styles = (theme) =>
 			fontSize: 18,
 		},
 		actionSectionbutton: {
-			color: theme.colors.background,
 			backgroundColor: theme.colors.primary,
 			paddingHorizontal: 10,
 			paddingVertical: 5,
 			borderRadius: 100,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
+		},
+		actionButtonTxt: {
+			color: theme.colors.background,
 			fontSize: 16,
 			fontWeight: "bold",
 		},
@@ -754,7 +763,7 @@ export const styles = (theme) =>
 			flexDirection: "row",
 			justifyContent: "flex-start",
 			alignItems: "center",
-			marginRight: 10,
+			marginRight: 15,
 			borderRadius: 10,
 			shadowColor: "#000",
 			shadowOffset: {
@@ -791,6 +800,72 @@ export const styles = (theme) =>
 		accountNumber: {
 			color: theme.colors.accent,
 			fontSize: 14,
+		},
+		// ********** Ammount Select **********
+		amountSelectBox: {
+			width: theme.dimensions.width * 0.9,
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "center",
+			marginTop: 20,
+		},
+		amountActionBox: {
+			flexDirection: "row",
+			width: theme.dimensions.width * 0.7,
+			justifyContent: "space-between",
+			alignItems: "center",
+		},
+		amountAddSubstract: {
+			backgroundColor: theme.colors.background,
+			width: theme.dimensions.width * 0.12,
+			height: theme.dimensions.width * 0.12,
+			borderColor: theme.colors.accent,
+			borderWidth: 2,
+			borderRadius: 10,
+			justifyContent: "center",
+			alignItems: "center",
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
+		},
+		amountAddSubstractTxt: {
+			color: theme.colors.accent,
+			fontSize: 24,
+			fontWeight: "bold",
+		},
+		amountTxt: {
+			color: theme.colors.accent,
+			fontSize: 36,
+			fontWeight: "bold",
+			maxWidth: theme.dimensions.width * 0.3,
+			textAlign: "center",
+		},
+		amountSelect: {
+			backgroundColor: theme.colors.background,
+			width: theme.dimensions.width * 0.2,
+			height: theme.dimensions.width * 0.1,
+			borderColor: theme.colors.accent,
+			borderWidth: 2,
+			borderRadius: 10,
+			justifyContent: "center",
+			alignItems: "center",
+			marginRight: 10,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
+		},
+		amountSelectTxt: {
+			color: theme.colors.accent,
+			fontSize: 18,
+			fontWeight: "bold",
 		},
 		// ********** Errors **********
 		errorTxt: {
