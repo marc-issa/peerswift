@@ -18,6 +18,7 @@ import { useTheme } from "@react-navigation/native";
 // Components import
 import Account from "../components/Account";
 import AmountSelect from "../components/AmountSelect";
+import Recepients from "../components/Recepients";
 import Buttons from "../components/Buttons";
 
 const SendMoney = ({ navigation }) => {
@@ -26,6 +27,7 @@ const SendMoney = ({ navigation }) => {
 
 	const [selectedAccount, setSelectedAccount] = useState(null);
 	const [amount, setAmount] = useState(0.0);
+	const [recepient, setRecepient] = useState(null);
 
 	const handleAccountClick = (account) => {
 		setSelectedAccount(account);
@@ -33,6 +35,10 @@ const SendMoney = ({ navigation }) => {
 
 	const handleAmmountChange = (value) => {
 		setAmount(value);
+	};
+
+	const handleRecepientChange = (value) => {
+		setRecepient(value);
 	};
 
 	const accountData = [
@@ -52,6 +58,52 @@ const SendMoney = ({ navigation }) => {
 			wallet: false,
 		},
 	];
+
+	const recepientsData = [
+		{
+			id: 1,
+			name: "Will Adam",
+			country_flag: "https://flagcdn.com/w320/cy.png",
+			rating: 4.5,
+		},
+		{
+			id: 2,
+			name: "Will Adam",
+			country_flag: "https://flagcdn.com/w320/cy.png",
+			rating: 4.5,
+		},
+		{
+			id: 13,
+			name: "Will Adam",
+			country_flag: "https://flagcdn.com/w320/cy.png",
+			rating: 4.5,
+		},
+		{
+			id: 14,
+			name: "Will Adam",
+			country_flag: "https://flagcdn.com/w320/cy.png",
+			rating: 4.5,
+		},
+		{
+			id: 15,
+			name: "Will Adam",
+			country_flag: "https://flagcdn.com/w320/cy.png",
+			rating: 4.5,
+		},
+		{
+			id: 16,
+			name: "Will Adam",
+			country_flag: "https://flagcdn.com/w320/cy.png",
+			rating: 4.5,
+		},
+		{
+			id: 17,
+			name: "Will Adam",
+			country_flag: "https://flagcdn.com/w320/cy.png",
+			rating: 4.5,
+		},
+	];
+
 	return (
 		<KeyboardAvoidingView
 			style={style.container}
@@ -107,7 +159,13 @@ const SendMoney = ({ navigation }) => {
 								<Text style={style.actionButtonTxt}>+ Add</Text>
 							</TouchableOpacity>
 						</View>
+						<Recepients
+							recepients={recepientsData}
+							value={recepient}
+							onChange={handleRecepientChange}
+						/>
 					</View>
+
 					<Buttons
 						type={"primary"}
 						screen={"SendMoney"}

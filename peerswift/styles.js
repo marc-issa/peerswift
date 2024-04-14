@@ -867,6 +867,32 @@ export const styles = (theme) =>
 			fontSize: 18,
 			fontWeight: "bold",
 		},
+		// ********** Recepients **********
+		recepientsBox: {
+			width: theme.dimensions.width * 0.9,
+			flexDirection: "row",
+			justifyContent: "flex-start",
+			alignItems: "center",
+		},
+		recepientItem: {
+			padding: 10,
+			marginRight: 10,
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "center",
+		},
+		recepientImage: {
+			width: theme.dimensions.width * 0.15,
+			height: theme.dimensions.width * 0.15,
+			borderRadius: 100,
+			borderColor: theme.colors.primary,
+			marginBottom: 10,
+		},
+		recepientText: {
+			color: theme.colors.accent,
+			fontSize: 16,
+			fontWeight: "bold",
+		},
 		// ********** Errors **********
 		errorTxt: {
 			color: "#D05353",
