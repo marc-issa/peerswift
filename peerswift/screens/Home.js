@@ -181,7 +181,9 @@ const Home = ({ navigation }) => {
 							</View>
 							<Text style={style.navTxt}>request</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={style.navButton}>
+						<TouchableOpacity
+							style={style.navButton}
+							onPress={() => navigation.navigate("TopUp")}>
 							<View style={style.navBox}>
 								<Image
 									source={require("../assets/Icons/top_up.png")}

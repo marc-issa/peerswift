@@ -16,10 +16,11 @@ import Profile from "../screens/Profile";
 import Countries from "../screens/Countries";
 import Notifications from "../screens/Notifications";
 import EditProfile from "../screens/EditProfile";
-import RequestTransfer from "../screens/RequestTransfer";
 
 // Actions
 import SendMoney from "../screens/SendMoney";
+import RequestTransfer from "../screens/RequestTransfer";
+import TopUp from "../screens/TopUp";
 
 const Stack = createStackNavigator();
 
@@ -133,6 +134,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='RequestTransfer'
 				component={RequestTransfer}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='TopUp'
+				component={TopUp}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,
