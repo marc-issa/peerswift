@@ -12,12 +12,26 @@ import {
 import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
 
-const Account = ({ account }) => {
+const Account = ({ account, value, onChange }) => {
 	const theme = useTheme();
 	const style = styles(theme);
+
+	const handleAccountClick = (id) => {
+		if (account.account_id === value) {
+			onChange(null);
+			return;
+		}
+		onChange(id);
+	};
+
 	if (account.wallet) {
 		return (
-			<TouchableOpacity style={style.accountBox}>
+			<TouchableOpacity
+				style={[
+					style.accountBox,
+					{ borderWidth: account.account_id === value ? 2 : 0 },
+				]}
+				onPress={() => handleAccountClick(account.account_id)}>
 				<Text style={style.accountTitle}>{account.account_name}</Text>
 				<View style={style.accountInfo}>
 					<Text style={style.accountInfoTitle}>Total Balance</Text>
@@ -30,7 +44,12 @@ const Account = ({ account }) => {
 		);
 	} else {
 		return (
-			<TouchableOpacity style={style.accountBox}>
+			<TouchableOpacity
+				style={[
+					style.accountBox,
+					{ borderWidth: account.account_id === value ? 2 : 0 },
+				]}
+				onPress={() => handleAccountClick(account.account_id)}>
 				<Text style={style.accountTitle}>{account.account_name}</Text>
 				<View style={style.accountInfo}>
 					<Text style={style.accountInfoTitle}>

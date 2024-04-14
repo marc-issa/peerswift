@@ -723,6 +723,9 @@ export const styles = (theme) =>
 			flexDirection: "column",
 			justifyContent: "flex-start",
 			alignItems: "center",
+			borderBottomColor: theme.colors.accent,
+			borderBottomWidth: 2,
+			paddingBottom: 20,
 		},
 		actionSectionHeader: {
 			flexDirection: "row",
@@ -732,7 +735,7 @@ export const styles = (theme) =>
 		},
 		actionSectionTitle: {
 			color: theme.colors.accent,
-			fontSize: 16,
+			fontSize: 18,
 		},
 		actionSectionbutton: {
 			color: theme.colors.background,
@@ -746,7 +749,7 @@ export const styles = (theme) =>
 		// ********** Account **********
 		accountBox: {
 			width: theme.dimensions.width * 0.75,
-			height: theme.dimensions.width * 0.25,
+			height: theme.dimensions.width * 0.2,
 			backgroundColor: "#F6F6F6",
 			flexDirection: "row",
 			justifyContent: "flex-start",
@@ -761,6 +764,7 @@ export const styles = (theme) =>
 			shadowOpacity: 0.25,
 			elevation: 3,
 			padding: 10,
+			borderColor: theme.colors.primary,
 		},
 		accountTitle: {
 			flex: 1,

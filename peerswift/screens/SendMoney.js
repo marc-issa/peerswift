@@ -8,10 +8,18 @@ import { useTheme } from "@react-navigation/native";
 
 // Components import
 import Account from "../components/Account";
+import Buttons from "../components/Buttons";
 
 const SendMoney = ({ navigation }) => {
 	const theme = useTheme();
 	const style = styles(theme);
+
+	const [selectedAccount, setSelectedAccount] = useState(null);
+
+	const handleAccountClick = (account) => {
+		setSelectedAccount(account);
+	};
+
 	const accountData = [
 		{
 			account_id: 1,
@@ -53,10 +61,38 @@ const SendMoney = ({ navigation }) => {
 					showsHorizontalScrollIndicator={false}
 					style={{ marginTop: 20 }}>
 					{accountData.map((account) => (
-						<Account key={account.account_id} account={account} />
+						<Account
+							key={account.account_id}
+							account={account}
+							value={selectedAccount}
+							onChange={handleAccountClick}
+						/>
 					))}
 				</ScrollView>
 			</View>
+			<View style={style.actionSection}>
+				<View style={style.actionSectionHeader}>
+					<Text style={style.actionSectionTitle}>
+						How much would you like to send?
+					</Text>
+				</View>
+			</View>
+			<View style={[style.actionSection, { borderBottomWidth: 0 }]}>
+				<View style={style.actionSectionHeader}>
+					<Text style={style.actionSectionTitle}>Choose a Recipient</Text>
+					<TouchableOpacity>
+						<Text style={style.actionSectionbutton}>+ Add</Text>
+					</TouchableOpacity>
+				</View>
+			</View>
+			<Buttons
+				type={"primary"}
+				screen={"SendMoney"}
+				navData={{}}
+				navigation={navigation}
+				disabled={true}
+				title={"Send to Will Adam"}
+			/>
 		</View>
 	);
 };
