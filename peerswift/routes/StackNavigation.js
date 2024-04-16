@@ -24,6 +24,7 @@ import TopUp from "../screens/TopUp";
 
 // Add Screens
 import AddRecipient from "../screens/AddRecipient";
+import AddCard from "../screens/AddCard";
 
 const Stack = createStackNavigator();
 
@@ -153,6 +154,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='AddRecipient'
 				component={AddRecipient}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='AddCard'
+				component={AddCard}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,

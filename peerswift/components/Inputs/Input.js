@@ -5,7 +5,7 @@ import { useTheme } from "@react-navigation/native";
 
 import { View, TextInput, Text, Animated } from "react-native";
 
-const Input = ({ value, onChange, title }) => {
+const Input = ({ value, onChange, title, keyboardType }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
@@ -68,6 +68,7 @@ const Input = ({ value, onChange, title }) => {
 			<TextInput
 				value={value}
 				onChangeText={handleInputChange}
+				keyboardType={keyboardType ? keyboardType : "default"}
 				placeholder={""}
 				style={{
 					height: theme.dimensions.height * 0.055,
