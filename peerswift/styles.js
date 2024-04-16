@@ -41,6 +41,14 @@ export const styles = (theme) =>
 			height: theme.dimensions.height * 0.06,
 			marginTop: theme.dimensions.height * 0.035,
 			borderRadius: 5,
+			backgroundColor: theme.colors.background,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
 		},
 		// Phone input
 		flagBox: {
@@ -915,6 +923,45 @@ export const styles = (theme) =>
 		countriesButtonTitle: {
 			color: theme.colors.accent,
 			fontSize: 18,
+		},
+		// ********** Cards Screen **********
+		cardBox: {
+			width: theme.dimensions.width * 0.9,
+			paddingHorizontal: 30,
+			paddingVertical: 15,
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "flex-start",
+			marginTop: 20,
+			padding: 10,
+			backgroundColor: theme.colors.accent,
+			borderRadius: 10,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
+		},
+		cardInfo: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			width: "100%",
+			marginTop: 20,
+		},
+		cardName: {
+			color: theme.colors.background,
+			fontSize: 16,
+			fontFamily: "monospace",
+		},
+		cardNumber: {
+			color: theme.colors.background,
+			fontSize: 20,
+			fontWeight: "bold",
+			fontFamily: "monospace",
+			marginTop: 20,
 		},
 		// ********** Errors **********
 		errorTxt: {

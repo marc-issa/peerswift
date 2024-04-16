@@ -126,7 +126,9 @@ const SendMoney = ({ navigation }) => {
 					<View style={style.actionSection}>
 						<View style={style.actionSectionHeader}>
 							<Text style={style.actionSectionTitle}>Choose account</Text>
-							<TouchableOpacity style={style.actionSectionbutton}>
+							<TouchableOpacity
+								style={style.actionSectionbutton}
+								onPress={() => navigation.navigate("AddRecipient")}>
 								<Text style={style.actionButtonTxt}>+ Add</Text>
 							</TouchableOpacity>
 						</View>
@@ -155,7 +157,9 @@ const SendMoney = ({ navigation }) => {
 					<View style={[style.actionSection, { borderBottomWidth: 0 }]}>
 						<View style={style.actionSectionHeader}>
 							<Text style={style.actionSectionTitle}>Choose a Recipient</Text>
-							<TouchableOpacity style={style.actionSectionbutton}>
+							<TouchableOpacity
+								style={style.actionSectionbutton}
+								onPress={() => navigation.navigate("AddCard")}>
 								<Text style={style.actionButtonTxt}>+ Add</Text>
 							</TouchableOpacity>
 						</View>
