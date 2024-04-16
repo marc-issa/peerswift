@@ -5,7 +5,7 @@ import { useTheme } from "@react-navigation/native";
 
 import { View, TextInput, Text, Animated } from "react-native";
 
-const Input = ({ value, onChange, title, keyboardType }) => {
+const Input = ({ value, onChange, title, keyboardType, type }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
@@ -52,6 +52,11 @@ const Input = ({ value, onChange, title, keyboardType }) => {
 				(isFocused || value) && {
 					borderColor: theme.colors.primary,
 					borderWidth: 1.5,
+				},
+				{
+					width: type
+						? theme.dimensions.width * 0.4
+						: theme.dimensions.width * 0.9,
 				},
 			]}>
 			<Animated.Text

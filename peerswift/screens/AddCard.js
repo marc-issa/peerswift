@@ -34,9 +34,16 @@ const AddRecipient = ({ navigation }) => {
 	const [cvv, setCvv] = useState("");
 
 	const handleCardNumberChange = (text) => {
-		const plainNumber = text.replace(/\D/g, "");
+		let plainNumber = "";
+		if (text.length !== 0) {
+			plainNumber = text.replace(/\D/g, "");
+		}
 
 		if (plainNumber.length <= 16) {
+			if (plainNumber.length === 0) {
+				setCardNumber("");
+				return;
+			}
 			const formattedNumber = plainNumber.match(/.{1,4}/g).join(" ");
 
 			setCardNumber(formattedNumber);
@@ -84,15 +91,19 @@ const AddRecipient = ({ navigation }) => {
 						</View>
 						<View style={style.cardBox}>
 							<Image source={require("../assets/Icons/visa-logo.png")} />
-							<Text style={style.cardNumber}>**** **** **** 1234</Text>
+							<Text style={style.cardNumber}>
+								{cardNumber.length >= 0 && cardNumber.length <= 15
+									? "**** **** **** ****"
+									: `**** **** **** ${cardNumber.substring(15)}`}
+							</Text>
 							<View style={style.cardInfo}>
 								<View>
 									<Text style={style.cardName}>Card Holder</Text>
-									<Text style={style.cardName}>John Doe</Text>
+									<Text style={style.cardName}>{cardName}</Text>
 								</View>
 								<View>
 									<Text style={style.cardName}>Expiry Date</Text>
-									<Text style={style.cardName}>12/24</Text>
+									<Text style={style.cardName}>{expiryDate}</Text>
 								</View>
 							</View>
 						</View>
@@ -107,18 +118,27 @@ const AddRecipient = ({ navigation }) => {
 							value={cardName}
 							onChange={handleCardNameChange}
 						/>
-						<Input
-							title={"Expiry Date"}
-							value={expiryDate}
-							onChange={handleExpiryDateChange}
-							keyboardType={"numeric"}
-						/>
-						<Input
-							title={"CVV"}
-							value={cvv}
-							onChange={handleCvvChange}
-							keyboardType={"numeric"}
-						/>
+						<View
+							style={{
+								flexDirection: "row",
+								justifyContent: "space-between",
+								width: theme.dimensions.width * 0.9,
+							}}>
+							<Input
+								title={"Expiry Date"}
+								value={expiryDate}
+								onChange={handleExpiryDateChange}
+								keyboardType={"numeric"}
+								type={"half"}
+							/>
+							<Input
+								title={"CVV"}
+								value={cvv}
+								onChange={handleCvvChange}
+								keyboardType={"numeric"}
+								type={"half"}
+							/>
+						</View>
 						<Buttons
 							type={"primary"}
 							screen={""}
