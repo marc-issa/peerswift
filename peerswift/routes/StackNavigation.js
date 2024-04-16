@@ -22,6 +22,9 @@ import SendMoney from "../screens/SendMoney";
 import RequestTransfer from "../screens/RequestTransfer";
 import TopUp from "../screens/TopUp";
 
+// Add Screens
+import AddRecipient from "../screens/AddRecipient";
+
 const Stack = createStackNavigator();
 
 const StackNavigation = ({ navigation }) => {
@@ -142,6 +145,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='TopUp'
 				component={TopUp}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='AddRecipient'
+				component={AddRecipient}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,
