@@ -6,7 +6,8 @@ import { useTheme } from "@react-navigation/native";
 
 // API imports
 import { useQuery } from "@tanstack/react-query";
-import getCountries from "../api client/getCountries";
+import getCountries from "../api client/countries/getCountries";
+import PostPhone from "../api client/Auth/PostPhone";
 
 import { View, Image, Text } from "react-native";
 
@@ -14,6 +15,7 @@ import { View, Image, Text } from "react-native";
 import PhoneInput from "../components/Inputs/PhoneInput";
 import Buttons from "../components/Buttons";
 import DialPad from "../components/DialPad";
+import ErrorComponent from "../components/ErrorComponent";
 
 // Functions
 import searchCountry from "../functions/searchCountry";
@@ -29,8 +31,19 @@ const Login = ({ navigation }) => {
 	const [countries, setCountries] = useState([]);
 	const [countryCode, setCountryCode] = useState([]);
 	const [flag, setFlag] = useState("");
+	const [countryId, setCountryId] = useState("");
+
+	const [loading, setLoading] = useState(false);
+
+	// Error handling
+	const [modalVisible, setModalVisible] = useState(false);
+
+	const handleError = () => {
+		setModalVisible(true);
+	};
 
 	// API Calls
+	// Get countries
 	const { isPending, data, error } = useQuery({
 		queryKey: ["countries"],
 		queryFn: getCountries,
@@ -52,10 +65,32 @@ const Login = ({ navigation }) => {
 			if (country) {
 				setFlag(country.country_flag);
 				setCountryCode(country.country_code);
+				setCountryId(country.country_id);
 			}
 		}
 	}, [countries]);
 
+	// Post phone number
+	const handleSubmit = async () => {
+		setLoading(true);
+		const fullPhoneNumber = countryCode + phoneNumber;
+		const result = await PostPhone(fullPhoneNumber);
+		if (result.status === "success") {
+			navigation.replace("OTPVerf", { phoneNumber: fullPhoneNumber });
+		} else {
+			if (result.message === "User not found") {
+				navigation.navigate("Signup", {
+					phoneNumber: fullPhoneNumber,
+					countryId: countryId,
+				});
+			} else {
+				handleError();
+			}
+		}
+		setLoading(false);
+	};
+
+	// Handlers
 	const handlePhoneInput = (value) => {
 		if (value === "<") {
 			return setPhoneNumber(phoneNumber.slice(0, -1));
@@ -82,12 +117,13 @@ const Login = ({ navigation }) => {
 			<Buttons
 				type={"primary"}
 				screen={"OTPVerf"}
-				navData={{ phoneNumber: countryCode + phoneNumber }}
-				navigation={navigation}
 				disabled={disabled}
 				title={"Continue"}
+				isPending={loading}
+				handleSubmit={handleSubmit}
 			/>
-			<DialPad onChange={handlePhoneInput} />
+			<DialPad onChange={handlePhoneInput} isPending={loading} />
+			<ErrorComponent isVisible={modalVisible} message={"An error occurred"} />
 		</View>
 	);
 };

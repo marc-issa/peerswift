@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import baseUrl from "./BaseUrl";
+import baseUrl from "../BaseUrl";
 
 const getCountries = async () => {
 	try {

@@ -87,7 +87,7 @@ export const styles = (theme) =>
 			flexDirection: "row",
 			borderWidth: 1,
 			borderColor: theme.colors.accent,
-			width: theme.dimensions.width * 0.85,
+			width: theme.dimensions.width * 0.9,
 			height: theme.dimensions.height * 0.06,
 			marginTop: theme.dimensions.height * 0.035,
 			paddingLeft: theme.dimensions.width * 0.07,
@@ -967,6 +967,41 @@ export const styles = (theme) =>
 		errorTxt: {
 			color: "#D05353",
 			fontSize: 16,
+		},
+		centeredView: {
+			display: "absolute",
+			justifyContent: "center",
+			alignItems: "center",
+			top: theme.dimensions.height * 0.9,
+		},
+		modalView: {
+			width: theme.dimensions.width * 0.9,
+			padding: 15,
+			flexDirection: "row",
+			justifyContent: "flex-start",
+			alignItems: "center",
+			backgroundColor: theme.colors.accent,
+			opacity: 0.9,
+			borderRadius: 10,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			shadowRadius: 4,
+			elevation: 5,
+		},
+		modalText: {
+			textAlign: "center",
+			color: theme.colors.background,
+			fontSize: 16,
+			fontWeight: "bold",
+		},
+		modalImage: {
+			width: 32,
+			height: 32,
+			marginRight: 10,
 		},
 		// ********** Icons **********
 		icon: {

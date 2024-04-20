@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 // API imports
 import { useQuery } from "@tanstack/react-query";
-import getCountries from "../api client/getCountries";
+import getCountries from "../api client/countries/getCountries";
 
 // Component imports
 import PhoneInput from "../components/Inputs/PhoneInput";

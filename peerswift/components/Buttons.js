@@ -1,14 +1,21 @@
 import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
 
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text, ActivityIndicator } from "react-native";
 
-const Buttons = ({ navigation, type, screen, disabled, title, navData }) => {
+const Buttons = ({
+	type,
+	screen,
+	disabled,
+	title,
+	isPending,
+	handleSubmit,
+}) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
 	const primaryRedirect = () => {
-		navigation.replace(screen, navData);
+		handleSubmit();
 	};
 
 	if (type === "primary") {
@@ -19,9 +26,13 @@ const Buttons = ({ navigation, type, screen, disabled, title, navData }) => {
 					disabled && style.disabledButton,
 					screen === "SendMoney" && { width: theme.dimensions.width * 0.9 },
 				]}
-				disabled={disabled}
+				disabled={disabled || isPending}
 				onPress={primaryRedirect}>
-				<Text style={style.primaryButtonTxt}>{title}</Text>
+				{isPending ? (
+					<ActivityIndicator size='small' />
+				) : (
+					<Text style={style.primaryButtonTxt}>{title}</Text>
+				)}
 			</TouchableOpacity>
 		);
 	}

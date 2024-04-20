@@ -7,15 +7,34 @@ module.exports = {
 	login: async (req, res) => {
 		try {
 			const { phone_number } = req.body;
-			const verification = await otpVerf.sendOTP(phone_number);
-			res.status(200).json({
-				status: verification.status,
-				message: "OTP sent successfully",
-			});
+
+			const queryText = `SELECT * FROM users WHERE phone_number = $1`;
+			const values = [phone_number];
+			const poolRes = await pool.query(queryText, values);
+			if (poolRes.rows.length > 0) {
+				try {
+					const verification = await otpVerf.sendOTP(phone_number);
+					res.status(200).json({
+						status: verification.status,
+						message: "OTP sent successfully",
+						user: poolRes.rows[0],
+					});
+				} catch (err) {
+					res.status(400).json({
+						status: "error",
+						message: "OTP not sent",
+					});
+				}
+			} else {
+				res.status(400).json({
+					status: "error",
+					message: "User not found",
+				});
+			}
 		} catch (error) {
 			res.status(400).json({
 				status: "error",
-				message: error.message || "OTP not sent",
+				message: error.message || "An error occurred during login",
 			});
 		}
 	},
@@ -48,29 +67,16 @@ module.exports = {
 	},
 
 	signup: async (req, res) => {
-		const { phone_number, full_name, mid_name, dob, country_id, pin } =
+		const { phone_number, full_name, mid_name, dob, country_id, group_id } =
 			req.body;
 
 		try {
 			// Start a transaction
 			await pool.query("BEGIN");
 
-			// Get group_id
-			const groupsQuery = `SELECT group_id FROM groups WHERE country_id = $1`;
-			const groupValues = [country_id];
-			const groupResult = await pool.query(groupsQuery, groupValues);
-			const group_id = groupResult.rows[0].group_id;
-
 			// Insert user
-			const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, country_id, kyc_status, pin, registration_date, last_login_date) VALUES ($1, $2, $3, $4, $5, false, $6, NOW(), NOW()) RETURNING *`;
-			const userValues = [
-				phone_number,
-				full_name,
-				mid_name,
-				dob,
-				country_id,
-				pin,
-			];
+			const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, country_id, kyc_status, pin, registration_date, last_login_date) VALUES ($1, $2, $3, $4, $5, false, null, NOW(), NOW()) RETURNING *`;
+			const userValues = [phone_number, full_name, mid_name, dob, country_id];
 			const userResult = await pool.query(queryText, userValues);
 			const user_id = userResult.rows[0].user_id;
 

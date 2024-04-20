@@ -21,16 +21,39 @@ import CalendarInput from "../components/Inputs/CalendarInput";
 // Functions import
 import isSameDay from "../functions/isSameDay";
 
-const Signup = ({ navigation }) => {
+// API imports
+import PostUser from "../api client/Auth/PostUser";
+import getGroupByCountry from "../api client/groups/GetGroupByCountry";
+import { useQuery } from "@tanstack/react-query";
+
+const Signup = ({ navigation, route }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
 	const [disabled, setDisabled] = useState(true);
 
+	const [loading, setLoading] = useState(false);
+
+	const [phoneNumber, setPhoneNumber] = useState(route.params.phoneNumber);
 	const [firstName, setFirstName] = useState("");
 	const [middleName, setMiddleName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [date, setDate] = useState(new Date());
+	const [groupId, setGroupId] = useState("");
+
+	const [countryId, setCountryId] = useState(route.params.countryId);
+
+	// API Calls
+	// Get group by country
+	useEffect(() => {
+		getGroupByCountry(countryId)
+			.then((data) => {
+				setGroupId(data.data[0].group_id);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, [countryId]);
 
 	const handleFirstNameChange = (text) => {
 		setFirstName(text);
@@ -57,6 +80,19 @@ const Signup = ({ navigation }) => {
 			setDisabled(true);
 		}
 	}, [firstName, middleName, lastName, date]);
+
+	// Post User Info
+	const handleSubmit = async () => {
+		const data = {
+			phone_number: phoneNumber,
+			full_name: firstName + " " + lastName,
+			middle_name: middleName,
+			date_of_birth: date,
+			group_id: groupId,
+		};
+		const result = await PostUser(data);
+		console.log(result);
+	};
 
 	return (
 		<KeyboardAvoidingView
@@ -98,10 +134,10 @@ const Signup = ({ navigation }) => {
 						<Buttons
 							type={"primary"}
 							screen={"PinVerf"}
-							navData={"new"}
-							navigation={navigation}
 							disabled={disabled}
 							title={"Continue"}
+							isPending={loading}
+							handleSubmit={handleSubmit}
 						/>
 					</View>
 				</TouchableWithoutFeedback>

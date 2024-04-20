@@ -4,7 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import { styles } from "../../styles";
 import { useTheme } from "@react-navigation/native";
 
-import { View, Text, TouchableOpacity, Modal, Animated } from "react-native";
+import {
+	View,
+	Text,
+	TouchableOpacity,
+	Modal,
+	Animated,
+	Platform,
+} from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 // Functions import
@@ -67,9 +74,14 @@ const CalendarInput = ({ isEmpty, value, onChange }) => {
 		setShow(false);
 	};
 
-	const handleDateSelect = (event, selectedDate) => {
-		const currentDate = selectedDate || date;
-		setDate(currentDate);
+	const handleDateSelect = async (event, selectDate) => {
+		const currentDate = selectDate || date;
+		await setDate(currentDate);
+		onChange(currentDate);
+		if (theme.os === "android") {
+			setSelectedDate(false);
+			setShow(false);
+		}
 	};
 
 	const displayDate = selectedDate ? "" : date.toLocaleDateString();

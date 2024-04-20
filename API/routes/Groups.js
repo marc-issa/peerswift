@@ -4,5 +4,6 @@ const router = express();
 const GroupsController = require("../controllers/GroupsController");
 
 router.get("/create", GroupsController.createGroup);
+router.post("/country", GroupsController.getGroupByCountry);
 
 module.exports = router;

@@ -2,7 +2,7 @@ import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
 import { View, Text, TouchableOpacity } from "react-native";
 
-const DialPad = ({ onChange }) => {
+const DialPad = ({ onChange, isPending }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
@@ -20,6 +20,7 @@ const DialPad = ({ onChange }) => {
 		<View style={style.buttonGrid}>
 			{buttons.map((button) => (
 				<TouchableOpacity
+					disabled={isPending}
 					key={button}
 					style={style.dialButton}
 					onPress={() => handlePress(button)}>

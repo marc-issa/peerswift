@@ -34,4 +34,28 @@ module.exports = {
 			});
 		}
 	},
+	getGroupByCountry: async (req, res) => {
+		try {
+			const { country_id } = req.body;
+			const query = `SELECT * FROM groups WHERE country_id = $1`;
+			const values = [country_id];
+			const result = await pool.query(query, values);
+			if (result.rows.length === 0) {
+				return res.status(404).json({
+					status: "error",
+					message: "Group not found",
+				});
+			}
+			res.status(200).json({
+				status: "success",
+				data: result.rows,
+			});
+		} catch (error) {
+			console.error("Error in getGroupByCountry:", error.stack);
+			res.status(400).json({
+				status: "error",
+				message: error.message || "Unable to get groups",
+			});
+		}
+	},
 };
