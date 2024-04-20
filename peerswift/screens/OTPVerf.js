@@ -6,18 +6,26 @@ import { useTheme } from "@react-navigation/native";
 
 import { View, Image, Text, TouchableOpacity } from "react-native";
 
+// Context imports
+import { useAuth } from "../routes/AuthProvider";
+
 // Component imports
 import OtpInput from "../components/Inputs/OtpInput";
 import Buttons from "../components/Buttons";
 import DialPad from "../components/DialPad";
 
+// APIs import
+import PostOTP from "../api client/Auth/PostOTP";
+
 const OTPVerf = ({ navigation, route }) => {
 	const theme = useTheme();
 	const style = styles(theme);
+	const { login } = useAuth();
 
 	const [otp, setOtp] = useState([]);
 
 	const [disabled, setDisabled] = useState(true);
+	const [loading, setLoading] = useState(false);
 
 	const [phoneNumber, setPhoneNumber] = useState(route.params.phoneNumber);
 
@@ -32,6 +40,25 @@ const OTPVerf = ({ navigation, route }) => {
 
 	const handleResendOTP = () => {
 		console.log("Resend OTP");
+	};
+
+	const handleSubmit = () => {
+		setLoading(true);
+		PostOTP({ phone_number: phoneNumber, otp: otp.join("") })
+			.then((data) => {
+				if (data.message === "Phone number verified successfully") {
+					setLoading(false);
+					console.log(data.jwt);
+					login(data.jwt);
+				} else {
+					setLoading(false);
+					console.log(data.message);
+				}
+			})
+			.catch((error) => {
+				setLoading(false);
+				console.log(error);
+			});
 	};
 
 	useEffect(() => {
@@ -59,9 +86,10 @@ const OTPVerf = ({ navigation, route }) => {
 			<Buttons
 				type={"primary"}
 				screen={"PinVerf"}
-				navigation={navigation}
 				disabled={disabled}
 				title={"Verify"}
+				isPending={loading}
+				handleSubmit={handleSubmit}
 			/>
 			<DialPad onChange={handleOtpInput} />
 		</View>

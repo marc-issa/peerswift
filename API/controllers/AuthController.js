@@ -51,6 +51,9 @@ module.exports = {
 					status: verification.status,
 					message: "Phone number verified successfully",
 					user: dbRes.rows[0],
+					jwt: jwt.sign(dbRes.rows[0], process.env.JWT_SECRET, {
+						expiresIn: "30d",
+					}),
 				});
 			} else {
 				res.status(400).json({
@@ -91,6 +94,8 @@ module.exports = {
 			// Commit transaction
 			await pool.query("COMMIT");
 
+			// const verification = await otpVerf.sendOTP(phone_number);
+
 			res.status(200).json({
 				status: "success",
 				message: "User created successfully",
@@ -124,10 +129,6 @@ module.exports = {
 					res.status(200).json({
 						status: "success",
 						message: "Pin verified successfully",
-						user: results.rows[0],
-						jwt: jwt.sign(results.rows[0], process.env.JWT_SECRET, {
-							expiresIn: "30d",
-						}),
 					});
 				} else {
 					res.status(400).json({

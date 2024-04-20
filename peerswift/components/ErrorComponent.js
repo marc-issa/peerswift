@@ -5,16 +5,12 @@ import { Modal, View, Text, Image } from "react-native";
 import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
 
-const ErrorModal = ({ isVisible, message, onClose, onRetry }) => {
+const ErrorModal = ({ isVisible, message, onClose }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
 	return (
-		<Modal
-			animationType='slide'
-			transparent={true}
-			visible={isVisible}
-			onRequestClose={onClose}>
+		<Modal animationType='slide' transparent={true} visible={isVisible}>
 			<View style={style.centeredView}>
 				<View style={style.modalView}>
 					<Image

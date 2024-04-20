@@ -17,6 +17,7 @@ import { useTheme } from "@react-navigation/native";
 import Input from "../components/Inputs/Input";
 import Buttons from "../components/Buttons";
 import CalendarInput from "../components/Inputs/CalendarInput";
+import ErrorComponent from "../components/ErrorComponent";
 
 // Functions import
 import isSameDay from "../functions/isSameDay";
@@ -24,7 +25,6 @@ import isSameDay from "../functions/isSameDay";
 // API imports
 import PostUser from "../api client/Auth/PostUser";
 import getGroupByCountry from "../api client/groups/GetGroupByCountry";
-import { useQuery } from "@tanstack/react-query";
 
 const Signup = ({ navigation, route }) => {
 	const theme = useTheme();
@@ -42,6 +42,20 @@ const Signup = ({ navigation, route }) => {
 	const [groupId, setGroupId] = useState("");
 
 	const [countryId, setCountryId] = useState(route.params.countryId);
+
+	// Error handling
+	const [modalVisible, setModalVisible] = useState(false);
+
+	const handleError = () => {
+		setModalVisible(true);
+	};
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setModalVisible(false);
+		}, 3000);
+		return () => clearTimeout(timer);
+	}, [modalVisible]);
 
 	// API Calls
 	// Get group by country
@@ -86,12 +100,17 @@ const Signup = ({ navigation, route }) => {
 		const data = {
 			phone_number: phoneNumber,
 			full_name: firstName + " " + lastName,
-			middle_name: middleName,
-			date_of_birth: date,
+			mid_name: middleName,
+			dob: date,
+			country_id: countryId,
 			group_id: groupId,
 		};
 		const result = await PostUser(data);
-		console.log(result);
+		if (result.status === "success") {
+			navigation.replace("OTPVerf", { phoneNumber: phoneNumber });
+		} else {
+			handleError();
+		}
 	};
 
 	return (
@@ -138,6 +157,10 @@ const Signup = ({ navigation, route }) => {
 							title={"Continue"}
 							isPending={loading}
 							handleSubmit={handleSubmit}
+						/>
+						<ErrorComponent
+							isVisible={modalVisible}
+							message={"An error occurred"}
 						/>
 					</View>
 				</TouchableWithoutFeedback>

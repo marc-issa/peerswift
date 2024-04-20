@@ -1,8 +1,7 @@
 import fetch from "node-fetch";
-import baseUrl from "../../api client/BaseUrl";
+import baseUrl from "../BaseUrl";
 
 const PostUser = async (user) => {
-	console.log(user);
 	try {
 		const response = await fetch(`${baseUrl}/auth/signup`, {
 			method: "POST",

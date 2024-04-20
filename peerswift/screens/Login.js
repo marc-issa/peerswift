@@ -42,6 +42,13 @@ const Login = ({ navigation }) => {
 		setModalVisible(true);
 	};
 
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setModalVisible(false);
+		}, 3000);
+		return () => clearTimeout(timer);
+	}, [modalVisible]);
+
 	// API Calls
 	// Get countries
 	const { isPending, data, error } = useQuery({
@@ -83,6 +90,8 @@ const Login = ({ navigation }) => {
 					phoneNumber: fullPhoneNumber,
 					countryId: countryId,
 				});
+			} else if (result.message === "OTP sent successfully") {
+				navigation.replace("OTPVerf", { phoneNumber: fullPhoneNumber });
 			} else {
 				handleError();
 			}

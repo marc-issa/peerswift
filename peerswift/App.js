@@ -6,6 +6,7 @@ import { Dimensions, Platform, useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { useNavigationContainerRef } from "@react-navigation/native";
 import StackNavigation from "./routes/StackNavigation";
+import AuthStackNavigation from "./routes/AuthStackNavigation";
 
 // SplashScreen imports
 import * as SplashScreen from "expo-splash-screen";
@@ -20,10 +21,21 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // Initialize SplashScreen to prevent auto hide
 SplashScreen.preventAutoHideAsync();
 
+// AuthProvider
+import { AuthProvider, useAuth } from "./routes/AuthProvider";
+
 // Create a new instance of QueryClient
 const queryClient = new QueryClient();
 
-export default function App() {
+export default function AppWrapper() {
+	return (
+		<AuthProvider>
+			<App />
+		</AuthProvider>
+	);
+}
+
+function App() {
 	// Theme setup
 	const { width, height } = Dimensions.get("window");
 	const colorScheme = useColorScheme();
@@ -57,16 +69,21 @@ export default function App() {
 
 	// Reference for navigation
 	const navigationRef = useNavigationContainerRef();
+	const { isLoggedIn } = useAuth();
 
 	// Hide SplashScreen once everything is loaded
 	useEffect(() => {
 		SplashScreen.hideAsync();
-	}, []);
+	}, [isLoggedIn]);
 
 	return (
 		<NavigationContainer ref={navigationRef} theme={themeColor}>
 			<QueryClientProvider client={queryClient}>
-				<StackNavigation navigation={navigationRef} />
+				{isLoggedIn ? (
+					<StackNavigation navigation={navigationRef} />
+				) : (
+					<AuthStackNavigation />
+				)}
 			</QueryClientProvider>
 		</NavigationContainer>
 	);

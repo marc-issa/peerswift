@@ -1,12 +1,13 @@
 import fetch from "node-fetch";
 import baseUrl from "../BaseUrl";
 
-const PostPhone = async (phone_number) => {
+const PostOTP = async (data) => {
 	const reqData = {
-		phone_number: phone_number,
+		phone_number: data.phone_number,
+		otp_code: data.otp,
 	};
 	try {
-		const response = await fetch(`${baseUrl}/auth/login`, {
+		const response = await fetch(`${baseUrl}/auth/verify-phone`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -19,9 +20,9 @@ const PostPhone = async (phone_number) => {
 	} catch (error) {
 		return {
 			status: "error",
-			message: error.message || "An error occurred during login",
+			message: error.message || "An error occurred during OTP verification",
 		};
 	}
 };
 
-export default PostPhone;
+export default PostOTP;
