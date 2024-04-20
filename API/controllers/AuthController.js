@@ -113,9 +113,23 @@ module.exports = {
 	},
 
 	pinAccees: (req, res) => {
-		const { pin, phone_number } = req.body;
-		const queryText = `SELECT * FROM users WHERE pin = $1 AND phone_number = $2`;
+		const { pin } = req.body;
+		// Extract the JWT token from the Authorization header
+		const authHeader = req.headers.authorization;
+		if (!authHeader) throw new Error("No token provided");
 
+		const token = authHeader.split(" ")[1];
+		if (!token) throw new Error("Bearer token not formatted properly");
+
+		// Decode the token
+		const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+		// Extract phone_number from the decoded token
+		const phone_number = decoded.phone_number;
+		if (!phone_number)
+			throw new Error("Phone number not included in the token");
+
+		const queryText = `SELECT * FROM users WHERE pin = $1 AND phone_number = $2`;
 		const values = [pin, phone_number];
 
 		pool.query(queryText, values, (error, results) => {
@@ -138,5 +152,56 @@ module.exports = {
 				}
 			}
 		});
+	},
+
+	pinInsert: (req, res) => {
+		try {
+			// Extract the JWT token from the Authorization header
+			const authHeader = req.headers.authorization;
+			if (!authHeader) throw new Error("No token provided");
+
+			const token = authHeader.split(" ")[1];
+			if (!token) throw new Error("Bearer token not formatted properly");
+
+			// Decode the token
+			const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+			// Extract phone_number from the decoded token
+			const phone_number = decoded.phone_number;
+			if (!phone_number)
+				throw new Error("Phone number not included in the token");
+
+			const { pin } = req.body;
+			const queryText = `UPDATE users SET pin = $1 WHERE phone_number = $2 RETURNING *`;
+
+			const values = [pin, phone_number];
+
+			pool.query(queryText, values, (error, results) => {
+				if (error) {
+					res.status(400).json({
+						status: "error",
+						message: error.message || "Pin not inserted",
+					});
+				} else {
+					if (results.rows.length > 0) {
+						res.status(200).json({
+							status: "success",
+							message: "Pin inserted successfully",
+							user: results.rows[0],
+						});
+					} else {
+						res.status(400).json({
+							status: "error",
+							message: "Pin not inserted",
+						});
+					}
+				}
+			});
+		} catch (error) {
+			res.status(401).json({
+				status: "error",
+				message: error.message || "Unauthorized",
+			});
+		}
 	},
 };

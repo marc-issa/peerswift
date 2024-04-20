@@ -1,11 +1,38 @@
 import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
 
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import {
+	View,
+	Text,
+	TouchableOpacity,
+	Image,
+	ScrollView,
+	Alert,
+} from "react-native";
+
+// Context imports
+import { useAuth } from "../routes/AuthProvider";
 
 const Profile = ({ navigation }) => {
 	const theme = useTheme();
 	const style = styles(theme);
+
+	const { logout } = useAuth();
+
+	const handleLogout = () => {
+		Alert.alert("Logout", "Are you sure you want to logout?", [
+			{
+				text: "Cancel",
+				style: "cancel",
+			},
+			{
+				text: "Logout",
+				onPress: () => {
+					logout();
+				},
+			},
+		]);
+	};
 
 	const icons = {
 		profile: require("../assets/Icons/profile.png"),
@@ -25,7 +52,13 @@ const Profile = ({ navigation }) => {
 					style.profileItem,
 					{ marginTop: iconName === "logout" ? 40 : 20 },
 				]}
-				onPress={() => navigation.navigate(redirect)}>
+				onPress={() => {
+					if (redirect) {
+						navigation.navigate(redirect);
+					} else {
+						handleLogout();
+					}
+				}}>
 				<Image source={icon} style={style.profileItemIcon} />
 				<Text style={style.profileItemText}>{title}</Text>
 			</TouchableOpacity>
@@ -66,7 +99,7 @@ const Profile = ({ navigation }) => {
 				{profileItem("Privacy Policy", "shield_search", "PrivacyPolicy")}
 				{profileItem("Terms & Conditions", "terms", "TermsConditions")}
 				{profileItem("Fees", "fees", "FeesCharges")}
-				{profileItem("Logout", "logout", "Logout")}
+				{profileItem("Logout", "logout")}
 			</ScrollView>
 		</View>
 	);

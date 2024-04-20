@@ -48,7 +48,6 @@ const OTPVerf = ({ navigation, route }) => {
 			.then((data) => {
 				if (data.message === "Phone number verified successfully") {
 					setLoading(false);
-					console.log(data.jwt);
 					login(data.jwt);
 				} else {
 					setLoading(false);
