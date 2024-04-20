@@ -184,10 +184,13 @@ module.exports = {
 					});
 				} else {
 					if (results.rows.length > 0) {
+						console.log(results.rows[0]);
 						res.status(200).json({
 							status: "success",
 							message: "Pin inserted successfully",
-							user: results.rows[0],
+							jwt: jwt.sign(results.rows[0], process.env.JWT_SECRET, {
+								expiresIn: "30d",
+							}),
 						});
 					} else {
 						res.status(400).json({

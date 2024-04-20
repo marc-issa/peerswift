@@ -8,6 +8,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 // Component import
 import DialPad from "../components/DialPad";
 import PinInput from "../components/Inputs/PinInput";
+import ErrorComponent from "../components/ErrorComponent";
 
 // Function import
 import getInfo from "../functions/getInfo";
@@ -15,6 +16,12 @@ import getInfo from "../functions/getInfo";
 // APIs import
 import UpdatePin from "../api client/Auth/UpdatePin";
 import PinAccess from "../api client/Auth/PinAccess";
+
+// Context imports
+import { useAuth } from "../routes/AuthProvider";
+
+// Crypto
+import CryptoJS from "crypto-js";
 
 const PinVerf = ({ navigation }) => {
 	const theme = useTheme();
@@ -24,6 +31,23 @@ const PinVerf = ({ navigation }) => {
 
 	const [isFirstTime, setIsFirstTime] = useState(false);
 
+	const { login } = useAuth();
+
+	// Error handling
+	const [modalVisible, setModalVisible] = useState(false);
+
+	const handleError = () => {
+		setModalVisible(true);
+	};
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setModalVisible(false);
+		}, 3000);
+		return () => clearTimeout(timer);
+	}, [modalVisible]);
+
+	// Get User Info
 	useEffect(() => {
 		getInfo("authToken").then((data) => {
 			if (data && data.pin) {
@@ -47,20 +71,24 @@ const PinVerf = ({ navigation }) => {
 		if (pin.length === 6) {
 			if (isFirstTime) {
 				const newPin = pin.join("");
-				UpdatePin({ pin: newPin }).then((data) => {
+				const hashedPin = CryptoJS.SHA256(newPin).toString(CryptoJS.enc.Hex);
+
+				UpdatePin({ pin: hashedPin }).then((data) => {
 					if (data.status === "success") {
+						login(data.jwt);
 						navigation.replace("PinVerf");
 					} else {
-						console.log(data.message);
+						handleError();
 					}
 				});
 			} else {
 				const newPin = pin.join("");
-				PinAccess({ pin: newPin }).then((data) => {
+				const hashedPin = CryptoJS.SHA256(newPin).toString(CryptoJS.enc.Hex);
+				PinAccess({ pin: hashedPin }).then((data) => {
 					if (data.status === "success") {
 						navigation.replace("Home");
 					} else {
-						console.log(data.message);
+						handleError();
 					}
 				});
 			}
@@ -96,6 +124,7 @@ const PinVerf = ({ navigation }) => {
 				</Text>
 			</View>
 			<DialPad onChange={handlePinInput} />
+			<ErrorComponent isVisible={modalVisible} message={"An error occurred"} />
 		</View>
 	);
 };
