@@ -81,7 +81,7 @@ module.exports = {
 			const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, country, kyc_status, pin, registration_date) VALUES ($1, $2, $3, $4, $5, false, null, NOW()) RETURNING *`;
 			const userValues = [phone_number, full_name, mid_name, dob, country_id];
 			const userResult = await pool.query(queryText, userValues);
-			const user_id = userResult.rows[0].user_id;
+			const user_id = userResult.rows[0].id;
 
 			// Insert wallet
 			const walletQuery = `INSERT INTO wallets (user_id, balance, currency) VALUES ($1, 0, 'USD') RETURNING *`;
@@ -94,10 +94,11 @@ module.exports = {
 			// Commit transaction
 			await pool.query("COMMIT");
 
-			// const verification = await otpVerf.sendOTP(phone_number);
+			const verification = await otpVerf.sendOTP(phone_number);
 
 			res.status(200).json({
 				status: "success",
+				verification: verification,
 				message: "User created successfully",
 				user: userResult.rows[0],
 			});

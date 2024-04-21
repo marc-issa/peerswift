@@ -70,9 +70,9 @@ const Login = ({ navigation }) => {
 		if (countries) {
 			const country = searchCountry(countries, "Lebanon");
 			if (country) {
-				setFlag(country.country_flag);
-				setCountryCode(country.country_code);
-				setCountryId(country.country_id);
+				setFlag(country.flag);
+				setCountryCode(country.code);
+				setCountryId(country.id);
 			}
 		}
 	}, [countries]);

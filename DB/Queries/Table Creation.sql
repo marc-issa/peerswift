@@ -7,9 +7,9 @@ CREATE TYPE hold_status AS ENUM ('Active', 'Released', 'Cancelled');
 -- Create the "countries" table first as it is referenced by other tables
 CREATE TABLE countries (
     id SERIAL PRIMARY KEY,
-    code VARCHAR(4),
+    code VARCHAR(255),
     name VARCHAR(255),
-    abbreviation VARCHAR(4),
+    abreviation VARCHAR(4),
     currency_name VARCHAR(255),
     currency_code VARCHAR(3),
     flag VARCHAR(255)

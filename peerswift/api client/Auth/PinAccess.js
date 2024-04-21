@@ -5,7 +5,7 @@ import * as SecureStore from "expo-secure-store";
 const PinAccess = async (pin) => {
 	const authToken = await SecureStore.getItemAsync("authToken");
 	try {
-		const response = await fetch(`${baseUrl}/auth/pin-insert`, {
+		const response = await fetch(`${baseUrl}/auth/pin-access`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

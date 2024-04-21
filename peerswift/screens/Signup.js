@@ -62,7 +62,7 @@ const Signup = ({ navigation, route }) => {
 	useEffect(() => {
 		getGroupByCountry(countryId)
 			.then((data) => {
-				setGroupId(data.data[0].group_id);
+				setGroupId(data.data[0].id);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -106,6 +106,7 @@ const Signup = ({ navigation, route }) => {
 			group_id: groupId,
 		};
 		const result = await PostUser(data);
+		console.log(result);
 		if (result.status === "success") {
 			navigation.replace("OTPVerf", { phoneNumber: phoneNumber });
 		} else {
