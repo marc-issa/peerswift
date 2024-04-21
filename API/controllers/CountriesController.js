@@ -14,7 +14,7 @@ module.exports = {
 		try {
 			const response = await axios.get(url);
 			const countries = response.data;
-			const queryText = `INSERT INTO countries (country_code, country_name, currency_name, currency_code, country_flag, country_abreviation) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+			const queryText = `INSERT INTO countries (code, name, currency_name, currency_code, country_flag, abreviation) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
 
 			for (const country of countries) {
 				for (const currencyCode in country.currencies) {

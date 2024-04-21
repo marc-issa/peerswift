@@ -1,4 +1,13 @@
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import { useState, useEffect } from "react";
+
+import {
+	View,
+	Text,
+	Image,
+	TouchableOpacity,
+	ScrollView,
+	ActivityIndicator,
+} from "react-native";
 
 import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
@@ -6,9 +15,48 @@ import { useTheme } from "@react-navigation/native";
 // Components import
 import ActivitiesCard from "../components/activitiesCard";
 
+// API import
+import FetchSummary from "../api client/User/FetchSummary";
+import { useQuery } from "@tanstack/react-query";
+
 const Home = ({ navigation }) => {
 	const theme = useTheme();
 	const style = styles(theme);
+
+	const [balance, setBalance] = useState("");
+	const [currency, setCurrency] = useState("");
+	const [rating, setRating] = useState(0);
+	const [totalActivity, setTotalActivity] = useState(0);
+
+	const [requests, setRequests] = useState([]);
+	const [transactions, setTransactions] = useState([]);
+
+	const [loading, setLoading] = useState(false);
+
+	// API Calls
+	// Get countries
+	const { isPending, data, error } = useQuery({
+		queryKey: ["summary"],
+		queryFn: FetchSummary,
+	});
+
+	useEffect(() => {
+		setLoading(isPending);
+
+		if (error) {
+			console.log(error);
+		}
+		if (data) {
+			console.log(data);
+			if (data.wallet) {
+				setBalance(data.wallet.balance);
+				setCurrency(data.wallet.currency);
+			}
+			if (data.rating) {
+				setRating(data.rating);
+			}
+		}
+	}, [isPending]);
 
 	const requestsDummy = [
 		{
@@ -138,13 +186,24 @@ const Home = ({ navigation }) => {
 				</View>
 				<View style={style.BalanceDisp}>
 					<Text style={style.homeTxt}>Total Balance</Text>
-					<Text style={style.balanceTxt}>$2,360.14</Text>
+					{loading ? (
+						<ActivityIndicator size={"small"} />
+					) : (
+						<Text style={style.balanceTxt}>
+							{currency} {""}
+							{balance}
+						</Text>
+					)}
 				</View>
 				<View style={style.homeFunc}>
 					<View style={style.stats}>
 						<View style={[style.statsBox, { backgroundColor: "#06A77D" }]}>
 							<Text style={style.statsTxtS}>rating</Text>
-							<Text style={style.statsTxtL}>3.5</Text>
+							{loading ? (
+								<ActivityIndicator size={"small"} />
+							) : (
+								<Text style={style.statsTxtL}>{rating}</Text>
+							)}
 						</View>
 						<View
 							style={[

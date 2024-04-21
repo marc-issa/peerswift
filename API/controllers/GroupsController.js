@@ -15,8 +15,8 @@ module.exports = {
 			const countries = countriesResult.rows;
 
 			const insertPromises = countries.map(async (country) => {
-				const groupsQuery = `INSERT INTO groups (group_name, country_id, description) VALUES ($1, $2, $3) RETURNING *`;
-				const groupValues = [country.country_name, country.country_id, ""]; // Assuming description is an empty string for now
+				const groupsQuery = `INSERT INTO groups (name, country_id) VALUES ($1, $2) RETURNING *`;
+				const groupValues = [country.country_name, country.country_id];
 				return await pool.query(groupsQuery, groupValues);
 			});
 			const responses = await Promise.all(insertPromises);

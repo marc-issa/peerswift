@@ -78,7 +78,7 @@ module.exports = {
 			await pool.query("BEGIN");
 
 			// Insert user
-			const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, country_id, kyc_status, pin, registration_date, last_login_date) VALUES ($1, $2, $3, $4, $5, false, null, NOW(), NOW()) RETURNING *`;
+			const queryText = `INSERT INTO users (phone_number, full_name, mid, dob, country, kyc_status, pin, registration_date) VALUES ($1, $2, $3, $4, $5, false, null, NOW()) RETURNING *`;
 			const userValues = [phone_number, full_name, mid_name, dob, country_id];
 			const userResult = await pool.query(queryText, userValues);
 			const user_id = userResult.rows[0].user_id;
