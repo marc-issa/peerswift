@@ -85,7 +85,6 @@ const PinVerf = ({ navigation }) => {
 				const newPin = pin.join("");
 				const hashedPin = CryptoJS.SHA256(newPin).toString(CryptoJS.enc.Hex);
 				PinAccess({ pin: hashedPin }).then((data) => {
-					console.log(data);
 					if (data.status === "success") {
 						navigation.replace("Home");
 					} else {

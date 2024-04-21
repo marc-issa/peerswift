@@ -34,7 +34,7 @@ const Home = ({ navigation }) => {
 	const [loading, setLoading] = useState(false);
 
 	// API Calls
-	// Get countries
+	// Fetch Summary
 	const { isPending, data, error } = useQuery({
 		queryKey: ["summary"],
 		queryFn: FetchSummary,
@@ -47,7 +47,6 @@ const Home = ({ navigation }) => {
 			console.log(error);
 		}
 		if (data) {
-			console.log(data);
 			if (data.wallet) {
 				setBalance(data.wallet.balance);
 				setCurrency(data.wallet.currency);
@@ -55,116 +54,17 @@ const Home = ({ navigation }) => {
 			if (data.rating) {
 				setRating(data.rating);
 			}
+			if (data.activity) {
+				setTotalActivity(data.activity);
+			}
+			if (data.recent_requests) {
+				setRequests(data.recent_requests);
+			}
+			if (data.recent_transactions) {
+				setTransactions(data.recent_transactions);
+			}
 		}
 	}, [isPending]);
-
-	const requestsDummy = [
-		{
-			history_id: 1,
-			request_id: 1,
-			matched_id: 1,
-			user_id: 100,
-			event_type: "CREATED",
-			amount: 500.0,
-			currency: "USD",
-			status: "PENDING",
-			timestamp: "2024-04-08 10:00:00",
-			description: "Initial request creation",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 2,
-			request_id: 2,
-			matched_id: 2,
-			user_id: 101,
-			event_type: "MATCHED",
-			amount: 200.0,
-			currency: "EUR",
-			status: "IN_PROGRESS",
-			timestamp: "2024-04-08 11:00:00",
-			description: "Match found for transfer",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 3,
-			request_id: 3,
-			matched_id: null,
-			user_id: 102,
-			event_type: "CANCELLED",
-			amount: 150.0,
-			currency: "GBP",
-			status: "CANCELLED",
-			timestamp: "2024-04-08 12:00:00",
-			description: "User cancelled request",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 4,
-			request_id: 4,
-			matched_id: 3,
-			user_id: 103,
-			event_type: "COMPLETED",
-			amount: 750.0,
-			currency: "USD",
-			status: "COMPLETED",
-			timestamp: "2024-04-08 13:00:00",
-			description: "Transfer completed successfully",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 5,
-			request_id: 5,
-			matched_id: 4,
-			user_id: 104,
-			event_type: "UPDATED",
-			amount: 300.0,
-			currency: "USD",
-			status: "IN_PROGRESS",
-			timestamp: "2024-04-08 14:00:00",
-			description: "Request details updated",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-	];
 
 	return (
 		<ScrollView>
@@ -214,7 +114,7 @@ const Home = ({ navigation }) => {
 								},
 							]}>
 							<Text style={style.statsTxtS}>activity</Text>
-							<Text style={style.statsTxtL}>45</Text>
+							<Text style={style.statsTxtL}>{totalActivity}</Text>
 						</View>
 					</View>
 					<View style={style.navs}>
@@ -292,7 +192,7 @@ const Home = ({ navigation }) => {
 						showsHorizontalScrollIndicator={false}
 						horizontal={true}
 						style={{ paddingVertical: 10 }}>
-						{requestsDummy.map((request, index) => (
+						{requests.map((request, index) => (
 							<ActivitiesCard key={index} data={request} type={"request"} />
 						))}
 					</ScrollView>
@@ -312,7 +212,7 @@ const Home = ({ navigation }) => {
 						showsHorizontalScrollIndicator={false}
 						horizontal={true}
 						style={{ paddingVertical: 10 }}>
-						{requestsDummy.map((request, index) => (
+						{transactions.map((request, index) => (
 							<ActivitiesCard key={index} data={request} type={"transaction"} />
 						))}
 					</ScrollView>
