@@ -115,7 +115,7 @@ const Profile = ({ navigation }) => {
 			<ScrollView
 				style={{ width: theme.dimensions.width * 0.9, paddingTop: 20 }}>
 				<Text style={style.profileSection}>Settings</Text>
-				{profileItem("Edit Profile", "profile", "EditProfile")}
+				{profileItem("Profile", "profile", "EditProfile")}
 				{profileItem("KYC Verification", "shield", "KYCVerification")}
 				<Text style={[style.profileSection, { marginTop: 20 }]}>About us</Text>
 				{profileItem("About us", "about", "AboutUs")}

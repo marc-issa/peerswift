@@ -49,6 +49,7 @@ const EditProfile = ({ navigation }) => {
 	}
 
 	function formatPhone(phone) {
+		if (!phone) return phone;
 		// Format phone number as +XXX XX XXX XXX or +XXX-XX-XXX-XXX
 		// Remove all non-digit characters
 		phone = phone.replace(/\D/g, "");
