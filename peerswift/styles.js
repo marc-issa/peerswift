@@ -617,10 +617,12 @@ export const styles = (theme) =>
 		},
 		messageBubble: {
 			padding: 10,
+			paddingTop: 5,
 			borderRadius: 10,
 			marginVertical: 5,
 			marginHorizontal: 10,
 			maxWidth: theme.dimensions.width * 0.6,
+			minWidth: theme.dimensions.width * 0.3,
 			alignSelf: "flex-start",
 		},
 		receivedMessage: {
@@ -628,6 +630,12 @@ export const styles = (theme) =>
 		},
 		sentMessage: {
 			backgroundColor: theme.colors.primary,
+		},
+		messageSender: {
+			color: theme.colors.accent,
+			fontSize: 14,
+			fontWeight: "bold",
+			marginBottom: 5,
 		},
 		messageText: {
 			color: "black",

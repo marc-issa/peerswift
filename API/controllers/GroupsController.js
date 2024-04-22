@@ -34,8 +34,14 @@ module.exports = {
 				for (let j = 0; j < messagesResult.rows.length; j++) {
 					if (messagesResult.rows[j].user_id === user.id) {
 						messagesResult.rows[j].incoming = false;
+						messagesResult.rows[j].sender = user;
 					} else {
 						messagesResult.rows[j].incoming = true;
+						const senderQuery = `SELECT * FROM users WHERE id = $1`;
+						const senderResult = await pool.query(senderQuery, [
+							messagesResult.rows[j].user_id,
+						]);
+						messagesResult.rows[j].sender = senderResult.rows[0];
 					}
 				}
 				result.rows[i].messages = messagesResult.rows;

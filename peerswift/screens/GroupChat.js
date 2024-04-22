@@ -72,6 +72,7 @@ const GroupChat = ({ navigation, route }) => {
 						text={message.message}
 						time={message.timestamp}
 						incoming={message.incoming}
+						fullName={message.sender.full_name}
 					/>
 				))}
 			</ScrollView>
