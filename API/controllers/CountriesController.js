@@ -2,6 +2,23 @@ const axios = require("axios");
 const pool = require("../modules/db");
 
 module.exports = {
+	getCountryById: async (req, res) => {
+		const id = req.query.id;
+		const queryText = `SELECT * FROM countries WHERE id = $1`;
+		try {
+			const response = await pool.query(queryText, [id]);
+			const country = response.rows[0];
+			res.status(200).json({
+				status: "success",
+				data: country,
+			});
+		} catch (error) {
+			res.status(400).json({
+				status: "error",
+				message: error.message || "Country not found",
+			});
+		}
+	},
 	insertCountries: async (req, res) => {
 		const check_table = await pool.query("SELECT * FROM countries LIMIT 1");
 		if (check_table.rows.length > 0) {

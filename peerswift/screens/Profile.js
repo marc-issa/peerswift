@@ -96,10 +96,6 @@ const Profile = ({ navigation }) => {
 					/>
 				</TouchableOpacity>
 				<View style={style.profileHeader}>
-					<Image
-						source={{ uri: "https://flagcdn.com/w320/cy.png" }}
-						style={style.groupChatIcon}
-					/>
 					<Text style={style.profileName}>{user.full_name}</Text>
 					{user.kyc_status ? (
 						<Image
