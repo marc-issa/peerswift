@@ -1,5 +1,52 @@
+const jwt = require("jsonwebtoken");
 const pool = require("../modules/db");
+
 module.exports = {
+	getGroups: async (req, res) => {
+		try {
+			const user = jwt.decode(req.headers.authorization.split(" ")[1]);
+			const page = parseInt(req.query.page) || 1;
+			const pageSize = 10;
+			const offset = (page - 1) * pageSize;
+
+			const countryQuery = `SELECT * FROM countries WHERE id = $1`;
+			const messagesQuery = `SELECT * FROM group_messages WHERE group_id = $1 ORDER BY timestamp DESC`;
+
+			const query = `SELECT * FROM user_group_memberships WHERE user_id = $1 LIMIT $2 OFFSET $3`;
+
+			const result = await pool.query(query, [user.id, pageSize, offset]);
+
+			for (let i = 0; i < result.rows.length; i++) {
+				const groupQuery = `SELECT * FROM groups WHERE id = $1`;
+				const groupResult = await pool.query(groupQuery, [
+					result.rows[i].group_id,
+				]);
+				result.rows[i].group = groupResult.rows[0];
+
+				const countryResult = await pool.query(countryQuery, [
+					groupResult.rows[0].country_id,
+				]);
+				result.rows[i].country = countryResult.rows[0];
+
+				const messagesResult = await pool.query(messagesQuery, [
+					result.rows[i].group_id,
+				]);
+
+				result.rows[i].messages = messagesResult.rows;
+			}
+
+			res.status(200).json({
+				status: "success",
+				data: result.rows,
+			});
+		} catch (error) {
+			console.error("Error in getGroups:", error.stack);
+			res.status(400).json({
+				status: "error",
+				message: error.message || "Unable to get groups",
+			});
+		}
+	},
 	createGroup: async (req, res) => {
 		try {
 			const checkQuery = `SELECT * FROM groups`;
