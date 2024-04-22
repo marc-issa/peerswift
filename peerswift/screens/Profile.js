@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from "react";
+
 import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
 
@@ -13,11 +15,30 @@ import {
 // Context imports
 import { useAuth } from "../routes/AuthProvider";
 
+import * as SecureStore from "expo-secure-store";
+import { decode as base64decode } from "base-64";
+
 const Profile = ({ navigation }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
 	const { logout } = useAuth();
+
+	const [user, setUser] = useState({});
+
+	const getUser = async () => {
+		const token = await SecureStore.getItemAsync("authToken");
+		global.atob = base64decode;
+
+		const decodedToken = JSON.parse(atob(token.split(".")[1]));
+		return decodedToken;
+	};
+
+	useEffect(() => {
+		getUser().then((user) => {
+			setUser(user);
+		});
+	}, []);
 
 	const handleLogout = () => {
 		Alert.alert("Logout", "Are you sure you want to logout?", [
@@ -79,13 +100,15 @@ const Profile = ({ navigation }) => {
 						source={{ uri: "https://flagcdn.com/w320/cy.png" }}
 						style={style.groupChatIcon}
 					/>
-					<Text style={style.profileName}>John Doe</Text>
-					<Image
-						source={require("../assets/Icons/profile_verified.png")}
-						style={{
-							marginLeft: 10,
-						}}
-					/>
+					<Text style={style.profileName}>{user.full_name}</Text>
+					{user.kyc_status ? (
+						<Image
+							source={require("../assets/Icons/profile_verified.png")}
+							style={{
+								marginLeft: 10,
+							}}
+						/>
+					) : null}
 				</View>
 				<View style={{ flex: 1 }}></View>
 			</View>
