@@ -1,238 +1,116 @@
 // Import necessary dependencies from React and React Native
-import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import { useTheme } from "@react-navigation/native";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+	View,
+	Text,
+	Image,
+	TouchableOpacity,
+	ScrollView,
+	RefreshControl,
+} from "react-native";
 
 // Import component
 import ActCardLong from "../components/ActCardLong";
 
 // Import your styles
 import { styles } from "../styles";
+import { useTheme } from "@react-navigation/native";
+
+// API imports
+import FetchRequests from "../api client/requests/FetchRequests";
+import FetchTransactions from "../api client/transactions/FetchTransactions";
+import { useQuery } from "@tanstack/react-query";
 
 const Activity = ({ navigation, route }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
+	const [requests, setRequests] = useState([]);
+	const [transactions, setTransactions] = useState([]);
+
 	const [filter, setFilter] = useState(route.params.filter);
+	const [refreshing, setRefreshing] = useState(false);
 
 	const handleChangeFilter = (newFilter) => {
 		setFilter(newFilter);
 	};
 
-	const requestsDummy = [
-		{
-			history_id: 1,
-			request_id: 1,
-			matched_id: 1,
-			user_id: 100,
-			event_type: "CREATED",
-			amount: 500.0,
-			currency: "USD",
-			status: "PENDING",
-			timestamp: "2024-04-08 10:00:00",
-			description: "Initial request creation",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 2,
-			request_id: 2,
-			matched_id: 2,
-			user_id: 101,
-			event_type: "MATCHED",
-			amount: 200.0,
-			currency: "EUR",
-			status: "IN_PROGRESS",
-			timestamp: "2024-04-08 11:00:00",
-			description: "Match found for transfer",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 3,
-			request_id: 3,
-			matched_id: null,
-			user_id: 102,
-			event_type: "CANCELLED",
-			amount: 150.0,
-			currency: "GBP",
-			status: "CANCELLED",
-			timestamp: "2024-04-08 12:00:00",
-			description: "User cancelled request",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 4,
-			request_id: 4,
-			matched_id: 3,
-			user_id: 103,
-			event_type: "COMPLETED",
-			amount: 750.0,
-			currency: "USD",
-			status: "COMPLETED",
-			timestamp: "2024-04-08 13:00:00",
-			description: "Transfer completed successfully",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 5,
-			request_id: 5,
-			matched_id: 4,
-			user_id: 104,
-			event_type: "UPDATED",
-			amount: 300.0,
-			currency: "USD",
-			status: "IN_PROGRESS",
-			timestamp: "2024-04-08 14:00:00",
-			description: "Request details updated",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-	];
-	const transactionsDummy = [
-		{
-			history_id: 1,
-			request_id: 1,
-			matched_id: 1,
-			user_id: 100,
-			event_type: "CREATED",
-			amount: 500.0,
-			currency: "USD",
-			status: "PENDING",
-			timestamp: "2024-04-08 10:00:00",
-			description: "Initial request creation",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 2,
-			request_id: 2,
-			matched_id: 2,
-			user_id: 101,
-			event_type: "MATCHED",
-			amount: 200.0,
-			currency: "EUR",
-			status: "IN_PROGRESS",
-			timestamp: "2024-04-08 11:00:00",
-			description: "Match found for transfer",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 3,
-			request_id: 3,
-			matched_id: null,
-			user_id: 102,
-			event_type: "CANCELLED",
-			amount: 150.0,
-			currency: "GBP",
-			status: "CANCELLED",
-			timestamp: "2024-04-08 12:00:00",
-			description: "User cancelled request",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 4,
-			request_id: 4,
-			matched_id: 3,
-			user_id: 103,
-			event_type: "COMPLETED",
-			amount: 750.0,
-			currency: "USD",
-			status: "COMPLETED",
-			timestamp: "2024-04-08 13:00:00",
-			description: "Transfer completed successfully",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-		{
-			history_id: 5,
-			request_id: 5,
-			matched_id: 4,
-			user_id: 104,
-			event_type: "UPDATED",
-			amount: 300.0,
-			currency: "USD",
-			status: "IN_PROGRESS",
-			timestamp: "2024-04-08 14:00:00",
-			description: "Request details updated",
-			user: {
-				user_id: 100,
-				username: "John Doe",
-			},
-			country: {
-				flag: "https://flagcdn.com/w320/cy.png",
-				currency_code: "USD",
-			},
-			user_rating: 4.5,
-		},
-	];
+	// API Calls
+	// Fetch Requests
+	const { isPending, data, error, refetch } = useQuery({
+		queryKey: ["requests"],
+		queryFn: FetchRequests,
+	});
+
+	const handleRequestsData = (data) => {
+		if (error) {
+			console.log(error);
+		}
+		if (data) {
+			if (data.status === "success") {
+				setRequests(data.requests);
+			} else {
+				console.log("error");
+			}
+		}
+	};
+
+	useEffect(() => {
+		handleRequestsData(data);
+	}, [isPending]);
+
+	// Fetch Transactions
+	const {
+		isPending: isPendingTransactions,
+		data: dataTransactions,
+		error: errorTransactions,
+		refetch: refetchTransactions,
+	} = useQuery({
+		queryKey: ["transactions"],
+		queryFn: FetchTransactions,
+	});
+
+	const handleTransactionsData = (data) => {
+		if (errorTransactions) {
+			console.log(errorTransactions);
+		}
+		if (data) {
+			if (data.status === "success") {
+				setTransactions(data.transactions);
+			} else {
+				console.log("error");
+			}
+		}
+	};
+
+	useEffect(() => {
+		handleTransactionsData(dataTransactions);
+	}, [isPendingTransactions]);
+
+	const onRefresh = useCallback(() => {
+		setRefreshing(true);
+		if (filter === "requests") {
+			refetch()
+				.then((data) => {
+					handleRequestsData(data.data);
+					setRefreshing(false);
+				})
+				.catch((error) => {
+					console.error("Failed to refresh data:", error);
+					setRefreshing(false);
+				});
+		} else {
+			refetchTransactions()
+				.then((data) => {
+					handleTransactionsData(data.data);
+					setRefreshing(false);
+				})
+				.catch((error) => {
+					console.error("Failed to refresh data:", error);
+					setRefreshing(false);
+				});
+		}
+	}, [refetch, refetchTransactions]);
 
 	return (
 		<View style={style.container}>
@@ -293,15 +171,18 @@ const Activity = ({ navigation, route }) => {
 					</TouchableOpacity>
 				</View>
 			</View>
-			<ScrollView>
+			<ScrollView
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}>
 				<View style={style.listContainer}>
 					{filter === "requests" &&
-						requestsDummy.map((request) => (
-							<ActCardLong key={request.history_id} data={request} />
+						requests.map((request) => (
+							<ActCardLong key={request.id} data={request} />
 						))}
 					{filter === "transactions" &&
-						transactionsDummy.map((transaction) => (
-							<ActCardLong key={transaction.history_id} data={transaction} />
+						transactions.map((transaction) => (
+							<ActCardLong key={transaction.id} data={transaction} />
 						))}
 				</View>
 			</ScrollView>

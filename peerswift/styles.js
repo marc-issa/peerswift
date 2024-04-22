@@ -395,6 +395,7 @@ export const styles = (theme) =>
 		},
 		cardActLong: {
 			width: theme.dimensions.width * 0.9,
+			height: theme.dimensions.height * 0.075,
 			borderRadius: 10,
 			backgroundColor: "#F6F6F6",
 			flexDirection: "row",
@@ -409,19 +410,19 @@ export const styles = (theme) =>
 			elevation: 3,
 		},
 		cardCurerncyLong: {
-			fontSize: 18,
+			fontSize: 24,
 			color: theme.colors.accent,
 			fontWeight: "bold",
 			marginRight: 5,
 		},
 		cardAmountLong: {
-			fontSize: 19,
+			fontSize: 25,
 			color: theme.colors.accent,
 			fontWeight: "bold",
 		},
 		cardActFlagLong: {
-			width: theme.dimensions.width * 0.075,
-			height: theme.dimensions.width * 0.075,
+			width: theme.dimensions.width * 0.05,
+			height: theme.dimensions.width * 0.05,
 			marginRight: 5,
 			borderRadius: 100,
 		},

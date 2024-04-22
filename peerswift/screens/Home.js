@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 import {
 	View,
@@ -7,6 +7,7 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	ActivityIndicator,
+	RefreshControl,
 } from "react-native";
 
 import { styles } from "../styles";
@@ -32,15 +33,16 @@ const Home = ({ navigation }) => {
 	const [transactions, setTransactions] = useState([]);
 
 	const [loading, setLoading] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 
 	// API Calls
 	// Fetch Summary
-	const { isPending, data, error } = useQuery({
+	const { isPending, data, error, refetch } = useQuery({
 		queryKey: ["summary"],
 		queryFn: FetchSummary,
 	});
 
-	useEffect(() => {
+	const handleData = (data) => {
 		setLoading(isPending);
 
 		if (error) {
@@ -64,10 +66,33 @@ const Home = ({ navigation }) => {
 				setTransactions(data.recent_transactions);
 			}
 		}
+	};
+
+	useEffect(() => {
+		handleData(data);
 	}, [isPending]);
 
+	const onRefresh = useCallback(() => {
+		setRefreshing(true);
+		setLoading(true);
+		refetch()
+			.then((data) => {
+				handleData(data.data);
+				setRefreshing(false);
+				setLoading(false);
+			})
+			.catch((error) => {
+				console.error("Failed to refresh data:", error);
+				setRefreshing(false);
+				setLoading(false);
+			});
+	}, [refetch]);
+
 	return (
-		<ScrollView>
+		<ScrollView
+			refreshControl={
+				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+			}>
 			<View style={style.container}>
 				<View style={style.header}>
 					<TouchableOpacity onPress={() => navigation.navigate("Profile")}>
@@ -114,7 +139,11 @@ const Home = ({ navigation }) => {
 								},
 							]}>
 							<Text style={style.statsTxtS}>activity</Text>
-							<Text style={style.statsTxtL}>{totalActivity}</Text>
+							{loading ? (
+								<ActivityIndicator size={"small"} />
+							) : (
+								<Text style={style.statsTxtL}>{totalActivity}</Text>
+							)}
 						</View>
 					</View>
 					<View style={style.navs}>

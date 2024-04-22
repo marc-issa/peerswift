@@ -33,11 +33,15 @@ const authRouter = require("./routes/Auth");
 const userRouter = require("./routes/User");
 const countriesRouter = require("./routes/Countries");
 const groupsRouter = require("./routes/Groups");
+const requestsRouter = require("./routes/Requests");
+const transactionRouter = require("./routes/Transactions");
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/countries", countriesRouter);
 app.use("/groups", groupsRouter);
+app.use("/request", requestsRouter);
+app.use("/transaction", transactionRouter);
 
 app.listen(port, () => {
 	logIPv4Addresses();

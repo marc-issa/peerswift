@@ -43,6 +43,7 @@ module.exports = {
 					const matchedRequestsRes = await pool.query(matchedRequestsQuery, [
 						requestsHistoryRes.rows[i].matched_id,
 					]);
+					matchedRequestsRes.rows[0].id = requestsHistoryRes.rows[i].id;
 					for (let j = 0; j < matchedRequestsRes.rows.length; j++) {
 						let partnerUser = {};
 						let country = {};
@@ -87,7 +88,10 @@ module.exports = {
 						unmatchedRequestsQuery,
 						[requestsHistoryRes.rows[i].unmatched_id],
 					);
-					recent_requests.push(unmatchedRequestsRes.rows[0]);
+					if (unmatchedRequestsRes.rows.length > 0) {
+						unmatchedRequestsRes.rows[0].id = requestsHistoryRes.rows[i].id;
+						recent_requests.push(unmatchedRequestsRes.rows[0]);
+					}
 				}
 			}
 
@@ -102,6 +106,7 @@ module.exports = {
 					const transactionRes = await pool.query(transactionQuery, [
 						transactionsRes.rows[i].transaction_id,
 					]);
+					transactionRes.rows[0].id = transactionsRes.rows[i].id;
 					for (let j = 0; j < transactionRes.rows.length; j++) {
 						let partnerUser = {};
 						let country = {};
@@ -144,6 +149,7 @@ module.exports = {
 					const topupRes = await pool.query(topupQuery, [
 						transactionsRes.rows[i].top_up_id,
 					]);
+					topupRes.rows[0].id = transactionsRes.rows[i].id;
 					recent_transactions.push(topupRes.rows[0]);
 				}
 			}
