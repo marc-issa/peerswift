@@ -31,8 +31,15 @@ module.exports = {
 				const messagesResult = await pool.query(messagesQuery, [
 					result.rows[i].group_id,
 				]);
-
+				for (let j = 0; j < messagesResult.rows.length; j++) {
+					if (messagesResult.rows[j].user_id === user.id) {
+						messagesResult.rows[j].incoming = false;
+					} else {
+						messagesResult.rows[j].incoming = true;
+					}
+				}
 				result.rows[i].messages = messagesResult.rows;
+				result.rows[i].last_message = messagesResult.rows[0];
 			}
 
 			res.status(200).json({

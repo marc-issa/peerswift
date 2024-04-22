@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
 	View,
 	Text,
@@ -14,9 +14,13 @@ import { styles } from "../styles";
 // Components import
 import Message from "../components/Message";
 
-const GroupChat = ({ navigation }) => {
+const GroupChat = ({ navigation, route }) => {
 	const theme = useTheme();
 	const style = styles(theme);
+
+	const group = route.params.group;
+
+	const scrollViewRef = useRef();
 
 	const [messageText, setMessageText] = useState("");
 
@@ -25,22 +29,14 @@ const GroupChat = ({ navigation }) => {
 		setMessageText("");
 	};
 
-	// Dummy data for messages
-	const messages = [
-		{
-			id: 1,
-			text: "Hello there! I will be traveling to from Canada to Lebanon next week! if you are interested please feel free to reach out.",
-			time: "9:34 PM",
-			incoming: false, // false for sent messages, true for received ones
-		},
-		{
-			id: 2,
-			text: "Hello there! I will be traveling to from Canada to Lebanon next week! if you are interested please feel free to reach out.",
-			time: "9:34 PM",
-			incoming: true, // false for sent messages, true for received ones
-		},
-		// Add more messages here
-	];
+	const messages = group.messages;
+
+	// Scroll to bottom on new messages
+	useEffect(() => {
+		if (scrollViewRef.current) {
+			scrollViewRef.current.scrollToEnd({ animated: true });
+		}
+	}, [messages]);
 
 	return (
 		<KeyboardAvoidingView
@@ -56,20 +52,25 @@ const GroupChat = ({ navigation }) => {
 					</TouchableOpacity>
 					<View style={style.groupChatHeader}>
 						<Image
-							source={{ uri: "https://flagcdn.com/w320/cy.png" }}
+							source={{ uri: group.country.flag }}
 							style={style.groupChatIcon}
 						/>
-						<Text style={style.groupChatName}>Cyprus</Text>
+						<Text style={style.groupChatName}>{group.group.name}</Text>
 					</View>
 					<View style={{ flex: 1 }}></View>
 				</View>
 			</View>
-			<ScrollView style={style.messagesContainer}>
-				{messages.map((message) => (
+			<ScrollView
+				style={style.messagesContainer}
+				ref={scrollViewRef}
+				onContentSizeChange={() =>
+					scrollViewRef.current.scrollToEnd({ animated: false })
+				}>
+				{[...messages].reverse().map((message) => (
 					<Message
 						key={message.id}
-						text={message.text}
-						time={message.time}
+						text={message.message}
+						time={message.timestamp}
 						incoming={message.incoming}
 					/>
 				))}

@@ -4,6 +4,8 @@ import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
 import { View, Text, Image } from "react-native";
 
+import formatLastMessageDate from "../functions/formatLastMessageDate";
+
 const Message = ({ text, time, incoming }) => {
 	const theme = useTheme();
 	const style = styles(theme);
@@ -28,7 +30,13 @@ const Message = ({ text, time, incoming }) => {
 					style={[style.messageText, !incoming ? style.sentMessageTxt : ""]}>
 					{text}
 				</Text>
-				<Text style={style.messageTime}>{time}</Text>
+				<Text
+					style={[
+						style.messageTime,
+						{ color: incoming ? theme.colors.accent : theme.colors.background },
+					]}>
+					{formatLastMessageDate(time)}
+				</Text>
 			</View>
 		</View>
 	);

@@ -509,9 +509,10 @@ export const styles = (theme) =>
 			paddingVertical: 10,
 		},
 		groupIcon: {
-			width: theme.dimensions.width * 0.2,
-			height: theme.dimensions.width * 0.2,
+			width: theme.dimensions.width * 0.15,
+			height: theme.dimensions.width * 0.15,
 			borderRadius: 100,
+			marginLeft: 10,
 		},
 		groupInfoBox: {
 			flexDirection: "column",
@@ -570,7 +571,7 @@ export const styles = (theme) =>
 			flex: 1,
 			width: theme.dimensions.width,
 			marginTop: 10,
-			flexDirection: "column-reverse",
+			flexDirection: "column",
 			paddingBottom: 10,
 		},
 		// Send Input
@@ -635,7 +636,7 @@ export const styles = (theme) =>
 			color: theme.colors.background,
 		},
 		messageTime: {
-			color: "grey",
+			color: theme.colors.background,
 			fontSize: 10,
 			marginTop: 4,
 			alignSelf: "flex-end",
