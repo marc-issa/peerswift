@@ -15,6 +15,7 @@ import { useTheme } from "@react-navigation/native";
 
 // Components import
 import ActivitiesCard from "../components/activitiesCard";
+import NoDataFound from "../components/NoDataFound";
 
 // API import
 import FetchSummary from "../api client/User/FetchSummary";
@@ -216,6 +217,7 @@ const Home = ({ navigation }) => {
 							<Text style={style.linkTxt}>view all</Text>
 						</TouchableOpacity>
 					</View>
+					{requests.length === 0 && <NoDataFound />}
 					<ScrollView
 						showsVerticalScrollIndicator={false}
 						showsHorizontalScrollIndicator={false}
@@ -236,6 +238,7 @@ const Home = ({ navigation }) => {
 							<Text style={style.linkTxt}>view all</Text>
 						</TouchableOpacity>
 					</View>
+					{transactions.length === 0 && <NoDataFound />}
 					<ScrollView
 						showsVerticalScrollIndicator={false}
 						showsHorizontalScrollIndicator={false}

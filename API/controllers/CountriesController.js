@@ -64,7 +64,7 @@ module.exports = {
 		}
 	},
 	getCountries: async (req, res) => {
-		const queryText = `SELECT * FROM countries`;
+		const queryText = `SELECT * FROM countries ORDER BY name ASC`;
 		try {
 			const response = await pool.query(queryText);
 			const countries = response.rows;

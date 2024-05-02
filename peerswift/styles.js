@@ -1022,4 +1022,15 @@ export const styles = (theme) =>
 			width: 40,
 			height: 40,
 		},
+		// ********** No Data Found **********
+		noDataBox: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center",
+			height: theme.dimensions.height * 0.15,
+		},
+		noDataText: {
+			color: theme.colors.accent,
+			fontSize: 18,
+		},
 	});

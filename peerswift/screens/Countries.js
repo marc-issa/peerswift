@@ -1,27 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
 import { styles } from "../styles";
 
+// API import
+import getCountries from "../api client/countries/getCountries";
+import { useQuery } from "@tanstack/react-query";
+
 const Countries = ({ navigation }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
-	let countryCount = 0;
+	const [countries, setCountries] = useState([]);
 
-	const countryList = [
-		{
-			country_id: 1,
-			country_name: "Cyprus",
-			country_flag: "https://flagcdn.com/w320/cy.png",
-		},
-		{
-			country_id: 2,
-			country_name: "Cyprus",
-			country_flag: "https://flagcdn.com/w320/cy.png",
-		},
-	];
+	const [loading, setLoading] = useState(false);
+
+	// API Calls
+	// Fetch countries
+	const { isPending, data, error, refetch } = useQuery({
+		queryKey: ["countries"],
+		queryFn: getCountries,
+	});
+
+	const handleData = (data) => {
+		setLoading(isPending);
+
+		if (error) {
+			console.log(error);
+		}
+		if (data) {
+			if (data.status === "success") {
+				setCountries(data.data);
+			}
+		}
+	};
+
+	useEffect(() => {
+		handleData(data);
+	}, [isPending]);
+
+	let countryCount = 0;
 
 	const countryListItems = (country, countryCount) => {
 		return (
@@ -30,12 +49,9 @@ const Countries = ({ navigation }) => {
 					style.countryBox,
 					{ borderTopWidth: countryCount === 1 ? 1 : 0 },
 				]}
-				key={country.country_id}>
-				<Image
-					source={{ uri: country.country_flag }}
-					style={style.countryFlag}
-				/>
-				<Text style={style.countryName}>{country.country_name}</Text>
+				key={country.id}>
+				<Image source={{ uri: country.flag }} style={style.countryFlag} />
+				<Text style={style.countryName}>{country.name}</Text>
 			</TouchableOpacity>
 		);
 	};
@@ -53,10 +69,11 @@ const Countries = ({ navigation }) => {
 			</View>
 			<ScrollView>
 				<View style={style.countriesList}>
-					{countryList.map((country, index) => {
-						countryCount++;
-						return countryListItems(country, countryCount);
-					})}
+					{countries &&
+						countries.map((country) => {
+							countryCount++;
+							return countryListItems(country, countryCount);
+						})}
 				</View>
 			</ScrollView>
 		</View>

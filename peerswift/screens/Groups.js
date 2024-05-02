@@ -81,13 +81,17 @@ const Groups = ({ navigation }) => {
 							/>
 							<View style={style.groupInfoBox}>
 								<Text style={style.groupName}>{group.group.name}</Text>
-								<Text style={style.groupLastMessage}>
-									{formatMessage(group.last_message.message)}
-								</Text>
+								{group.last_message ? (
+									<Text style={style.groupLastMessage}>
+										{formatMessage(group.last_message.message)}
+									</Text>
+								) : null}
 							</View>
 							<View style={style.groupTimeBox}>
 								<Text style={style.lastMessageTime}>
-									{formatLastMessageDate(group.last_message.timestamp)}
+									{group.last_message
+										? formatLastMessageDate(group.last_message.timestamp)
+										: ""}
 								</Text>
 							</View>
 						</TouchableOpacity>

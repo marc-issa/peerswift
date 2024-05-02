@@ -7,7 +7,7 @@ select * from user_group_memberships
 select * from groups
 select * from countries
 
-update wallets set balance=1000
+update wallets set balance=1200
 
 select * from user_ratings
 insert into user_ratings(rated_user_id, rating_user_id, rating, comment, rating_date)
@@ -37,3 +37,18 @@ insert into top_ups(user_id, amount, currency, time, source) values(5, 1200, 'US
 SELECT enumlabel
 FROM pg_enum
 WHERE enumtypid = (SELECT oid FROM pg_type WHERE typname = 'matching_status');
+
+select * from groups
+select * from user_group_memberships
+select * from group_messages
+
+insert into group_messages(group_id, user_id, message, timestamp) values(125, 6, 'this is the 12 test message', NOW())
+
+DELETE FROM countries
+WHERE name IN (
+    SELECT name
+    FROM countries
+    GROUP BY name
+    HAVING COUNT(*) > 1
+);
+

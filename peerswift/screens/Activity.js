@@ -11,6 +11,7 @@ import {
 
 // Import component
 import ActCardLong from "../components/ActCardLong";
+import NoDataFound from "../components/NoDataFound";
 
 // Import your styles
 import { styles } from "../styles";
@@ -171,6 +172,10 @@ const Activity = ({ navigation, route }) => {
 					</TouchableOpacity>
 				</View>
 			</View>
+			{filter === "requests" && requests.length === 0 && <NoDataFound />}
+			{filter === "transactions" && transactions.length === 0 && (
+				<NoDataFound />
+			)}
 			<ScrollView
 				refreshControl={
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
