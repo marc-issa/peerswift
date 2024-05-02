@@ -711,7 +711,7 @@ export const styles = (theme) =>
 			width: theme.dimensions.width,
 		},
 		countryFlag: {
-			width: theme.dimensions.width * 0.1,
+			width: theme.dimensions.width * 0.15,
 			height: theme.dimensions.width * 0.1,
 			marginRight: 10,
 		},

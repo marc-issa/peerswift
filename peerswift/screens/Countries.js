@@ -8,7 +8,7 @@ import { styles } from "../styles";
 import getCountries from "../api client/countries/getCountries";
 import { useQuery } from "@tanstack/react-query";
 
-const Countries = ({ navigation }) => {
+const Countries = ({ navigation, route }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
@@ -49,6 +49,11 @@ const Countries = ({ navigation }) => {
 					style.countryBox,
 					{ borderTopWidth: countryCount === 1 ? 1 : 0 },
 				]}
+				onPress={() => {
+					if (route.params.type === "groups") {
+						console.log("Groups");
+					}
+				}}
 				key={country.id}>
 				<Image source={{ uri: country.flag }} style={style.countryFlag} />
 				<Text style={style.countryName}>{country.name}</Text>

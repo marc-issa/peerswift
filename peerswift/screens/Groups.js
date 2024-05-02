@@ -14,7 +14,7 @@ import formatLastMessageDate from "../functions/formatLastMessageDate";
 import FetchGroups from "../api client/groups/FetchGroups";
 import { useQuery } from "@tanstack/react-query";
 
-const Groups = ({ navigation }) => {
+const Groups = ({ navigation, route }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
@@ -53,7 +53,8 @@ const Groups = ({ navigation }) => {
 					/>
 				</TouchableOpacity>
 				<Text style={style.headerTitle}>Groups</Text>
-				<TouchableOpacity onPress={() => navigation.navigate("Countries")}>
+				<TouchableOpacity
+					onPress={() => navigation.navigate("Countries", { type: "groups" })}>
 					<Image
 						source={require("../assets/Icons/add.png")}
 						style={{
