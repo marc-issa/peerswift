@@ -118,4 +118,34 @@ module.exports = {
 			});
 		}
 	},
+	addToGroup: async (req, res) => {
+		try {
+			const user = jwt.decode(req.headers.authorization.split(" ")[1]);
+			const { country_id } = req.body;
+
+			const checkGroup = `SELECT * FROM groups WHERE country_id = $1`;
+			const checkResult = await pool.query(checkGroup, [country_id]);
+			if (checkResult.rows.length === 0) {
+				return res.status(404).json({
+					status: "error",
+					message: "Group not found",
+				});
+			}
+
+			const query = `INSERT INTO user_group_memberships (user_id, group_id, join_date) VALUES ($1, $2, NOW()) RETURNING *`;
+			const values = [user.id, checkResult.rows[0].id];
+			const result = await pool.query(query, values);
+
+			res.status(201).json({
+				status: "success",
+				message: "User added to group successfully",
+				data: result.rows[0],
+			});
+		} catch (error) {
+			res.status(400).json({
+				status: "error",
+				message: error.message || "Unable to add user to group",
+			});
+		}
+	},
 };

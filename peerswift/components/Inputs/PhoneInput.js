@@ -8,8 +8,9 @@ import {
 } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { styles } from "../../styles";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const PhoneInput = ({ value, onChange, flag }) => {
+const PhoneInput = ({ navigation, value, onChange, flag }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 	const anim = useRef(new Animated.Value(value ? 1 : 0)).current;
@@ -68,20 +69,21 @@ const PhoneInput = ({ value, onChange, flag }) => {
 					borderWidth: isFocused ? 1.5 : 1,
 				},
 			]}>
-			<View
+			<TouchableOpacity
 				style={[
 					style.flagBox,
 					{
 						borderColor: isFocused ? theme.colors.primary : theme.colors.accent,
 						borderRightWidth: isFocused ? 1.5 : 1,
 					},
-				]}>
+				]}
+				onPress={() => navigation.navigate("Countries", { type: "phone" })}>
 				{flagUrl ? (
 					<Image source={{ uri: flagUrl }} style={style.phoneFlag} />
 				) : (
 					<ActivityIndicator size='small' />
 				)}
-			</View>
+			</TouchableOpacity>
 			<Animated.Text style={labelStyle}>Phone Number</Animated.Text>
 			<TextInput
 				keyboardType={"phone-pad"}

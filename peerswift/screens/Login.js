@@ -122,7 +122,12 @@ const Login = ({ navigation }) => {
 				Access global exchanges with PEERSIWFT! Log in or sign up using your
 				phone number.
 			</Text>
-			<PhoneInput value={phoneNumber} onChange={handlePhoneInput} flag={flag} />
+			<PhoneInput
+				navigation={navigation}
+				value={phoneNumber}
+				onChange={handlePhoneInput}
+				flag={flag}
+			/>
 			<Buttons
 				type={"primary"}
 				screen={"OTPVerf"}

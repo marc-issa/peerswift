@@ -7,6 +7,7 @@ import { styles } from "../styles";
 // API import
 import getCountries from "../api client/countries/getCountries";
 import { useQuery } from "@tanstack/react-query";
+import AddToGroup from "../api client/groups/AddToGroup";
 
 const Countries = ({ navigation, route }) => {
 	const theme = useTheme();
@@ -40,6 +41,13 @@ const Countries = ({ navigation, route }) => {
 		handleData(data);
 	}, [isPending]);
 
+	// Add to group
+	const addToGroup = async (group_id) => {
+		const data = await AddToGroup(group_id);
+		console.log(data);
+	};
+
+	// Country Component
 	let countryCount = 0;
 
 	const countryListItems = (country, countryCount) => {
@@ -51,7 +59,8 @@ const Countries = ({ navigation, route }) => {
 				]}
 				onPress={() => {
 					if (route.params.type === "groups") {
-						console.log("Groups");
+						addToGroup(country.id);
+						navigation.goBack();
 					}
 				}}
 				key={country.id}>

@@ -7,6 +7,7 @@ import {
 import Login from "../screens/Login";
 import OTPVerf from "../screens/OTPVerf";
 import Signup from "../screens/Signup";
+import Countries from "../screens/Countries";
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,14 @@ const AuthStackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='Signup'
 				component={Signup}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='Countries'
+				component={Countries}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,

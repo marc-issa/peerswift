@@ -1,10 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 // Import your styles
 import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
 
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import {
+	View,
+	Text,
+	Image,
+	TouchableOpacity,
+	ScrollView,
+	RefreshControl,
+} from "react-native";
 
 // Functions import
 import formatMessage from "../functions/formatMessage";
@@ -21,8 +28,9 @@ const Groups = ({ navigation, route }) => {
 	const [groups, setGroups] = useState([]);
 
 	const [loading, setLoading] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 
-	const { isPending, data, error } = useQuery({
+	const { isPending, data, error, refetch } = useQuery({
 		queryKey: ["groups"],
 		queryFn: FetchGroups,
 	});
@@ -42,6 +50,22 @@ const Groups = ({ navigation, route }) => {
 	useEffect(() => {
 		handleData(data);
 	}, [isPending]);
+
+	const onRefresh = useCallback(() => {
+		setRefreshing(true);
+		setLoading(true);
+		refetch()
+			.then((data) => {
+				handleData(data.data);
+				setRefreshing(false);
+				setLoading(false);
+			})
+			.catch((error) => {
+				console.error("Failed to refresh data:", error);
+				setRefreshing(false);
+				setLoading(false);
+			});
+	}, [refetch]);
 
 	return (
 		<View style={style.container}>
@@ -64,7 +88,10 @@ const Groups = ({ navigation, route }) => {
 					/>
 				</TouchableOpacity>
 			</View>
-			<ScrollView>
+			<ScrollView
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}>
 				<View style={style.groupList}>
 					{groups.map((group) => (
 						<TouchableOpacity
