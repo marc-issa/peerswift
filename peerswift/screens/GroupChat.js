@@ -14,6 +14,9 @@ import { styles } from "../styles";
 // Components import
 import Message from "../components/Message";
 
+// Send message to group chat
+import SendMessage from "../api client/groups/SendMessage";
+
 const GroupChat = ({ navigation, route }) => {
 	const theme = useTheme();
 	const style = styles(theme);
@@ -25,11 +28,17 @@ const GroupChat = ({ navigation, route }) => {
 	const [messageText, setMessageText] = useState("");
 
 	const handleSendMessage = () => {
-		console.log("Message to send:", messageText);
-		setMessageText("");
+		SendMessage(group.group.id, messageText).then((response) => {
+			if (response.status === "success") {
+				setMessageText("");
+				setMessages([response.data.messages, ...messages]);
+			} else {
+				console.error(response.message);
+			}
+		});
 	};
 
-	const messages = group.messages;
+	const [messages, setMessages] = useState(group.messages);
 
 	// Scroll to bottom on new messages
 	useEffect(() => {

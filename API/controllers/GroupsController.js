@@ -148,4 +148,53 @@ module.exports = {
 			});
 		}
 	},
+	sendMessage: async (req, res) => {
+		try {
+			const user = jwt.decode(req.headers.authorization.split(" ")[1]);
+			const { group_id, message } = req.body;
+
+			const insertMessageQuery = `INSERT INTO group_messages (group_id, user_id, message, timestamp) VALUES ($1, $2, $3, NOW()) RETURNING *`;
+			const messageResult = await pool.query(insertMessageQuery, [
+				group_id,
+				user.id,
+				message,
+			]);
+			const messageData = messageResult.rows[0];
+
+			const groupQuery = `SELECT * FROM groups WHERE id = $1`;
+			const groupResult = await pool.query(groupQuery, [group_id]);
+
+			const countryQuery = `SELECT * FROM countries WHERE id = $1`;
+			const countryResult = await pool.query(countryQuery, [
+				groupResult.rows[0].country_id,
+			]);
+
+			if (messageData.user_id === user.id) {
+				messageData.incoming = false;
+				messageData.sender = user;
+			} else {
+				messageData.incoming = true;
+				const senderQuery = `SELECT * FROM users WHERE id = $1`;
+				const senderResult = await pool.query(senderQuery, [
+					messageData.user_id,
+				]);
+				messageData.sender = senderResult.rows[0];
+			}
+
+			res.status(201).json({
+				status: "success",
+				data: {
+					group: groupResult.rows[0],
+					country: countryResult.rows[0],
+					messages: messageData,
+				},
+			});
+		} catch (error) {
+			console.error("Error in sendMessage:", error.stack);
+			res.status(400).json({
+				status: "error",
+				message: error.message || "Unable to send message",
+			});
+		}
+	},
 };
