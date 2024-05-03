@@ -175,4 +175,71 @@ module.exports = {
 			});
 		}
 	},
+	getUser: async (req, res) => {
+		try {
+			const { phone_number } = req.body;
+			const userQuery = `SELECT * FROM users WHERE phone_number = $1`;
+			const userRes = await pool.query(userQuery, [phone_number]);
+
+			if (userRes.rows.length > 0) {
+				const countryQuery = `SELECT * FROM countries WHERE id = $1`;
+				const countryRes = await pool.query(countryQuery, [
+					userRes.rows[0].country,
+				]);
+
+				userRes.rows[0].country = countryRes.rows[0];
+
+				res.status(200).json({
+					status: "success",
+					user: userRes.rows[0],
+				});
+			} else {
+				res.status(400).json({
+					status: "error",
+					message: "User not found",
+				});
+			}
+		} catch (error) {
+			res.status(400).json({
+				status: "error",
+				message: error.message || "User not found",
+			});
+		}
+	},
+	addContact: async (req, res) => {
+		const { user_id } = req.body;
+		const user = jwt.decode(req.headers.authorization.split(" ")[1]);
+
+		const checkContactQuery = `SELECT * FROM user_contacts WHERE user_id = $1 AND contact_user_id = $2`;
+		const checkContactValues = [user.id, user_id];
+
+		const checkContactRes = await pool.query(
+			checkContactQuery,
+			checkContactValues,
+		);
+
+		if (checkContactRes.rows.length > 0) {
+			return res.status(400).json({
+				status: "error",
+				message: "Contact already added",
+			});
+		}
+
+		const contactQuery = `INSERT INTO user_contacts (user_id, contact_user_id, added_date) VALUES ($1, $2, NOW()) RETURNING *`;
+		const contactValues = [user.id, user_id];
+
+		try {
+			await pool.query(contactQuery, contactValues);
+
+			res.status(200).json({
+				status: "success",
+				message: "Contact added successfully",
+			});
+		} catch (error) {
+			res.status(400).json({
+				status: "error",
+				message: error.message || "An error occurred during adding contact",
+			});
+		}
+	},
 };

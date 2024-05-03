@@ -9,11 +9,14 @@ import { useEffect, useState } from "react";
 // API imports
 import { useQuery } from "@tanstack/react-query";
 import getCountries from "../api client/countries/getCountries";
+import FetchUser from "../api client/User/FetchUser";
+import AddContact from "../api client/User/AddContact";
 
 // Component imports
 import PhoneInput from "../components/Inputs/PhoneInput";
 import Buttons from "../components/Buttons";
 import DialPad from "../components/DialPad";
+import ErrorComponent from "../components/ErrorComponent";
 
 // Functions
 import searchCountry from "../functions/searchCountry";
@@ -25,10 +28,29 @@ const AddRecipient = ({ navigation }) => {
 	const [phoneNumber, setPhoneNumber] = useState("");
 
 	const [disabled, setDisabled] = useState(true);
+	const [loading, setLoading] = useState(false);
+	const [selected, setSelected] = useState(false);
 
 	const [countries, setCountries] = useState([]);
 	const [countryCode, setCountryCode] = useState([]);
 	const [flag, setFlag] = useState("");
+
+	const [recipient, setRecipient] = useState({});
+
+	// Error handling
+	const [modalVisible, setModalVisible] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
+
+	const handleError = () => {
+		setModalVisible(true);
+	};
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setModalVisible(false);
+		}, 3000);
+		return () => clearTimeout(timer);
+	}, [modalVisible]);
 
 	// API Calls
 	const { isPending, data, error } = useQuery({
@@ -50,8 +72,8 @@ const AddRecipient = ({ navigation }) => {
 		if (countries) {
 			const country = searchCountry(countries, "Lebanon");
 			if (country) {
-				setFlag(country.country_flag);
-				setCountryCode(country.country_code);
+				setFlag(country.flag);
+				setCountryCode(country.code);
 			}
 		}
 	}, [countries]);
@@ -68,8 +90,41 @@ const AddRecipient = ({ navigation }) => {
 			setDisabled(false);
 		} else {
 			setDisabled(true);
+			setSelected(false);
+			setRecipient({});
 		}
 	}, [phoneNumber]);
+
+	const handleSubmit = () => {
+		setLoading(true);
+		if (selected) {
+			const data = {
+				user_id: recipient.id,
+			};
+			AddContact(data).then((response) => {
+				if (response.status === "success") {
+					navigation.goBack();
+				} else {
+					setErrorMsg(response.message);
+					handleError();
+				}
+			});
+		} else {
+			const data = {
+				phone_number: countryCode + phoneNumber,
+			};
+			FetchUser(data).then((response) => {
+				if (response.status === "success") {
+					setRecipient(response.user);
+					setSelected(true);
+				} else {
+					setErrorMsg(response.message);
+					handleError();
+				}
+			});
+		}
+		setLoading(false);
+	};
 
 	return (
 		<ScrollView>
@@ -89,6 +144,19 @@ const AddRecipient = ({ navigation }) => {
 					instantly. Simply enter their phone number below, and if they're
 					already using our app, we'll add them to your recipient list.
 				</Text>
+				<View style={style.addedRecpBox}>
+					{recipient.country ? (
+						<Image
+							source={{ uri: recipient.country.flag }}
+							style={style.recepientFlag}
+						/>
+					) : (
+						<></>
+					)}
+					<Text style={style.recepientTitle}>
+						{recipient ? recipient.full_name : ""}
+					</Text>
+				</View>
 				<PhoneInput
 					value={phoneNumber}
 					onChange={handlePhoneInput}
@@ -97,12 +165,17 @@ const AddRecipient = ({ navigation }) => {
 				<Buttons
 					type={"primary"}
 					screen={""}
-					navData={{}}
 					navigation={navigation}
 					disabled={disabled}
-					title={"Continue"}
+					title={selected ? "Add" : "Search"}
+					isPending={loading}
+					handleSubmit={handleSubmit}
 				/>
 				<DialPad onChange={handlePhoneInput} />
+				<ErrorComponent
+					isVisible={modalVisible}
+					message={errorMsg || "An error occurred"}
+				/>
 			</View>
 		</ScrollView>
 	);

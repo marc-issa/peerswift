@@ -973,6 +973,27 @@ export const styles = (theme) =>
 			fontFamily: "monospace",
 			marginTop: 20,
 		},
+		// ********** Add Recepient **********
+		addedRecpBox: {
+			width: theme.dimensions.width * 0.8,
+			height: theme.dimensions.height * 0.07,
+			flexDirection: "row",
+			justifyContent: "flex-start",
+			alignItems: "center",
+			marginBottom: -theme.dimensions.width * 0.035,
+			padding: 10,
+		},
+		recepientTitle: {
+			color: theme.colors.accent,
+			fontSize: 18,
+			fontWeight: "bold",
+		},
+		recepientFlag: {
+			width: theme.dimensions.width * 0.1,
+			height: theme.dimensions.width * 0.1,
+			marginRight: 10,
+			borderRadius: 100,
+		},
 		// ********** Errors **********
 		errorTxt: {
 			color: "#D05353",
