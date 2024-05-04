@@ -97,4 +97,67 @@ module.exports = {
 			});
 		}
 	},
+
+	getTransactionById: async (req, res) => {
+		try {
+			const userQuery = `SELECT * FROM users WHERE id = $1`;
+			const countryQuery = `SELECT * FROM countries WHERE id = $1`;
+			const ratingQuery = `SELECT * FROM user_ratings WHERE rated_user_id = $1`;
+
+			const user = jwt.decode(req.headers.authorization.split(" ")[1]);
+			const transactionId = req.params.id;
+
+			const transactionQuery = `SELECT * FROM transactions WHERE id = $1`;
+			const transactionRes = await pool.query(transactionQuery, [
+				transactionId,
+			]);
+
+			let transaction = transactionRes.rows[0];
+
+			let partnerUser = {};
+			let country = {};
+			let rate = 0;
+			if (transaction.initiator_user_id !== user.id) {
+				const partnerUserRes = await pool.query(userQuery, [
+					transaction.initiator_user_id,
+				]);
+				const countryRes = await pool.query(countryQuery, [
+					partnerUserRes.rows[0].country,
+				]);
+				const ratingRes = await pool.query(ratingQuery, [
+					transaction.initiator_user_id,
+				]);
+				partnerUser = partnerUserRes.rows[0];
+				country = countryRes.rows[0];
+				rate = calculateRating(ratingRes.rows);
+			} else if (transaction.partner_user_id !== user.id) {
+				const partnerUserRes = await pool.query(userQuery, [
+					transaction.partner_user_id,
+				]);
+				const countryRes = await pool.query(countryQuery, [
+					partnerUserRes.rows[0].country,
+				]);
+				const ratingRes = await pool.query(ratingQuery, [
+					transaction.partner_user_id,
+				]);
+				partnerUser = partnerUserRes.rows[0];
+				country = countryRes.rows[0];
+				rate = calculateRating(ratingRes.rows);
+			}
+			transaction.user = partnerUser;
+			transaction.user.flag = country.flag;
+			transaction.user.currency = country.currency_code;
+			transaction.user.rating = rate;
+
+			res.status(200).json({
+				status: "success",
+				transaction: transaction,
+			});
+		} catch (error) {
+			res.status(400).json({
+				status: "error",
+				message: error.message || "User not found",
+			});
+		}
+	},
 };

@@ -8,12 +8,12 @@ const Recepients = ({ recepients, value, onChange }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
-	const handleOnChange = (id) => {
-		if (value === id) {
+	const handleOnChange = (contact) => {
+		if (value === contact) {
 			onChange(null);
 			return;
 		}
-		onChange(id);
+		onChange(contact);
 	};
 	return (
 		<View style={style.recepientsBox}>
@@ -27,14 +27,14 @@ const Recepients = ({ recepients, value, onChange }) => {
 				{recepients.map((item, index) => {
 					return (
 						<TouchableOpacity
-							onPress={() => handleOnChange(item.id)}
+							onPress={() => handleOnChange(item)}
 							key={index}
 							style={style.recepientItem}>
 							<Image
-								source={{ uri: item.country_flag }}
+								source={{ uri: item.contact.country.flag }}
 								style={[
 									style.recepientImage,
-									{ borderWidth: value === item.id ? 3 : 0 },
+									{ borderWidth: value && value.id === item.id ? 3 : 0 },
 								]}
 							/>
 							<Text
@@ -42,12 +42,12 @@ const Recepients = ({ recepients, value, onChange }) => {
 									style.recepientText,
 									{
 										color:
-											value === item.id
+											value && value.id === item.id
 												? theme.colors.primary
 												: theme.colors.accent,
 									},
 								]}>
-								{item.name}
+								{item.contact.full_name}
 							</Text>
 							<Text
 								style={[

@@ -210,6 +210,13 @@ module.exports = {
 		const { user_id } = req.body;
 		const user = jwt.decode(req.headers.authorization.split(" ")[1]);
 
+		if (user.id === user_id) {
+			return res.status(400).json({
+				status: "error",
+				message: "You cannot add yourself as a contact",
+			});
+		}
+
 		const checkContactQuery = `SELECT * FROM user_contacts WHERE user_id = $1 AND contact_user_id = $2`;
 		const checkContactValues = [user.id, user_id];
 
@@ -245,7 +252,6 @@ module.exports = {
 	addCard: async (req, res) => {
 		const { card_number, card_name, expiry_date, cvv } = req.body;
 		const user = jwt.decode(req.headers.authorization.split(" ")[1]);
-		console.log(user);
 
 		const cardCheck = `SELECT * FROM credit_cards WHERE card_number = $1 AND user_id = $2`;
 		const cardCheckValues = [card_number, user.id];
