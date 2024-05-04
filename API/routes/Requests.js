@@ -8,5 +8,6 @@ const RequestsController = require("../controllers/RequestsController");
 router.use(auth.authenticateJWT);
 
 router.get("/", RequestsController.getRequests);
+router.post("/send", RequestsController.sendRequest);
 
 module.exports = router;

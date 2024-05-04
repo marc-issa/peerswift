@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useTheme } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 import { styles } from "../styles";
 
@@ -47,6 +48,10 @@ const Countries = ({ navigation, route }) => {
 		console.log(data);
 	};
 
+	const requestCountry = async (country) => {
+		await SecureStore.setItemAsync("requestCountry", JSON.stringify(country));
+	};
+
 	// Country Component
 	let countryCount = 0;
 
@@ -60,6 +65,9 @@ const Countries = ({ navigation, route }) => {
 				onPress={() => {
 					if (route.params.type === "groups") {
 						addToGroup(country.id);
+						navigation.goBack();
+					} else if (route.params.type === "request") {
+						requestCountry(country);
 						navigation.goBack();
 					}
 				}}

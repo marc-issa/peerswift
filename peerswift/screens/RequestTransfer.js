@@ -19,15 +19,90 @@ import { useTheme } from "@react-navigation/native";
 // Components import
 import AmountSelect from "../components/AmountSelect";
 import Buttons from "../components/Buttons";
+import ErrorComponent from "../components/ErrorComponent";
+
+// SecureStore import
+import * as SecureStore from "expo-secure-store";
+
+// API client import
+import PostRequest from "../api client/requests/PostRequest";
 
 const RequestTransfer = ({ navigation }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
 	const [amount, setAmount] = useState(0.0);
+	const [country, setCountry] = useState("");
 
+	const [loading, setLoading] = useState(false);
+	const [disabled, setDisabled] = useState(true);
+
+	// Error handling
+	const [modalVisible, setModalVisible] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
+
+	const handleError = () => {
+		setModalVisible(true);
+	};
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setModalVisible(false);
+		}, 3000);
+		return () => clearTimeout(timer);
+	}, [modalVisible]);
+
+	// Functions
 	const handleAmmountChange = (value) => {
 		setAmount(value);
+	};
+
+	const getCountry = async () => {
+		const storedCountry = await SecureStore.getItemAsync("requestCountry");
+		if (storedCountry) {
+			const parsedCountry = JSON.parse(storedCountry);
+			setCountry(parsedCountry);
+		}
+	};
+
+	useEffect(() => {
+		getCountry();
+	}, [country, amount]);
+
+	const clearCountry = async () => {
+		await SecureStore.deleteItemAsync("requestCountry");
+	};
+
+	useEffect(() => {
+		if (amount > 0 && country) {
+			setDisabled(false);
+		} else {
+			setDisabled(true);
+		}
+	}, [amount, country]);
+
+	const handleSubmit = () => {
+		setLoading(true);
+		const reqData = {
+			amount: amount,
+			country: country.id,
+		};
+		PostRequest(reqData)
+			.then((res) => {
+				if (res.status === "success") {
+					clearCountry();
+					alert("Request sent successfully");
+					navigation.goBack();
+				} else {
+					setErrorMsg(res.message);
+					handleError();
+				}
+			})
+			.catch((error) => {
+				setErrorMsg("An error occurred");
+				handleError();
+			});
+		setLoading(false);
 	};
 
 	return (
@@ -40,7 +115,11 @@ const RequestTransfer = ({ navigation }) => {
 				}}>
 				<ScrollView contentContainerStyle={{ flex: 1 }}>
 					<View style={style.header}>
-						<TouchableOpacity onPress={() => navigation.goBack()}>
+						<TouchableOpacity
+							onPress={() => {
+								clearCountry();
+								navigation.goBack();
+							}}>
 							<Image
 								source={require("../assets/Icons/back.png")}
 								style={style.backButton}
@@ -56,9 +135,26 @@ const RequestTransfer = ({ navigation }) => {
 							</Text>
 						</View>
 						<TouchableOpacity
-							onPress={() => navigation.navigate("Countries")}
+							onPress={() =>
+								navigation.navigate("Countries", { type: "request" })
+							}
 							style={style.countriesButtonBox}>
-							<Text style={style.countriesButtonTitle}>Select country</Text>
+							<View style={{ flexDirection: "row", alignItems: "center" }}>
+								{country ? (
+									<Image
+										source={{ uri: country.flag }}
+										style={{
+											width: 40,
+											height: 40,
+											borderRadius: 100,
+											marginRight: 10,
+										}}
+									/>
+								) : null}
+								<Text style={style.countriesButtonTitle}>
+									{country ? country.name : "Select country"}
+								</Text>
+							</View>
 							<Image
 								source={require("../assets/Icons/chevron.png")}
 								style={style.countriesButtonIcon}
@@ -76,10 +172,14 @@ const RequestTransfer = ({ navigation }) => {
 					<Buttons
 						type={"primary"}
 						screen={"SendMoney"}
-						navData={{}}
-						navigation={navigation}
-						disabled={true}
+						disabled={disabled}
 						title={"Send request"}
+						handleSubmit={handleSubmit}
+						isPending={loading}
+					/>
+					<ErrorComponent
+						isVisible={modalVisible}
+						message={errorMsg || "An error occurred"}
 					/>
 				</ScrollView>
 			</TouchableWithoutFeedback>

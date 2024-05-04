@@ -177,6 +177,7 @@ const Activity = ({ navigation, route }) => {
 				<NoDataFound />
 			)}
 			<ScrollView
+				showsVerticalScrollIndicator={false}
 				refreshControl={
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				}>
