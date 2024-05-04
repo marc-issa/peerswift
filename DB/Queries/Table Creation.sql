@@ -65,9 +65,10 @@ CREATE TABLE top_ups (
 -- Create the "transactions_history" table
 CREATE TABLE transactions_history (
     id SERIAL PRIMARY KEY,
-    transaction_id INT REFERENCES transactions(id),
-    top_up_id INT REFERENCES top_ups(id),
-    user_id INT REFERENCES users(id)
+    transaction_id INT NULL,
+    top_up_id INT NULL,
+    user_id INT REFERENCES users(id),
+	date TIMESTAMP
 );
 
 -- Create the "matched_requests" table
@@ -100,8 +101,8 @@ CREATE TABLE unmatched_requests (
 -- Create the "requests_history" table
 CREATE TABLE requests_history (
     id SERIAL PRIMARY KEY,
-    unmatched_id INT REFERENCES unmatched_requests(id),
-    matched_id INT REFERENCES matched_requests(id),
+    unmatched_id INT,
+    matched_id INT,
     user_id INT REFERENCES users(id),
     date TIMESTAMP
 );
@@ -156,9 +157,9 @@ CREATE TABLE user_contacts (
 );
 
 -- Create the "credit_card_holds" table
-CREATE TABLE credit_card_holds (
+CREATE TABLE holds (
     id SERIAL PRIMARY KEY,
-    card_id INT REFERENCES credit_cards(id),
+	request_id INT REFERENCES requests_history(id),
     user_id INT REFERENCES users(id),
     amount DECIMAL(10, 2),
     currency VARCHAR(3),
