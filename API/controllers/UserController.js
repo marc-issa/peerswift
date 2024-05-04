@@ -242,4 +242,38 @@ module.exports = {
 			});
 		}
 	},
+	addCard: async (req, res) => {
+		const { card_number, card_name, expiry_date, cvv } = req.body;
+		const user = jwt.decode(req.headers.authorization.split(" ")[1]);
+		console.log(user);
+
+		const cardCheck = `SELECT * FROM credit_cards WHERE card_number = $1 AND user_id = $2`;
+		const cardCheckValues = [card_number, user.id];
+
+		const cardCheckRes = await pool.query(cardCheck, cardCheckValues);
+
+		if (cardCheckRes.rows.length > 0) {
+			return res.status(400).json({
+				status: "error",
+				message: "Card already added",
+			});
+		}
+
+		const cardQuery = `INSERT INTO credit_cards (user_id, card_number,  expiry_date, cvv, card_holder_name, billing_address) VALUES ($1, $2, $3, $4, $5, ' ') RETURNING *`;
+		const cardValues = [user.id, card_number, expiry_date, cvv, card_name];
+
+		try {
+			await pool.query(cardQuery, cardValues);
+
+			res.status(200).json({
+				status: "success",
+				message: "Card added successfully",
+			});
+		} catch (error) {
+			res.status(400).json({
+				status: "error",
+				message: error.message || "An error occurred during adding card",
+			});
+		}
+	},
 };

@@ -964,13 +964,11 @@ export const styles = (theme) =>
 		cardName: {
 			color: theme.colors.background,
 			fontSize: 16,
-			fontFamily: "monospace",
 		},
 		cardNumber: {
 			color: theme.colors.background,
 			fontSize: 20,
 			fontWeight: "bold",
-			fontFamily: "monospace",
 			marginTop: 20,
 		},
 		// ********** Add Recepient **********
