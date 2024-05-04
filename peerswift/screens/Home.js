@@ -50,7 +50,6 @@ const Home = ({ navigation }) => {
 			console.log(error);
 		}
 		if (data) {
-			console.log(data);
 			if (data.wallet) {
 				setBalance(data.wallet.balance);
 				setCurrency(data.wallet.currency);

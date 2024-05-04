@@ -36,6 +36,7 @@ const groupsRouter = require("./routes/Groups");
 const requestsRouter = require("./routes/Requests");
 const transactionRouter = require("./routes/Transactions");
 const sendRouter = require("./routes/Send");
+const topupRouter = require("./routes/Topup");
 
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
@@ -44,6 +45,7 @@ app.use("/groups", groupsRouter);
 app.use("/request", requestsRouter);
 app.use("/transaction", transactionRouter);
 app.use("/send", sendRouter);
+app.use("/topup", topupRouter);
 
 app.listen(port, () => {
 	logIPv4Addresses();

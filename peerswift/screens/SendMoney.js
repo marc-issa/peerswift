@@ -65,7 +65,6 @@ const SendMoney = ({ navigation }) => {
 	};
 
 	const handleAccountType = (type) => {
-		console.log(type);
 		setAccountType(type);
 	};
 

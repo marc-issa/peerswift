@@ -428,7 +428,7 @@ export const styles = (theme) =>
 			borderRadius: 100,
 		},
 		cardFooterLong: {
-			width: theme.dimensions.width * 0.3,
+			width: theme.dimensions.width * 0.25,
 			borderBottomRightRadius: 10,
 			borderTopLeftRadius: 10,
 			paddingHorizontal: 5,
