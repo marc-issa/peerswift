@@ -184,11 +184,19 @@ const Activity = ({ navigation, route }) => {
 				<View style={style.listContainer}>
 					{filter === "requests" &&
 						requests.map((request) => (
-							<ActCardLong key={request.id} data={request} />
+							<ActCardLong
+								key={request.id}
+								data={request}
+								navigation={navigation}
+							/>
 						))}
 					{filter === "transactions" &&
 						transactions.map((transaction) => (
-							<ActCardLong key={transaction.id} data={transaction} />
+							<ActCardLong
+								key={transaction.id}
+								data={transaction}
+								navigation={navigation}
+							/>
 						))}
 				</View>
 			</ScrollView>

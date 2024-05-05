@@ -24,6 +24,12 @@ import TopUp from "../screens/TopUp";
 import AddRecipient from "../screens/AddRecipient";
 import AddCard from "../screens/AddCard";
 
+// utility Pages
+import AboutUs from "../screens/AboutUs";
+import PrivPol from "../screens/PrivPol";
+import TermCond from "../screens/Term&Cond";
+import Fees from "../screens/Fees";
+
 const Stack = createStackNavigator();
 
 const StackNavigation = ({ navigation }) => {
@@ -144,6 +150,38 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='DetailsScreen'
 				component={DetailsScreen}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='AboutUs'
+				component={AboutUs}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='PrivacyPolicy'
+				component={PrivPol}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='TermsConditions'
+				component={TermCond}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='FeesCharges'
+				component={Fees}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,

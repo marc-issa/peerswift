@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
 
-const ActCardLong = ({ data }) => {
+const ActCardLong = ({ data, navigation }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
@@ -23,7 +23,9 @@ const ActCardLong = ({ data }) => {
 	};
 
 	return (
-		<TouchableOpacity style={style.cardActLong}>
+		<TouchableOpacity
+			style={style.cardActLong}
+			onPress={() => navigation.navigate("DetailsScreen", { data: data })}>
 			<View style={style.cardHeader}>
 				<Image source={require("../assets/Icons/transaction-reversed.png")} />
 				<View

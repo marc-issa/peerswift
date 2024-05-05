@@ -10,15 +10,57 @@ import ErrorComponent from "../components/ErrorComponent";
 
 // API imports
 import CancelRequest from "../api client/requests/CancelRequest";
+import ConfirmReceived from "../api client/requests/ConfirmReceived";
+import ConfirmSent from "../api client/requests/ConfirmSent";
+
+// Expo SecureStore
+import * as SecureStore from "expo-secure-store";
+import { decode as base64decode } from "base-64";
 
 const DetailsScreen = ({ navigation, route }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
 	const [data, setData] = useState(route.params.data);
+	const [user, setUser] = useState({});
 
 	const [title, setTitle] = useState("");
 	const [loading, setLoading] = useState(false);
+
+	const [amountReceived, setAmountReceived] = useState(false);
+	const [amountSent, setAmountSent] = useState(false);
+	const [partnerUserSent, setPartnerUserSent] = useState(false);
+	const [partnerUserReceived, setPartnerUserReceived] = useState(false);
+
+	const getUser = async () => {
+		const token = await SecureStore.getItemAsync("authToken");
+		global.atob = base64decode;
+
+		const decodedToken = JSON.parse(atob(token.split(".")[1]));
+		return decodedToken;
+	};
+	useEffect(() => {
+		getUser().then((user) => {
+			setUser(user);
+		});
+	}, []);
+
+	useEffect(() => {
+		if (data.user1_id === null) {
+			return;
+		}
+		if (user.id === data.user1_id) {
+			setAmountReceived(data.user1_received_confirmed);
+			setAmountSent(data.user1_transfer_confirmed);
+			setPartnerUserSent(data.user2_transfer_confirmed);
+			setPartnerUserReceived(data.user2_received_confirmed);
+		} else {
+			setAmountReceived(data.user2_received_confirmed);
+			setAmountSent(data.user2_transfer_confirmed);
+			setPartnerUserSent(data.user1_transfer_confirmed);
+			setPartnerUserReceived(data.user1_received_confirmed);
+		}
+	}, [data]);
 
 	const statusColor = (status) => {
 		switch (status) {
@@ -82,9 +124,37 @@ const DetailsScreen = ({ navigation, route }) => {
 		}
 	}, [data]);
 
+	// Handle button press
 	const handleSubmit = async () => {
 		setLoading(true);
 		await CancelRequest({ request_id: data.id }).then((res) => {
+			if (res.status === "success") {
+				alert("Request cancelled successfully");
+				navigation.goBack();
+			} else {
+				setErrorMsg(res.message);
+				handleError();
+			}
+		});
+		setLoading(false);
+	};
+	const handleReceived = async () => {
+		setLoading(true);
+		await ConfirmReceived({ request_id: data.id }).then((res) => {
+			if (res.status === "success") {
+				alert("Request cancelled successfully");
+				navigation.goBack();
+			} else {
+				setErrorMsg(res.message);
+				handleError();
+			}
+		});
+		setLoading(false);
+	};
+
+	const handleSent = async () => {
+		setLoading(true);
+		await ConfirmSent({ request_id: data.id }).then((res) => {
 			if (res.status === "success") {
 				alert("Request cancelled successfully");
 				navigation.goBack();
@@ -177,6 +247,7 @@ const DetailsScreen = ({ navigation, route }) => {
 							<Text style={style.detailsTxt}>{dateFormat(data.time)}</Text>
 						)}
 					</View>
+
 					<View style={style.detailsRows}>
 						<Text style={style.detailsTxt}>Amount</Text>
 						<Text style={style.detailsTxt}>USD {data.amount}</Text>
@@ -184,20 +255,92 @@ const DetailsScreen = ({ navigation, route }) => {
 					<View style={style.detailsRows}>
 						<Text style={style.detailsTxt}>Fee</Text>
 						<Text style={style.detailsTxt}>
-							USD {data.fee ? data.fee : "0.00"}
+							USD{" "}
+							{data.user1_id || data.status === "Matching"
+								? `${data.amount * 0.01}`
+								: "0.00"}
 						</Text>
 					</View>
 					<View style={style.detailsTotalBox}>
 						<Text style={style.detailsTotalTxt}>Total</Text>
-						<Text style={style.detailsTotalTxt}>USD {data.amount}</Text>
+						<Text style={style.detailsTotalTxt}>
+							USD{" "}
+							{data.user1_id || data.status === "Matching"
+								? `${data.amount + data.amount * 0.01}`
+								: data.amount}
+						</Text>
 					</View>
-					<Buttons
-						type={"primary"}
-						screen={"CancelLong"}
-						title={"Cancel"}
-						disabled={false}
-						handleSubmit={handleSubmit}
-					/>
+					{data.user1_id ? (
+						<View style={[style.detailsRows, { marginTop: 40 }]}>
+							<Text style={style.detailsTxt}>Partner receive status: </Text>
+							<Text
+								style={[
+									style.detailsTxt,
+									{ color: partnerUserReceived ? "#06A77D" : "#D05353" },
+								]}>
+								{partnerUserReceived ? "Received" : "Not Received"}
+							</Text>
+						</View>
+					) : null}
+					{data.user1_id ? (
+						<View style={style.detailsRows}>
+							<Text style={style.detailsTxt}>Partner sending status: </Text>
+							<Text
+								style={[
+									style.detailsTxt,
+									{ color: partnerUserSent ? "#06A77D" : "#D05353" },
+								]}>
+								{partnerUserSent ? "Sent" : "Not Sent"}
+							</Text>
+						</View>
+					) : null}
+					{data.status === "Matching" ? (
+						<Buttons
+							type={"primary"}
+							screen={"CancelLong"}
+							title={"Cancel"}
+							disabled={false}
+							handleSubmit={handleSubmit}
+							loading={loading}
+						/>
+					) : null}
+					{data.status === "Pending" ? (
+						<>
+							<Buttons
+								type={"primary"}
+								screen={"AmountReceived"}
+								title={"Amount Received"}
+								disabled={!partnerUserSent || amountReceived}
+								handleSubmit={handleReceived}
+								loading={loading}
+							/>
+							<View
+								style={{
+									flexDirection: "row",
+									alignItems: "center",
+									justifyContent: "space-between",
+									marginTop: -10,
+									width: theme.dimensions.width * 0.9,
+								}}>
+								<Buttons
+									type={"primary"}
+									screen={"CancelShort"}
+									title={"Cancel"}
+									disabled={partnerUserSent || amountSent}
+									handleSubmit={handleSubmit}
+									loading={loading}
+								/>
+								<Buttons
+									type={"primary"}
+									screen={"AmountSent"}
+									title={"Amount Sent"}
+									disabled={amountSent}
+									handleSubmit={handleSent}
+									loading={loading}
+								/>
+							</View>
+						</>
+					) : null}
 					<ErrorComponent
 						isVisible={modalVisible}
 						message={errorMsg || "An error occurred"}

@@ -235,6 +235,7 @@ module.exports = {
 			]);
 
 			if (requestHistoryRes.rows[0].matched_id) {
+				const updateRequestHistoryQuery = `UPDATE requests_history SET date = NOW() WHERE matched_id = $1 RETURNING *`;
 				const matchedRequestQuery = `UPDATE matched_requests SET status = 'Cancelled' WHERE id = $1 RETURNING *`;
 				const matchedRequestRes = await client.query(matchedRequestQuery, [
 					requestHistoryRes.rows[0].matched_id,
@@ -256,7 +257,12 @@ module.exports = {
 						],
 					);
 				}
+				const updateRequestHistoryRes = await client.query(
+					updateRequestHistoryQuery,
+					[requestHistoryRes.rows[0].matched_id],
+				);
 			} else {
+				const updateRequestHistoryQuery = `UPDATE requests_history SET date = NOW() WHERE unmatched_id = $1 RETURNING *`;
 				const unmatchedRequestQuery = `Update unmatched_requests SET status = 'Cancelled' WHERE id = $1 RETURNING *`;
 				const unmatchedRequestRes = await client.query(unmatchedRequestQuery, [
 					requestHistoryRes.rows[0].unmatched_id,
@@ -265,6 +271,10 @@ module.exports = {
 					unmatchedRequestRes.rows[0].amount,
 					requestHistoryRes.rows[0].user_id,
 				]);
+				const updateRequestHistoryRes = await client.query(
+					updateRequestHistoryQuery,
+					[requestHistoryRes.rows[0].unmatched_id],
+				);
 			}
 
 			const updateHold = `UPDATE holds SET status = 'Cancelled' WHERE request_id = $1 RETURNING *`;
@@ -284,6 +294,172 @@ module.exports = {
 			});
 		} finally {
 			client.release(); // Release the client back to the pool
+		}
+	},
+	confirmTransfer: async (req, res) => {
+		const client = await pool.connect(); // Acquire a client from the pool
+		const { request_id } = req.body;
+		const user = jwt.decode(req.headers.authorization.split(" ")[1]);
+
+		try {
+			await client.query("BEGIN"); // Start a transaction
+
+			const requestHistoryQuery = `SELECT * FROM requests_history WHERE id = $1`;
+			const requestHistoryRes = await client.query(requestHistoryQuery, [
+				request_id,
+			]);
+
+			const matchedRequestQuery = `SELECT * FROM matched_requests WHERE id = $1`;
+			const matchedRequestRes = await client.query(matchedRequestQuery, [
+				requestHistoryRes.rows[0].matched_id,
+			]);
+
+			if (user.id === matchedRequestRes.rows[0].user1_id) {
+				const updateMatchedRequestQuery = `UPDATE matched_requests SET user1_transfer_confirmed = true WHERE id = $1 RETURNING *`;
+				const updateMatchedRequestRes = await client.query(
+					updateMatchedRequestQuery,
+					[requestHistoryRes.rows[0].matched_id],
+				);
+			} else {
+				const updateMatchedRequestQuery = `UPDATE matched_requests SET user2_transfer_confirmed = true WHERE id = $1 RETURNING *`;
+				const updateMatchedRequestRes = await client.query(
+					updateMatchedRequestQuery,
+					[requestHistoryRes.rows[0].matched_id],
+				);
+			}
+
+			const checkMatchedStatus = `SELECT * FROM matched_requests WHERE id = $1`;
+			const checkMatchedStatusRes = await client.query(checkMatchedStatus, [
+				requestHistoryRes.rows[0].matched_id,
+			]);
+
+			if (
+				checkMatchedStatusRes.rows[0].user1_transfer_confirmed &&
+				checkMatchedStatusRes.rows[0].user2_transfer_confirmed &&
+				checkMatchedStatusRes.rows[0].user1_received_confirmed &&
+				checkMatchedStatusRes.rows[0].user2_received_confirmed
+			) {
+				const updateMatchedRequestQuery = `UPDATE matched_requests SET status = 'Completed', completion_date = NOW() WHERE id = $1 RETURNING *`;
+				const updateMatchedRequestRes = await client.query(
+					updateMatchedRequestQuery,
+					[requestHistoryRes.rows[0].matched_id],
+				);
+
+				const updateRequestHistoryQuery = `UPDATE requests_history SET date = NOW() WHERE matched_id = $1 RETURNING *`;
+				const updateRequestHistoryRes = await client.query(
+					updateRequestHistoryQuery,
+					[requestHistoryRes.rows[0].matched_id],
+				);
+
+				const updateHoldQuery = `UPDATE holds SET hold_released_time = NOW() WHERE request_id = $1 RETURNING *`;
+				const updateHoldRes = await client.query(updateHoldQuery, [request_id]);
+
+				const walletUpdate = `UPDATE wallets SET balance = balance + $1 WHERE user_id = $2 RETURNING *`;
+				const walletUpdateRes = await client.query(walletUpdate, [
+					checkMatchedStatusRes.rows[0].amount,
+					user.id,
+				]);
+			}
+
+			await client.query("COMMIT"); // Commit the transaction
+
+			res.status(200).json({
+				status: "success",
+				message: "Transfer confirmed successfully",
+			});
+		} catch (error) {
+			await client.query("ROLLBACK"); // Rollback the transaction in case of an error
+			res.status(400).json({
+				status: "error",
+				message: error.message || "User not found",
+			});
+		}
+	},
+	confirmReceived: async (req, res) => {
+		const client = await pool.connect(); // Acquire a client from the pool
+		const { request_id } = req.body;
+		const user = jwt.decode(req.headers.authorization.split(" ")[1]);
+		let user2_id = 0;
+
+		try {
+			await client.query("BEGIN"); // Start a transaction
+
+			const requestHistoryQuery = `SELECT * FROM requests_history WHERE id = $1`;
+			const requestHistoryRes = await client.query(requestHistoryQuery, [
+				request_id,
+			]);
+
+			const matchedRequestQuery = `SELECT * FROM matched_requests WHERE id = $1`;
+			const matchedRequestRes = await client.query(matchedRequestQuery, [
+				requestHistoryRes.rows[0].matched_id,
+			]);
+
+			if (user.id === matchedRequestRes.rows[0].user1_id) {
+				user2_id = matchedRequestRes.rows[0].user2_id;
+				const updateMatchedRequestQuery = `UPDATE matched_requests SET user1_received_confirmed = true WHERE id = $1 RETURNING *`;
+				const updateMatchedRequestRes = await client.query(
+					updateMatchedRequestQuery,
+					[requestHistoryRes.rows[0].matched_id],
+				);
+			} else {
+				user2_id = matchedRequestRes.rows[0].user1_id;
+				const updateMatchedRequestQuery = `UPDATE matched_requests SET user2_received_confirmed = true WHERE id = $1 RETURNING *`;
+				const updateMatchedRequestRes = await client.query(
+					updateMatchedRequestQuery,
+					[requestHistoryRes.rows[0].matched_id],
+				);
+			}
+
+			const checkMatchedStatus = `SELECT * FROM matched_requests WHERE id = $1`;
+			const checkMatchedStatusRes = await client.query(checkMatchedStatus, [
+				requestHistoryRes.rows[0].matched_id,
+			]);
+
+			if (
+				checkMatchedStatusRes.rows[0].user1_transfer_confirmed &&
+				checkMatchedStatusRes.rows[0].user2_transfer_confirmed &&
+				checkMatchedStatusRes.rows[0].user1_received_confirmed &&
+				checkMatchedStatusRes.rows[0].user2_received_confirmed
+			) {
+				const updateMatchedRequestQuery = `UPDATE matched_requests SET status = 'Completed', completion_date = NOW() WHERE id = $1 RETURNING *`;
+				const updateMatchedRequestRes = await client.query(
+					updateMatchedRequestQuery,
+					[requestHistoryRes.rows[0].matched_id],
+				);
+
+				const updateRequestHistoryQuery = `UPDATE requests_history SET date = NOW() WHERE matched_id = $1 RETURNING *`;
+				const updateRequestHistoryRes = await client.query(
+					updateRequestHistoryQuery,
+					[requestHistoryRes.rows[0].matched_id],
+				);
+
+				const updateHoldQuery = `UPDATE holds SET hold_released_time = NOW(), status = 'Released' WHERE user_id = $1 RETURNING *`;
+				const updateHoldRes = await client.query(updateHoldQuery, [user.id]);
+				const updateHoldRes2 = await client.query(updateHoldQuery, [user2_id]);
+
+				const walletUpdate = `UPDATE wallets SET balance = balance + $1 WHERE user_id = $2 RETURNING *`;
+				const walletUpdateRes = await client.query(walletUpdate, [
+					checkMatchedStatusRes.rows[0].amount,
+					user.id,
+				]);
+				const walletUpdate2Res = await client.query(walletUpdate, [
+					checkMatchedStatusRes.rows[0].amount,
+					user2_id,
+				]);
+			}
+
+			await client.query("COMMIT"); // Commit the transaction
+
+			res.status(200).json({
+				status: "success",
+				message: "Transfer confirmed successfully",
+			});
+		} catch (error) {
+			await client.query("ROLLBACK"); // Rollback the transaction in case of an error
+			res.status(400).json({
+				status: "error",
+				message: error.message || "User not found",
+			});
 		}
 	},
 };

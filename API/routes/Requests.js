@@ -10,5 +10,7 @@ router.use(auth.authenticateJWT);
 router.get("/", RequestsController.getRequests);
 router.post("/send", RequestsController.sendRequest);
 router.post("/cancel", RequestsController.cancelRequest);
+router.post("/sent", RequestsController.confirmTransfer);
+router.post("/received", RequestsController.confirmReceived);
 
 module.exports = router;

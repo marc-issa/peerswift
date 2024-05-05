@@ -29,6 +29,18 @@ const Buttons = ({
 						width: theme.dimensions.width * 0.9,
 						backgroundColor: "#D05353",
 					},
+					screen === "AmountReceived" && {
+						width: theme.dimensions.width * 0.9,
+						backgroundColor: "#06A77D",
+					},
+					screen === "CancelShort" && {
+						width: theme.dimensions.width * 0.44,
+						backgroundColor: "#D05353",
+					},
+					screen === "AmountSent" && {
+						width: theme.dimensions.width * 0.44,
+						backgroundColor: "#06A77D",
+					},
 				]}
 				disabled={disabled || isPending}
 				onPress={primaryRedirect}>

@@ -1098,6 +1098,21 @@ export const styles = (theme) =>
 			height: 32,
 			marginRight: 10,
 		},
+		// ********** Utility **********
+		utilityBox: {
+			width: theme.dimensions.width * 0.9,
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "center",
+			marginTop: 20,
+		},
+		utilityText: {
+			color: theme.colors.accent,
+			fontSize: 18,
+		},
+		boldText: {
+			fontWeight: "bold",
+		},
 		// ********** Icons **********
 		icon: {
 			width: 36,

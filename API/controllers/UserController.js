@@ -76,6 +76,10 @@ module.exports = {
 							country = countryRes.rows[0];
 							rate = calculateRating(ratingRes.rows);
 						}
+						const holdRes = await pool.query(holdQuery, [
+							requestsHistoryRes.rows[i].id,
+						]);
+						matchedRequestsRes.rows[j].hold = holdRes.rows[0];
 						matchedRequestsRes.rows[j].user = partnerUser;
 						matchedRequestsRes.rows[j].user.flag = country.flag;
 						matchedRequestsRes.rows[j].user.currency = country.currency_code;
@@ -92,12 +96,11 @@ module.exports = {
 					const countryRes = await pool.query(countryQuery, [
 						unmatchedRequestsRes.rows[0].destination_country_id,
 					]);
-
 					const holdRes = await pool.query(holdQuery, [
 						requestsHistoryRes.rows[i].id,
 					]);
+					unmatchedRequestsRes.rows[i].hold = holdRes.rows[0];
 					unmatchedRequestsRes.rows[0].destination_country = countryRes.rows[0];
-					unmatchedRequestsRes.rows[0].hold = holdRes.rows[0];
 
 					if (unmatchedRequestsRes.rows.length > 0) {
 						unmatchedRequestsRes.rows[0].id = requestsHistoryRes.rows[i].id;
