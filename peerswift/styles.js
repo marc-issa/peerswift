@@ -992,6 +992,72 @@ export const styles = (theme) =>
 			marginRight: 10,
 			borderRadius: 100,
 		},
+		// ********** Details Screen **********
+		detailsHeader: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			width: theme.dimensions.width * 0.9,
+			marginTop: theme.dimensions.height * 0.02,
+		},
+		detailsHeaderTxt: {
+			color: theme.colors.accent,
+			fontSize: 22,
+		},
+		detailsStatusBox: {
+			flexDirection: "row",
+			justifyContent: "center",
+			alignItems: "center",
+			borderRadius: 10,
+			paddingVertical: 5,
+			maxWidth: theme.dimensions.width * 0.5,
+			minWidth: theme.dimensions.width * 0.4,
+		},
+		detailsStatus: {
+			color: theme.colors.background,
+			fontSize: 22,
+			fontWeight: "bold",
+		},
+		detailsBody: {
+			width: theme.dimensions.width * 0.9,
+			marginTop: theme.dimensions.height * 0.02,
+			flexDirection: "column",
+			justifyContent: "flex-start",
+			alignItems: "center",
+		},
+		detailsRows: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			width: theme.dimensions.width * 0.9,
+			marginVertical: 10,
+		},
+		detailsTxt: {
+			color: theme.colors.accent,
+			fontSize: 20,
+		},
+		detailsTotalBox: {
+			flexDirection: "row",
+			justifyContent: "space-between",
+			alignItems: "center",
+			width: theme.dimensions.width * 0.9,
+			backgroundColor: "#F6F6F6",
+			padding: 10,
+			borderRadius: 10,
+			marginTop: 15,
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 0,
+				height: 2,
+			},
+			shadowOpacity: 0.25,
+			elevation: 3,
+		},
+		detailsTotalTxt: {
+			fontSize: 20,
+			color: theme.colors.accent,
+			fontWeight: "bold",
+		},
 		// ********** Errors **********
 		errorTxt: {
 			color: "#D05353",

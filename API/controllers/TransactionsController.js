@@ -19,16 +19,9 @@ module.exports = {
 			const ratingQuery = `SELECT * FROM user_ratings WHERE rated_user_id = $1`;
 
 			const user = jwt.decode(req.headers.authorization.split(" ")[1]);
-			const page = parseInt(req.query.page) || 1;
-			const pageSize = 10;
-			const offset = (page - 1) * pageSize;
 
-			const transactionsQuery = `SELECT * FROM transactions_history WHERE user_id = $1 ORDER BY date DESC LIMIT $2 OFFSET $3`;
-			const transactionsRes = await pool.query(transactionsQuery, [
-				user.id,
-				pageSize,
-				offset,
-			]);
+			const transactionsQuery = `SELECT * FROM transactions_history WHERE user_id = $1 ORDER BY date DESC`;
+			const transactionsRes = await pool.query(transactionsQuery, [user.id]);
 
 			let recent_transactions = [];
 

@@ -98,7 +98,12 @@ module.exports = {
 				transactionRes.rows[0].id,
 				recepient_id,
 			];
+
 			await client.query(rTransactionHistory, rTransactionHistoryValues);
+
+			const addWalletQuery = `UPDATE wallets SET balance = balance + $1 WHERE user_id = $2 RETURNING *`;
+			const addWalletValues = [amount, recepient_id];
+			await client.query(addWalletQuery, addWalletValues);
 
 			await client.query("COMMIT"); // Commit the transaction
 

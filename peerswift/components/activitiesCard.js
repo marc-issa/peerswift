@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { styles } from "../styles";
 import { useTheme } from "@react-navigation/native";
 
-const ActivitiesCard = ({ data, type }) => {
+const ActivitiesCard = ({ data, type, navigation }) => {
 	const theme = useTheme();
 	const style = styles(theme);
 
@@ -27,7 +27,9 @@ const ActivitiesCard = ({ data, type }) => {
 	};
 
 	return (
-		<TouchableOpacity style={style.cardAct}>
+		<TouchableOpacity
+			style={style.cardAct}
+			onPress={() => navigation.navigate("DetailsScreen", { data: data })}>
 			<View style={style.cardHeader}>
 				<View style={{ flexDirection: "row", alignItems: "center" }}>
 					{data.user ? (

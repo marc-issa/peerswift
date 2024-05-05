@@ -25,6 +25,10 @@ const Buttons = ({
 					style.primaryButton,
 					disabled && style.disabledButton,
 					screen === "SendMoney" && { width: theme.dimensions.width * 0.9 },
+					screen === "CancelLong" && {
+						width: theme.dimensions.width * 0.9,
+						backgroundColor: "#D05353",
+					},
 				]}
 				disabled={disabled || isPending}
 				onPress={primaryRedirect}>

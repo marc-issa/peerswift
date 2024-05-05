@@ -2,15 +2,16 @@ import fetch from "node-fetch";
 import baseUrl from "../BaseUrl";
 import * as SecureStore from "expo-secure-store";
 
-const FetchTransactions = async () => {
+const CancelRequest = async (reqData) => {
 	const authToken = await SecureStore.getItemAsync("authToken");
 	try {
-		const response = await fetch(`${baseUrl}/transaction`, {
-			method: "GET",
+		const response = await fetch(`${baseUrl}/request/cancel`, {
+			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 				authorization: "Bearer " + authToken,
 			},
+			body: JSON.stringify(reqData),
 		});
 		const data = await response.json();
 		return data;
@@ -22,4 +23,4 @@ const FetchTransactions = async () => {
 	}
 };
 
-export default FetchTransactions;
+export default CancelRequest;

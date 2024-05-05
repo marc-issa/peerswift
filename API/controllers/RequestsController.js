@@ -84,7 +84,13 @@ module.exports = {
 						unmatchedRequestsQuery,
 						[requestsHistoryRes.rows[i].unmatched_id],
 					);
+
 					if (unmatchedRequestsRes.rows.length > 0) {
+						const countryRes = await pool.query(countryQuery, [
+							unmatchedRequestsRes.rows[0].destination_country_id,
+						]);
+						unmatchedRequestsRes.rows[0].destination_country =
+							countryRes.rows[0];
 						unmatchedRequestsRes.rows[0].id = requestsHistoryRes.rows[i].id;
 						recent_requests.push(unmatchedRequestsRes.rows[0]);
 					}
@@ -134,9 +140,12 @@ module.exports = {
 				user.id,
 			]);
 
-			const deductBalanceQuery = `UPDATE wallets SET balance = balance - $1 WHERE user_id = $2 RETURNING *`;
+			const fee = amount * 0.01;
+
+			const deductBalanceQuery = `UPDATE wallets SET balance = balance - $1 - $2 WHERE user_id = $3 RETURNING *`;
 			const deductBalanceRes = await client.query(deductBalanceQuery, [
 				amount,
+				fee,
 				user.id,
 			]);
 
@@ -158,7 +167,6 @@ module.exports = {
 				userCountryRes.rows[0].id,
 				user.id,
 			]);
-
 			if (checkMatchRes.rows.length > 0) {
 				const matchedRequestQuery = `INSERT INTO matched_requests(user1_id, user2_id, amount, currency, user1_transfer_confirmed, user2_transfer_confirmed, user1_received_confirmed, user2_received_confirmed, status, creation_date, completion_date) VALUES($1, $2, $3, 'USD', false, false, false, false, 'Pending', NOW(), NULL) RETURNING *`;
 				const matchedRequestRes = await client.query(matchedRequestQuery, [
@@ -183,6 +191,17 @@ module.exports = {
 					updateRequestHistoryQuery,
 					[matchedRequestRes.rows[0].id, checkMatchRes.rows[0].id],
 				);
+				const updateRequestHistoryOtherRes = await client.query(
+					updateRequestHistoryQuery,
+					[matchedRequestRes.rows[0].id, unmatchedRequestRes.rows[0].id], // Updated
+				);
+
+				const holdPartnerUserQuery = `INSERT INTO holds(request_id, user_id, amount, currency, hold_placed_time, hold_released_time, status) VALUES($1, $2, $3, 'USD', NOW(), NULL, 'Active') RETURNING *`;
+				const holdPartnerUserRes = await client.query(holdPartnerUserQuery, [
+					updateRequestHistoryRes.rows[0].id,
+					checkMatchRes.rows[0].user_id,
+					amount,
+				]);
 			}
 
 			await client.query("COMMIT"); // Commit the transaction
@@ -190,6 +209,72 @@ module.exports = {
 			res.status(200).json({
 				status: "success",
 				message: "Request sent successfully",
+			});
+		} catch (error) {
+			await client.query("ROLLBACK"); // Rollback the transaction in case of an error
+			res.status(400).json({
+				status: "error",
+				message: error.message || "User not found",
+			});
+		} finally {
+			client.release(); // Release the client back to the pool
+		}
+	},
+	cancelRequest: async (req, res) => {
+		const client = await pool.connect(); // Acquire a client from the pool
+		const { request_id } = req.body;
+		const user = jwt.decode(req.headers.authorization.split(" ")[1]);
+		try {
+			await client.query("BEGIN"); // Start a transaction
+
+			const refundBalanceQuery = `UPDATE wallets SET balance = balance + $1 WHERE user_id = $2 RETURNING *`;
+
+			const requestHistoryQuery = `SELECT * FROM requests_history WHERE id = $1`;
+			const requestHistoryRes = await client.query(requestHistoryQuery, [
+				request_id,
+			]);
+
+			if (requestHistoryRes.rows[0].matched_id) {
+				const matchedRequestQuery = `UPDATE matched_requests SET status = 'Cancelled' WHERE id = $1 RETURNING *`;
+				const matchedRequestRes = await client.query(matchedRequestQuery, [
+					requestHistoryRes.rows[0].matched_id,
+				]);
+				if (user.id === matchedRequestRes.rows[0].user1_id) {
+					const refundPartnerBalanceRes = await client.query(
+						refundBalanceQuery,
+						[
+							matchedRequestRes.rows[0].amount,
+							matchedRequestRes.rows[0].user2_id,
+						],
+					);
+				} else {
+					const refundPartnerBalanceRes = await client.query(
+						refundBalanceQuery,
+						[
+							matchedRequestRes.rows[0].amount,
+							matchedRequestRes.rows[0].user1_id,
+						],
+					);
+				}
+			} else {
+				const unmatchedRequestQuery = `Update unmatched_requests SET status = 'Cancelled' WHERE id = $1 RETURNING *`;
+				const unmatchedRequestRes = await client.query(unmatchedRequestQuery, [
+					requestHistoryRes.rows[0].unmatched_id,
+				]);
+				const refundBalanceRes = await client.query(refundBalanceQuery, [
+					unmatchedRequestRes.rows[0].amount,
+					requestHistoryRes.rows[0].user_id,
+				]);
+			}
+
+			const updateHold = `UPDATE holds SET status = 'Cancelled' WHERE request_id = $1 RETURNING *`;
+			const updateHoldRes = await client.query(updateHold, [request_id]);
+
+			await client.query("COMMIT"); // Commit the transaction
+
+			res.status(200).json({
+				status: "success",
+				message: "Request cancelled successfully",
 			});
 		} catch (error) {
 			await client.query("ROLLBACK"); // Rollback the transaction in case of an error

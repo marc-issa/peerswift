@@ -22,6 +22,7 @@ module.exports = {
 			const user = jwt.decode(req.headers.authorization.split(" ")[1]);
 			const userQuery = `SELECT * FROM users WHERE id = $1`;
 			const countryQuery = `SELECT * FROM countries WHERE id = $1`;
+			const holdQuery = `SELECT * FROM holds WHERE request_id = $1`;
 
 			const walletQuery = `SELECT * FROM wallets WHERE user_id = $1`;
 			const walletValues = [user.id];
@@ -88,13 +89,22 @@ module.exports = {
 						unmatchedRequestsQuery,
 						[requestsHistoryRes.rows[i].unmatched_id],
 					);
+					const countryRes = await pool.query(countryQuery, [
+						unmatchedRequestsRes.rows[0].destination_country_id,
+					]);
+
+					const holdRes = await pool.query(holdQuery, [
+						requestsHistoryRes.rows[i].id,
+					]);
+					unmatchedRequestsRes.rows[0].destination_country = countryRes.rows[0];
+					unmatchedRequestsRes.rows[0].hold = holdRes.rows[0];
+
 					if (unmatchedRequestsRes.rows.length > 0) {
 						unmatchedRequestsRes.rows[0].id = requestsHistoryRes.rows[i].id;
 						recent_requests.push(unmatchedRequestsRes.rows[0]);
 					}
 				}
 			}
-
 			const transactionsQuery = `SELECT * FROM transactions_history WHERE user_id = $1 ORDER BY date DESC LIMIT 5`;
 			const transactionsRes = await pool.query(transactionsQuery, [user.id]);
 

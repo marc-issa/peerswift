@@ -50,6 +50,7 @@ const Home = ({ navigation }) => {
 			console.log(error);
 		}
 		if (data) {
+			console.log(data);
 			if (data.wallet) {
 				setBalance(data.wallet.balance);
 				setCurrency(data.wallet.currency);
@@ -224,7 +225,12 @@ const Home = ({ navigation }) => {
 						horizontal={true}
 						style={{ paddingVertical: 10 }}>
 						{requests.map((request, index) => (
-							<ActivitiesCard key={index} data={request} type={"request"} />
+							<ActivitiesCard
+								key={index}
+								data={request}
+								type={"request"}
+								navigation={navigation}
+							/>
 						))}
 					</ScrollView>
 				</View>
@@ -245,7 +251,12 @@ const Home = ({ navigation }) => {
 						horizontal={true}
 						style={{ paddingVertical: 10 }}>
 						{transactions.map((request, index) => (
-							<ActivitiesCard key={index} data={request} type={"transaction"} />
+							<ActivitiesCard
+								key={index}
+								data={request}
+								type={"transaction"}
+								navigation={navigation}
+							/>
 						))}
 					</ScrollView>
 				</View>

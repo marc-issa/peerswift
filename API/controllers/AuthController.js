@@ -38,6 +38,35 @@ module.exports = {
 			});
 		}
 	},
+	dummyLogin: async (req, res) => {
+		try {
+			const { phone_number } = req.body;
+
+			const queryText = `SELECT * FROM users WHERE phone_number = $1`;
+			const values = [phone_number];
+			const poolRes = await pool.query(queryText, values);
+			if (poolRes.rows.length > 0) {
+				res.status(200).json({
+					status: "success",
+					user: poolRes.rows[0],
+					jwt: jwt.sign(poolRes.rows[0], process.env.JWT_SECRET, {
+						expiresIn: "30d",
+					}),
+				});
+			} else {
+				res.status(400).json({
+					status: "error",
+					message: "User not found",
+				});
+			}
+		} catch (error) {
+			res.status(400).json({
+				status: "error",
+				message: error.message || "An error occurred during login",
+			});
+		}
+	},
+
 	verifyPhone: async (req, res) => {
 		const { phone_number, otp_code } = req.body;
 		try {

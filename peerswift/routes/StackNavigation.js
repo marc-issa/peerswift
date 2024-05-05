@@ -13,6 +13,7 @@ import Profile from "../screens/Profile";
 import Countries from "../screens/Countries";
 import Notifications from "../screens/Notifications";
 import EditProfile from "../screens/EditProfile";
+import DetailsScreen from "../screens/DetailsScreen";
 
 // Actions
 import SendMoney from "../screens/SendMoney";
@@ -135,6 +136,14 @@ const StackNavigation = ({ navigation }) => {
 			<Stack.Screen
 				name='AddCard'
 				component={AddCard}
+				options={{
+					headerShown: false,
+					...TransitionPresets.SlideFromRightIOS,
+				}}
+			/>
+			<Stack.Screen
+				name='DetailsScreen'
+				component={DetailsScreen}
 				options={{
 					headerShown: false,
 					...TransitionPresets.SlideFromRightIOS,
